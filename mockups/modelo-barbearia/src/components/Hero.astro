@@ -1,0 +1,105 @@
+---
+import { Image } from 'astro:assets';
+import { site, hero, contato } from '../data/site';
+import { img, larguras } from '../lib/images';
+import { wa } from '../lib/wa';
+
+const foto = img(hero.imagem);
+const link = wa(site.whatsapp, contato.mensagem);
+---
+
+{/*
+  Hero em DUAS COLUNAS, e não com a foto de fundo atrás do texto.
+
+  Noutros sites da pasta a foto vai atrás do texto, com véu por cima. Aqui
+  não pode: o assunto da foto é a AÇÃO do corte — a mão, a máquina, o gesto
+  preciso. Qualquer véu opaco o bastante para o texto ficar legível apaga
+  justamente esse detalhe. No Recanto Paraíso isso foi medido e o véu teve
+  de ficar em 55%; numa barbearia, 55% de véu apaga o trabalho inteiro.
+
+  Em duas colunas o texto tem contraste garantido contra o fundo e a foto
+  aparece inteira, sem véu nenhum — que é o mínimo que se deve a um site
+  cujo produto É a foto.
+*/}
+<section id="topo" data-hero class="relative overflow-hidden bg-fundo">
+  <div
+    class="shell grid items-center gap-12 pb-16 pt-12 lg:min-h-[calc(92svh-76px)] lg:grid-cols-[1.05fr_1fr] lg:gap-16 lg:pb-24 lg:pt-16"
+  >
+    <div data-centro-mobile class="max-w-xl">
+      <p class="eyebrow" data-hero-fade style="--i:0">{hero.eyebrow}</p>
+
+      {/*
+        Cada linha do título com a PRÓPRIA máscara de overflow, montada
+        aqui no build. É o que permite a entrada linha a linha sem plugin
+        de split: o `site.ts` já entrega o título como lista de linhas.
+        O `--i` é o índice, e o CSS usa para escalonar o atraso.
+      */}
+      <h1 class="mt-6 text-[clamp(2.7rem,8.5vw,4.6rem)] leading-[0.98] text-texto">
+        {
+          hero.titulo.map((linha, i) => (
+            <span data-hero-linha style={`--i:${i}`}>
+              <span class:list={[i === 2 ? 'italic text-acento' : '']}>{linha}</span>
+            </span>
+          ))
+        }
+      </h1>
+
+      <p
+        data-hero-fade
+        style="--i:1"
+        class="mt-7 max-w-lg text-[16.5px] leading-relaxed text-texto-dim lg:text-[17.5px]"
+      >
+        {hero.texto}
+      </p>
+
+      <div
+        data-hero-fade
+        style="--i:2"
+        class="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap lg:items-center"
+      >
+        <a
+          href={link}
+          data-press
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex min-h-[54px] items-center justify-center rounded-full bg-btn px-8 text-[15px] font-semibold text-btn-texto transition-colors duration-[var(--dur-fast)] hover:bg-acento-hi"
+        >
+          {hero.cta}
+        </a>
+        <a
+          href="#portfolio"
+          data-press
+          class="inline-flex min-h-[54px] items-center justify-center rounded-full border border-linha px-8 text-[15px] font-semibold text-texto transition-colors duration-[var(--dur-fast)] hover:border-acento hover:text-acento"
+        >
+          {hero.ctaSecundario}
+        </a>
+      </div>
+
+      <p data-hero-fade style="--i:3" class="mt-8 text-[13.5px] text-texto-dim">
+        {`${site.endereco} · ${site.cidade} — ${site.estado}`}
+      </p>
+    </div>
+
+    {/* A foto. `data-hero-media` entra só com escala, sem fade: ela é o
+        elemento LCP, e com opacidade zero o navegador só a contaria quando
+        terminasse de aparecer — a métrica triplicaria à toa. */}
+    <div class="relative">
+      <div
+        data-hero-media
+        class="overflow-hidden rounded-[1.5rem] border border-linha lg:rounded-[2rem]"
+      >
+        <div class="aspect-[4/5] w-full">
+          <Image
+            src={foto}
+            alt={hero.alt}
+            widths={larguras(foto, [360, 480, 648])}
+            sizes="(min-width: 1024px) 44vw, 88vw"
+            loading="eager"
+            fetchpriority="high"
+            class="h-full w-full object-cover"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

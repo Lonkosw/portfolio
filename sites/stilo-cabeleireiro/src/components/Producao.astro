@@ -1,0 +1,93 @@
+---
+import { Image } from 'astro:assets';
+import { site, producao } from '../data/site';
+import { img } from '../lib/images';
+import { wa } from '../lib/wa';
+
+const link = wa(
+  site.whatsapp,
+  `Olá, ${site.nome}! Vim pelo site e queria falar sobre produção e maquiagem.`,
+);
+---
+
+{/*
+  Vem logo depois de Noivas de propósito — ver o comentário em `producao` no
+  site.ts. É a mesma cliente sem casamento, e quem rolou a seção da noiva sem
+  ser noiva cai exatamente aqui.
+
+  Sem foto grande de abertura: as três da galeria já bastam, e mais uma faria
+  a quarta seção seguida de "texto à esquerda, retrato 4:5 à direita".
+*/}
+<section id="producao" class="border-t border-linha bg-fundo py-24 lg:py-32">
+  <div class="shell">
+    <div class="grid gap-12 lg:grid-cols-[1fr_1.1fr] lg:items-start lg:gap-16">
+      <div data-reveal data-centro-mobile class="max-w-xl">
+        <p class="eyebrow">{producao.eyebrow}</p>
+        <h2 class="mt-5 text-[clamp(2.1rem,5.5vw,3.4rem)] text-texto">{producao.titulo}</h2>
+        <p class="mt-5 text-[16.5px] leading-relaxed text-texto-dim">{producao.texto}</p>
+
+        <ul data-reveal-grupo class="mt-9 grid gap-px overflow-hidden rounded-2xl border border-linha sm:grid-cols-2">
+          {
+            producao.itens.map((item) => (
+              <li class="bg-superficie p-5 text-left transition-colors duration-[var(--dur-fast)] hover:bg-superficie-hi">
+                <h3 class="text-[1.05rem] font-semibold text-texto">{item.nome}</h3>
+                <p class="mt-1 text-[14.5px] leading-relaxed text-texto-dim">{item.texto}</p>
+              </li>
+            ))
+          }
+        </ul>
+
+        <a
+          href={link}
+          data-press
+          target="_blank"
+          rel="noopener noreferrer"
+          class="mt-8 inline-flex min-h-[52px] items-center justify-center rounded-full bg-btn px-7 text-[15px] font-semibold text-btn-texto transition-colors duration-[var(--dur-fast)] hover:bg-cobre"
+        >
+          {producao.cta}
+        </a>
+      </div>
+
+      {/* Três fotos empilhadas em coluna única no celular e em mosaico no
+          desktop: a primeira ocupa a linha inteira, as outras duas dividem a
+          de baixo. Assim a seção tem peso visual sem exigir uma quarta foto. */}
+      <div data-reveal-grupo class="grid gap-4 sm:grid-cols-2 lg:gap-5">
+        {
+          producao.galeria.map((g, i) => {
+            const f = img(g.imagem);
+            const larga = i === 0;
+            return (
+              <figure
+                class:list={[
+                  'group relative overflow-hidden rounded-2xl border border-linha',
+                  larga && 'sm:col-span-2',
+                ]}
+              >
+                <div
+                  data-reveal-img
+                  class:list={['w-full', larga ? 'aspect-[4/5] sm:aspect-[16/10]' : 'aspect-[4/5]']}
+                >
+                  <div class="h-full w-full">
+                    <Image
+                      src={f}
+                      alt={g.alt}
+                      widths={[420, 640, 900, 1200]}
+                      sizes="(min-width: 1024px) 52vw, (min-width: 640px) 46vw, 92vw"
+                      loading="lazy"
+                      class="h-full w-full object-cover [@media(hover:hover)]:transition-transform [@media(hover:hover)]:duration-[var(--dur-slower)] [@media(hover:hover)]:ease-[var(--ease-out)] [@media(hover:hover)]:group-hover:scale-[1.05]"
+                    />
+                  </div>
+                </div>
+                {g.legenda && (
+                  <figcaption class="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-fundo via-fundo/70 to-transparent px-5 pb-4 pt-12 text-[13px] tracking-wide text-texto">
+                    {g.legenda}
+                  </figcaption>
+                )}
+              </figure>
+            );
+          })
+        }
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,60 @@
+---
+/**
+ * O ambiente — versão enxuta do "Espaco" do modelo-b: aqui só há UMA foto
+ * de banco de interior (sem marca), não uma galeria de três. Quando o
+ * Théo tiver fotos reais do espaço de um lead, dá para voltar a três
+ * colunas — a estrutura de dados (`ambiente.galeria`) já prevê isso.
+ */
+import { Image } from 'astro:assets';
+import { ambiente } from '../data/site';
+import { img, Q_FOTO, W_GRANDE } from '../lib/images';
+
+const foto = img(ambiente.imagem);
+---
+
+<section id="ambiente" class="border-t border-linha bg-fundo py-24 lg:py-32">
+  <div class="shell">
+    <div class="grid items-center gap-12 lg:grid-cols-[1fr_1.15fr] lg:gap-16">
+      <div data-reveal data-centro-mobile class="max-w-xl">
+        <p class="eyebrow">{ambiente.eyebrow}</p>
+        <h2 class="mt-5 text-[clamp(2.3rem,6vw,3.8rem)] text-texto">{ambiente.titulo}</h2>
+
+        {
+          ambiente.paragrafos.map((p) => (
+            <p class="mt-5 text-[16.5px] leading-relaxed text-texto-dim">{p}</p>
+          ))
+        }
+
+        <ul data-reveal-grupo class="mt-9 flex flex-wrap gap-2.5">
+          {
+            ambiente.valores.map((v) => (
+              <li class="rounded-full border border-linha bg-superficie px-4 py-2 text-[12.5px] font-semibold uppercase tracking-[0.13em] text-acento">
+                {v}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div
+        data-parallax-frame
+        class="relative aspect-[16/10] overflow-hidden rounded-[2rem] border border-linha"
+      >
+        <div data-reveal-img class="h-full w-full">
+          <div class="h-full w-full">
+            <Image
+              src={foto}
+              alt={ambiente.alt}
+              widths={W_GRANDE}
+              quality={Q_FOTO}
+              sizes="(min-width: 1024px) 56vw, 92vw"
+              loading="lazy"
+              data-parallax="5"
+              class="parallax-folga object-cover"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

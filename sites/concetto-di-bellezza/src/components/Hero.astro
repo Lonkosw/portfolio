@@ -1,0 +1,158 @@
+---
+/**
+ * Hero em DUAS COLUNAS — e aqui o site se afasta do Studio Priorize (o
+ * modelo que ele copia no resto) de propósito.
+ *
+ * O Priorize usa a foto como fundo de tela cheia porque a foto dele é a
+ * FACHADA: uma imagem larga, que aguenta ser esticada em 100vw e continuar
+ * legível. O acervo do Concetto é 4:5, retrato, de costas. Esticado em tela
+ * cheia num celular (que é mais alto que largo), o recorte come as laterais e
+ * sobra uma faixa de fios no meio — a foto some justamente onde ela mais
+ * importa.
+ *
+ * Em coluna, a foto aparece inteira, na proporção em que foi tirada.
+ *
+ * A moldura usa `.moldura-onda`: o topo arredondado assimétrico é o desenho
+ * dos espelhos do salão. É a única assinatura visual que este site tem e não
+ * dá para copiar de nenhum outro.
+ */
+import { Image } from 'astro:assets';
+import { site, hero } from '../data/site';
+import { img } from '../lib/images';
+
+const foto = img(hero.imagem);
+---
+
+<section id="topo" data-hero class="relative overflow-hidden bg-fundo">
+  {/* Rabisco de neon em onda, igual ao da parede do salão. Puramente
+      decorativo: `aria-hidden` e sem área clicável. Só no desktop — numa
+      tela estreita ele encostaria no texto. */}
+  <svg
+    aria-hidden="true"
+    viewBox="0 0 200 60"
+    fill="none"
+    class="pointer-events-none absolute -left-6 top-40 hidden w-56 text-caramelo/25 lg:block"
+  >
+    <path
+      d="M2 30c14-26 28 26 42 0s28 26 42 0 28 26 42 0 28 26 42 0"
+      stroke="currentColor"
+      stroke-width="4"
+      stroke-linecap="round"></path>
+  </svg>
+
+  <div
+    class="shell grid items-center gap-10 pb-16 pt-10 lg:min-h-[88svh] lg:grid-cols-[1.05fr_1fr] lg:gap-16 lg:pb-24 lg:pt-16"
+  >
+    {/* ── Coluna do texto ──────────────────────────────────────────────
+        Vem PRIMEIRO no HTML (e no celular) para que a primeira coisa lida
+        seja o que o salão faz, não uma foto sem legenda. */}
+    <div data-centro-mobile class="max-w-2xl lg:order-1">
+      <p class="eyebrow" data-hero-fade style="--i:0">{hero.eyebrow}</p>
+
+      {/*
+        Cada linha do título vem com a PRÓPRIA MÁSCARA de overflow, montada
+        aqui no build. É o que permite a entrada linha por linha sem plugin
+        de split: o `site.ts` já entrega o título como uma lista de linhas.
+        O `--i` é o índice, e o CSS o usa para escalonar o atraso.
+      */}
+      <h1 class="mt-5 text-[clamp(3.2rem,11vw,6rem)] text-texto">
+        {
+          hero.titulo.map((linha, i) => (
+            <span data-hero-linha style={`--i:${i}`}>
+              <span>{linha}</span>
+            </span>
+          ))
+        }
+      </h1>
+
+      <p
+        data-hero-fade
+        style="--i:1"
+        class="mt-6 max-w-xl text-[17px] leading-relaxed text-texto-dim lg:text-lg"
+      >
+        {hero.texto}
+      </p>
+
+      {/*
+        A NOTA DO GOOGLE, e não um selo inventado.
+
+        5,0 com 166 avaliações é o ativo mais forte que este salão tem, e
+        estava enterrado numa página de busca. Fica logo abaixo do primeiro
+        parágrafo porque é o que responde à pergunta que a pessoa faz em
+        silêncio: "esse lugar é bom mesmo?".
+
+        As estrelas são decorativas (`aria-hidden`) — a nota está escrita ao
+        lado em texto, então quem usa leitor de tela ouve o número, não
+        cinco repetições de "estrela".
+      */}
+      <a
+        href={site.avaliacoesGoogle}
+        target="_blank"
+        rel="noopener noreferrer"
+        data-hero-fade
+        data-press
+        style="--i:2"
+        class="mt-7 inline-flex min-h-[44px] items-center gap-3 rounded-full border border-linha bg-superficie px-5 py-2.5 transition-colors duration-[var(--dur-fast)] hover:border-acento/60 hover:bg-superficie-hi"
+      >
+        <span aria-hidden="true" class="flex gap-0.5 text-caramelo">
+          {
+            Array.from({ length: 5 }).map(() => (
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                <path d="m12 2 2.9 6.3 6.8.8-5 4.7 1.3 6.8L12 17.3 6 20.6l1.3-6.8-5-4.7 6.8-.8L12 2Z" />
+              </svg>
+            ))
+          }
+        </span>
+        <span class="text-[14px] leading-tight text-texto">
+          <strong class="font-semibold" data-tabular>{site.google.nota}</strong>
+          <span class="text-texto-dim">
+            {` · ${site.google.avaliacoes} avaliações no Google`}
+          </span>
+        </span>
+      </a>
+
+      <div data-hero-fade style="--i:3" class="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+        <a
+          href="#agendar"
+          data-magnetic="0.18"
+          data-press
+          class="inline-flex min-h-[54px] items-center justify-center rounded-full bg-btn px-8 text-[15px] font-semibold text-btn-texto transition-colors duration-[var(--dur-fast)] hover:bg-acento-hi"
+        >
+          {hero.cta}
+        </a>
+        <a
+          href="#antes-depois"
+          data-press
+          class="inline-flex min-h-[54px] items-center justify-center rounded-full border border-texto/25 px-8 text-[15px] font-semibold text-texto transition-colors duration-[var(--dur-fast)] hover:border-texto hover:bg-texto/5"
+        >
+          {hero.ctaSecundario}
+        </a>
+      </div>
+
+      <p data-hero-fade style="--i:4" class="mt-8 text-[13px] text-texto-dim">
+        {`${site.endereco} · ${site.bairro} · ${site.cidade} — ${site.estado}`}
+      </p>
+    </div>
+
+    {/* ── Coluna da foto ───────────────────────────────────────────────
+        `lg:order-2` no HTML e visualmente à direita. No celular ela cai
+        embaixo do texto: numa tela de telefone a dobra pega o título e o
+        parágrafo, que é o que precisa ser lido primeiro. */}
+    <div class="lg:order-2">
+      <div
+        data-hero-media
+        class="moldura-onda relative overflow-hidden border border-linha shadow-[0_24px_60px_-30px_rgb(35_43_30/0.45)]"
+      >
+        <Image
+          src={foto}
+          alt={hero.alt}
+          widths={[420, 640, 900, 1080]}
+          sizes="(min-width: 1024px) 44vw, 92vw"
+          loading="eager"
+          fetchpriority="high"
+          class="aspect-[4/5] h-full w-full object-cover"
+        />
+      </div>
+    </div>
+  </div>
+</section>

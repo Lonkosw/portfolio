@@ -1,0 +1,120 @@
+---
+import { site, nav, agendar } from '../data/site';
+import { wa } from '../lib/wa';
+
+const link = wa(site.whatsapp, agendar.mensagem);
+---
+
+<header data-header class="sticky top-0 z-40 border-b border-transparent">
+  {/* No celular vira grade de 3 colunas só para a marca cair no centro
+      exato; a partir de lg volta a ser a barra alinhada à esquerda. */}
+  <div
+    class="shell grid h-[72px] grid-cols-[1fr_auto_1fr] items-center gap-4 lg:flex lg:justify-between"
+  >
+    <a
+      href="#topo"
+      class="group col-start-2 flex min-h-[44px] items-baseline gap-[0.28em] py-2 justify-self-center lg:col-start-auto lg:justify-self-auto"
+      aria-label={`${site.nome} — início`}
+    >
+      <span class="font-[family-name:var(--font-display)] text-[21px] text-texto">Concetto</span>
+      <span
+        class="font-[family-name:var(--font-display)] text-[21px] italic text-acento transition-colors duration-[var(--dur-fast)] group-hover:text-acento-hi"
+      >
+        di Bellezza
+      </span>
+    </a>
+
+    <nav aria-label="Navegação principal" class="hidden items-center gap-7 lg:flex">
+      {
+        nav.map((item) => (
+          <a
+            href={item.href}
+            class="group relative -mx-1.5 flex min-h-[44px] items-center px-1.5 text-sm text-texto-dim transition-colors duration-[var(--dur-fast)] hover:text-texto"
+          >
+            {item.label}
+            <span class="absolute bottom-[11px] left-1.5 h-px w-0 bg-acento transition-[width] duration-[var(--dur-base)] ease-[var(--ease-standard)] group-hover:w-[calc(100%-0.75rem)]" />
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="col-start-3 flex items-center justify-end gap-3 lg:col-start-auto">
+      <a
+        href={link}
+        data-agenda-cta
+        data-magnetic="0.2"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="hidden min-h-[44px] items-center rounded-full bg-btn px-5 py-2.5 text-sm font-semibold text-btn-texto transition-colors duration-[var(--dur-fast)] hover:bg-acento-hi lg:inline-flex"
+      >
+        Agendar
+      </a>
+
+      {/* Um botão só: as barrinhas viram X no mesmo lugar. */}
+      <button
+        data-menu-toggle
+        type="button"
+        aria-expanded="false"
+        aria-controls="menu-mobile"
+        class="grid h-11 w-11 place-items-center rounded-full border border-linha text-texto transition-colors duration-[var(--dur-fast)] hover:border-acento hover:text-acento lg:hidden"
+      >
+        <span class="sr-only" data-menu-label>Abrir menu</span>
+        <svg
+          data-menu-icone="barras"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          aria-hidden="true"
+        >
+          <path d="M4 7h16M4 12h16M4 17h16" stroke-linecap="round"></path>
+        </svg>
+        <svg
+          data-menu-icone="x"
+          hidden
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          aria-hidden="true"
+        >
+          <path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  {/* Leque compacto, ancorado sob o botão — não toma a tela toda. */}
+  <div
+    id="menu-mobile"
+    data-menu-panel
+    class="absolute right-5 top-[64px] w-60 rounded-2xl border border-linha bg-superficie p-2 shadow-2xl shadow-black/50 md:right-10 lg:hidden"
+  >
+    <nav aria-label="Navegação mobile" class="flex flex-col">
+      {
+        nav.map((item) => (
+          <a
+            href={item.href}
+            class="rounded-xl px-4 py-3 text-[15px] text-texto-dim transition-colors duration-[var(--dur-fast)] hover:bg-superficie-hi hover:text-acento"
+          >
+            {item.label}
+          </a>
+        ))
+      }
+
+      <a
+        href={link}
+        data-agenda-cta
+        target="_blank"
+        rel="noopener noreferrer"
+        class="mt-2 rounded-xl bg-btn px-4 py-3 text-center text-[15px] font-semibold text-btn-texto transition-colors duration-[var(--dur-fast)] hover:bg-acento-hi"
+      >
+        Chamar no WhatsApp
+      </a>
+    </nav>
+  </div>
+</header>

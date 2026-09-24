@@ -1,0 +1,95 @@
+---
+import { site, nav } from '../data/site';
+import { wa } from '../lib/wa';
+
+const ano = new Date().getFullYear();
+
+// O link do rodapé ia para o WhatsApp SEM mensagem: a pessoa abria a conversa
+// em branco e tinha de escrever do zero — justamente o atrito que o site
+// inteiro existe para tirar. Aqui a mensagem é genérica de propósito, porque
+// quem clica no rodapé não passou por nenhuma ferramenta.
+const linkWhats = wa(
+  site.whatsapp,
+  'Olá, DolceCau! Vim pelo site e gostaria de falar sobre encomendas.',
+);
+---
+
+<footer class="border-t border-line bg-noir-soft py-14">
+  {/* No celular o rodapé acompanha o resto da página e fica centralizado;
+      a partir de md volta às três colunas alinhadas à esquerda. */}
+  <div class="shell text-center md:text-left">
+    <div class="flex flex-col items-center gap-10 md:flex-row md:items-start md:justify-between">
+      <div class="max-w-xs">
+        <p class="font-[family-name:var(--font-display)] text-2xl text-cream">
+          Dolce<em class="not-italic text-gold">Cau</em>
+        </p>
+        <p class="mt-3 text-sm leading-relaxed text-cream-dim">{site.descricao}</p>
+      </div>
+
+      {/* py-2 nos links: no toque, 20px de altura é alvo pequeno demais. */}
+      <nav
+        aria-label="Navegação do rodapé"
+        class="grid grid-cols-2 gap-x-10 sm:flex sm:flex-col"
+      >
+        {
+          nav.map((item) => (
+            <a
+              href={item.href}
+              class="py-3 text-sm text-cream-dim transition-colors hover:text-gold"
+            >
+              {item.label}
+            </a>
+          ))
+        }
+      </nav>
+
+      <div class="text-sm">
+        <p class="font-medium text-cream">Contato</p>
+        <ul class="mt-1 text-cream-dim">
+          <li>
+            <a
+              href={linkWhats}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-block py-3 transition-colors hover:text-gold"
+            >
+              {site.whatsappExibicao}
+            </a>
+          </li>
+          <li>
+            <a
+              href={site.instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-block py-3 transition-colors hover:text-gold"
+            >
+              @dolcecau
+            </a>
+          </li>
+          <li>
+            <a
+              href={site.maps}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-block py-3 transition-colors hover:text-gold"
+            >
+              {site.endereco}<br />{site.cidade} — {site.estado}
+            </a>
+          </li>
+          <li class="pt-2 text-cream-dim/80">{site.horario}</li>
+        </ul>
+      </div>
+    </div>
+
+    <div
+      class="mt-12 flex flex-col items-center gap-2 border-t border-line pt-6 text-xs text-cream-dim/70 sm:flex-row sm:items-center sm:justify-between"
+    >
+      <p>© {ano} {site.nome}. Todos os direitos reservados.</p>
+      {
+        site.demo && (
+          <p class="italic">Protótipo de demonstração — não é o site oficial da doceria.</p>
+        )
+      }
+    </div>
+  </div>
+</footer>

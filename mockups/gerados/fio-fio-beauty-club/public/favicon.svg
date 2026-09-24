@@ -1,0 +1,18 @@
+<!--
+  Favicon. O <link rel="icon"> do Layout apontava para este arquivo e ele não
+  existia: toda visita levava um 404 — barato, mas é uma requisição perdida no
+  caminho crítico e um ícone genérico na aba.
+
+  O desenho é a ONDA DOS ESPELHOS, a mesma assinatura do `.moldura-onda` e do
+  rabisco de neon do hero. Não é letra: numa aba de 16px uma inicial em serifa
+  fina vira borrão, e a onda continua legível.
+
+  Cores literais (#1f241a fundo, #dfb07a caramelo) porque SVG de favicon é
+  carregado fora da página — não há `var(--color-*)` para ler aqui. Ao mexer
+  na paleta, mexer aqui junto.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <rect width="64" height="64" rx="14" fill="#1f241a"/>
+  <path d="M8 32c6-13 12 13 18 0s12 13 18 0 12 13 12 0"
+        fill="none" stroke="#dfb07a" stroke-width="5" stroke-linecap="round"/>
+</svg>

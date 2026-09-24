@@ -1,0 +1,19 @@
+---
+import { marquee } from '../data/site';
+
+// Duplicado para o loop de -50% fechar sem salto.
+const trilha = [...marquee, ...marquee];
+---
+
+<section aria-hidden="true" class="overflow-hidden border-y border-linha bg-superficie py-5">
+  <div class="marquee-track flex w-max items-center gap-8 whitespace-nowrap">
+    {
+      trilha.map((item) => (
+        <span class="flex items-center gap-8 text-sm uppercase tracking-[0.2em] text-texto-dim">
+          {item}
+          <span class="h-1 w-1 rounded-full bg-acento/70" />
+        </span>
+      ))
+    }
+  </div>
+</section>

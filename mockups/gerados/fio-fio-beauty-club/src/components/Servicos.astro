@@ -1,0 +1,43 @@
+---
+import { servicos } from '../data/site';
+---
+
+<section id="servicos" data-secao-adiavel class="border-t border-linha bg-fundo py-24 lg:py-32">
+  <div class="shell">
+    <div data-reveal data-centro-mobile class="max-w-2xl">
+      <p class="eyebrow">{servicos.eyebrow}</p>
+      <h2 class="mt-5 text-[clamp(2.1rem,5.5vw,3.4rem)] text-texto">{servicos.titulo}</h2>
+      <p class="mt-5 text-[16.5px] leading-relaxed text-texto-dim">{servicos.texto}</p>
+    </div>
+
+    <ul
+      data-reveal-grupo
+      class="mt-14 grid gap-px overflow-hidden rounded-[2rem] border border-linha bg-linha sm:grid-cols-2 lg:grid-cols-3"
+    >
+      {
+        servicos.itens.map((item, i) => (
+          <li
+            class:list={[
+              'bg-superficie p-7 transition-colors duration-[var(--dur-fast)] hover:bg-superficie-hi lg:p-8',
+              item.destaque ? 'sm:col-span-2 lg:col-span-1' : '',
+              'larguraCheia' in item && item.larguraCheia ? 'sm:col-span-2 lg:col-span-3' : '',
+            ]}
+          >
+            <div class="flex items-baseline justify-between gap-3">
+              <span class="numeral text-[15px] tracking-[0.18em]" aria-hidden="true">
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              {item.destaque && (
+                <span class="rounded-full border border-acento/40 px-3 py-1 text-[12px] font-semibold uppercase tracking-[0.14em] text-acento">
+                  Carro-chefe
+                </span>
+              )}
+            </div>
+            <h3 class="mt-4 text-[1.4rem] text-texto">{item.nome}</h3>
+            <p class="mt-2.5 text-[15px] leading-relaxed text-texto-dim">{item.texto}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

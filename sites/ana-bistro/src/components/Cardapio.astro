@@ -1,0 +1,173 @@
+---
+import { cardapio, site, reservar } from '../data/site';
+import { wa } from '../lib/wa';
+
+const link = wa(
+  site.whatsapp,
+  'Olá! Vim pelo site e gostaria de saber sobre a carta e as reservas.',
+);
+---
+
+<section
+  id="cardapio"
+  data-secao-adiavel
+  class="border-y border-linha bg-superficie py-24 lg:py-32"
+>
+  <div class="shell">
+    <div data-reveal data-centro-mobile class="max-w-2xl">
+      <p class="eyebrow">{cardapio.eyebrow}</p>
+      <h2 class="mt-6 text-[clamp(2.3rem,6vw,3.9rem)] text-texto">{cardapio.titulo}</h2>
+      <p class="mt-6 text-[16.5px] leading-relaxed text-texto-dim">{cardapio.texto}</p>
+    </div>
+
+    {/*
+      ── A CARTA ────────────────────────────────────────────────────────
+      Em abas, e não empilhada: as quatro seções ocupariam três telas de
+      rolagem no celular, que é onde este site vai ser visto.
+
+      Funciona SEM JavaScript: o HTML nasce com todos os painéis visíveis e
+      os botões escondidos. Só quando o script confirma é que a classe
+      `is-abas` entra e vira um seletor de verdade. Um cardápio que some
+      quando o JS falha é pior do que um cardápio comprido.
+    */}
+    <div data-cardapio class="mt-14 lg:mt-16">
+      <div
+        role="tablist"
+        aria-label="Seções da carta"
+        data-so-com-js
+        class="flex flex-wrap gap-2 border-b border-linha pb-5"
+      >
+        {
+          cardapio.secoes.map((secao, i) => (
+            <button
+              type="button"
+              role="tab"
+              data-carta-aba
+              id={`aba-${i}`}
+              aria-controls={`painel-${i}`}
+              aria-selected={i === 0 ? 'true' : 'false'}
+              tabindex={i === 0 ? 0 : -1}
+              class="min-h-[46px] rounded-full border border-linha px-6 text-[13.5px] tracking-wide text-texto-dim transition-colors duration-[var(--dur-fast)] hover:border-acento/60 hover:text-texto"
+            >
+              {secao.nome}
+            </button>
+          ))
+        }
+      </div>
+
+      <div class="mt-10">
+        {
+          cardapio.secoes.map((secao, i) => (
+            <div
+              role="tabpanel"
+              data-carta-painel
+              id={`painel-${i}`}
+              aria-labelledby={`aba-${i}`}
+              tabindex="0"
+              class="focus-visible:outline-none"
+            >
+              {/* O título da seção aparece sempre. Com abas ele é
+                  redundante com o botão ativo, mas é ele que separa as
+                  seções quando não há JavaScript. */}
+              <h3
+                class="mb-8 font-[family-name:var(--font-display)] text-[1.6rem] italic text-acento is-abas-oculto"
+              >
+                {secao.nome}
+              </h3>
+
+              <ul class="grid gap-x-16 gap-y-8 lg:grid-cols-2">
+                {secao.itens.map((item) => (
+                  <li>
+                    {/* Nome … preço, ligados por linha pontilhada, como
+                        numa carta impressa. `items-baseline` alinha as
+                        três partes pela linha de base do texto. */}
+                    <div class="flex items-baseline gap-2">
+                      <h4 class="font-[family-name:var(--font-display)] text-[1.15rem] leading-snug text-texto">
+                        {item.nome}
+                      </h4>
+                      <span class="pontilhado" aria-hidden="true" />
+                      <span
+                        data-tabular
+                        class="shrink-0 font-[family-name:var(--font-display)] text-[1.15rem] text-acento"
+                      >
+                        {item.preco === '—' ? (
+                          <span class="text-[0.9rem] italic text-texto-dim">sob consulta</span>
+                        ) : (
+                          <>
+                            <span class="text-[0.72em] align-[0.15em] text-texto-dim">R$ </span>
+                            {item.preco}
+                          </>
+                        )}
+                      </span>
+                    </div>
+                    <p class="mt-1.5 max-w-md text-[14px] leading-relaxed text-texto-dim">
+                      {item.texto}
+                      {'precoNota' in item && item.precoNota && (
+                        <span class="text-texto-dim/70"> · {item.precoNota}</span>
+                      )}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+
+      {/*
+        O aviso de que a carta é demonstração. Fica DENTRO do bloco do
+        cardápio, e não no rodapé, porque é aqui que ele importa: quem lê
+        um preço precisa saber na hora que ele não está confirmado.
+      */}
+      <p
+        class="mt-12 flex items-start gap-3 rounded-sm border border-acento/25 bg-acento/[0.06] px-5 py-4 text-[13px] leading-relaxed text-texto-dim"
+      >
+        <svg
+          class="mt-0.5 shrink-0 text-acento"
+          width="15" height="15" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="1.8" aria-hidden="true"
+        >
+          <circle cx="12" cy="12" r="9" />
+          <path d="M12 8v5M12 16.5v.01" stroke-linecap="round" />
+        </svg>
+        <span>{cardapio.aviso}</span>
+      </p>
+
+      <div data-reveal class="mt-10 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
+        <a
+          href={link}
+          data-press
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex min-h-[52px] items-center justify-center rounded-full bg-btn px-8 text-[15px] font-semibold tracking-wide text-btn-texto transition-colors duration-[var(--dur-fast)] hover:bg-vinho-hi"
+        >
+          Perguntar sobre a carta
+        </a>
+        <a
+          href="#reservar"
+          class="inline-flex min-h-[48px] items-center text-[14.5px] text-texto-dim underline decoration-linha underline-offset-4 transition-colors duration-[var(--dur-fast)] hover:text-texto hover:decoration-acento"
+        >
+          {reservar.cta === 'Enviar pelo WhatsApp' ? 'Ir para a reserva' : reservar.cta}
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Com JavaScript, o título repetido dentro do painel some: o botão da
+     aba já diz em que seção a pessoa está, e repetir seria ruído. Sem
+     JavaScript ele permanece, porque aí ele é o único separador. */
+  [data-cardapio].is-abas .is-abas-oculto {
+    display: none;
+  }
+
+  /* A aba ativa. Cor E preenchimento, não só cor — estado indicado por
+     cor sozinha some para quem não distingue bem os tons. */
+  [data-carta-aba].is-ativa {
+    border-color: var(--color-acento);
+    background-color: var(--color-acento);
+    color: var(--color-fundo);
+    font-weight: 600;
+  }
+</style>

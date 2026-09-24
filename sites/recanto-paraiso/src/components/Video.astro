@@ -1,0 +1,185 @@
+---
+/**
+ * O único material em movimento do acervo: 8s girando sobre a mesa imperial
+ * montada no salão.
+ *
+ * TRÊS DECISÕES QUE NÃO SÃO ESTILO:
+ *
+ * 1. **`preload="none"`.** O arquivo tem 1,6 MB — mais do que a página
+ *    inteira. Num site que vai ser aberto no 4G de uma noiva, baixar isso
+ *    antes de a pessoa chegar aqui é gastar o pacote dela com algo que
+ *    talvez nunca veja. Com `preload="none"` o navegador busca o pôster e
+ *    mais nada; o vídeo só desce quando o `play()` acontece, e o `play()` só
+ *    acontece quando a seção entra na tela. Sem JS o `controls` nativo fica,
+ *    e aí quem baixa o arquivo é o dedo da pessoa.
+ *
+ * 2. **Botão de pausa de verdade.** Conteúdo em movimento que dura mais de
+ *    5 segundos e repete precisa de um jeito de parar (WCAG 2.2.2). Um vídeo
+ *    em `loop` é exatamente esse caso. O botão não é enfeite: é o que torna
+ *    a seção usável para quem tem distúrbio de atenção ou vestibular.
+ *
+ * 3. **Com `prefers-reduced-motion` ele NÃO começa sozinho.** Fica no pôster,
+ *    parado, com o botão em "tocar". Movimento reduzido não é movimento
+ *    proibido — é movimento que a pessoa escolhe.
+ *
+ * O vídeo é `muted` porque autoplay com som é bloqueado em todo navegador
+ * moderno, e porque a trilha era música de fundo de story. O áudio foi
+ * removido do arquivo (ver `scripts/processar-midias.py`), então não há como
+ * alguém "desmutar" e ouvir algo que não deveria estar aqui.
+ *
+ * CUSTO MEDIDO, para quem for mexer: esta seção põe UM quadro de ~30ms a
+ * mais no pior caso do scroll (de ~45ms para ~70ms com a CPU 4x mais lenta).
+ * É o decode do primeiro quadro do vídeo, e foi investigado: não é o
+ * `backdrop-filter` (removido, não mudou nada) nem o `rootMargin` (subir
+ * para 600px não mudou nada). É o preço de ter vídeo, ele acontece uma vez
+ * só, e acontece justamente quando a imagem começa a se mexer — que é o
+ * momento em que o olho está menos parado. Trocar por GIF ou por sequência
+ * de imagens sairia MAIS caro, não menos.
+ */
+import { getImage } from 'astro:assets';
+import { video } from '../data/site';
+import { img } from '../lib/images';
+
+const poster = await getImage({
+  src: img(video.poster),
+  width: 720,
+  format: 'jpg',
+  quality: 70,
+});
+---
+
+<section id="video" class="border-t border-line/60 py-24 lg:py-32">
+  <div class="shell grid items-center gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.85fr)] lg:gap-20">
+    <div data-reveal data-centro-mobile class="max-w-xl">
+      <p class="eyebrow">{video.eyebrow}</p>
+      <h2 class="mt-5 text-[clamp(2.1rem,5.5vw,3.5rem)] text-cream">{video.titulo}</h2>
+      <p class="mt-5 text-[16.5px] leading-relaxed text-cream-dim">{video.texto}</p>
+    </div>
+
+    {/*
+      A caixa reserva a proporção exata do arquivo ANTES de ele existir na
+      página — sem isto o layout salta quando o vídeo carrega. `mx-auto` com
+      teto de 22rem: um vídeo vertical em tela cheia de desktop viraria uma
+      torre de 900px de altura.
+    */}
+    <figure
+      data-reveal
+      class="relative mx-auto w-full max-w-[20rem] overflow-hidden rounded-3xl border border-line bg-mata-soft lg:max-w-[22rem]"
+      style={`aspect-ratio: ${video.largura} / ${video.altura}`}
+    >
+      {/* `controls` sai no clique do JS: com script, quem manda é o botão
+          abaixo; sem script, o controle nativo é a única forma de tocar. */}
+      <video
+        data-video
+        src={video.arquivo}
+        poster={poster.src}
+        width={video.largura}
+        height={video.altura}
+        muted
+        loop
+        playsinline
+        controls
+        preload="none"
+        aria-label={video.alt}
+        class="h-full w-full object-cover"></video>
+
+      {/* SEM `backdrop-blur` neste botão: ele fica por cima de VÍDEO, e
+          desfoque de fundo sobre imagem em movimento é recalculado a cada
+          quadro. Foi esse o vilão do travamento no Studio Priorize, onde
+          cortar 70 KB de JavaScript não mexeu no pior quadro e tirar um
+          `backdrop-filter` resolveu. `bg-mata/80` dá a mesma separação. */}
+      <button
+        type="button"
+        data-video-toggle
+        aria-pressed="false"
+        class="absolute bottom-3 right-3 hidden h-11 w-11 items-center justify-center rounded-full border border-cream/25 bg-mata/80 text-cream transition-colors duration-[var(--dur-fast)] hover:border-cream/60 hover:bg-mata"
+      >
+        {/* Os dois ícones ficam no DOM e alternam por `hidden`: trocar o
+            `innerHTML` no clique piscaria. */}
+        <svg data-icone-pausa width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <rect x="6" y="4" width="4" height="16" rx="1" />
+          <rect x="14" y="4" width="4" height="16" rx="1" />
+        </svg>
+        <svg data-icone-tocar hidden width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          {/* Triângulo deslocado 1px para a direita: um "play" centrado
+              matematicamente parece encostado à esquerda. */}
+          <path d="M6 3.5 20.5 12 6 20.5Z" transform="translate(1 0)" />
+        </svg>
+        <span data-video-rotulo class="sr-only">Pausar o vídeo</span>
+      </button>
+    </figure>
+  </div>
+</section>
+
+<script>
+  const figura = document.querySelector('[data-video]') as HTMLVideoElement | null;
+  const botao = document.querySelector('[data-video-toggle]') as HTMLButtonElement | null;
+
+  if (figura && botao) {
+    const iconePausa = botao.querySelector('[data-icone-pausa]') as SVGElement;
+    const iconeTocar = botao.querySelector('[data-icone-tocar]') as SVGElement;
+    const rotulo = botao.querySelector('[data-video-rotulo]') as HTMLElement;
+    const calmo = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Troca de controle: o nativo sai, o próprio entra. Nesta ordem, para
+    // não existir um quadro com os dois na tela.
+    figura.controls = false;
+    botao.classList.remove('hidden');
+    botao.classList.add('flex');
+
+    const pintar = (tocando: boolean) => {
+      iconePausa.hidden = !tocando;
+      iconeTocar.hidden = tocando;
+      botao.setAttribute('aria-pressed', String(!tocando));
+      rotulo.textContent = tocando ? 'Pausar o vídeo' : 'Tocar o vídeo';
+    };
+    pintar(false);
+
+    /* Quem manda o arquivo descer é o `play()`, e ele só é chamado quando a
+       seção aparece. `rootMargin` de 200px dá ao vídeo uma cabeça de
+       vantagem: ele começa a carregar um scroll antes de estar visível.
+
+       ⚠️ Uma vez que a pessoa pausou de propósito, o observador não volta a
+       dar play: o botão vira a última palavra. Sem esta trava, sair da
+       seção e voltar ressuscitaria um vídeo que ela mandou parar. */
+    let pausadoPelaPessoa = false;
+
+    const observador = new IntersectionObserver(
+      (entradas) => {
+        for (const entrada of entradas) {
+          if (!entrada.isIntersecting) {
+            // Fora da tela ele para: vídeo tocando escondido gasta bateria
+            // e dados sem entregar nada.
+            if (!figura.paused) figura.pause();
+            continue;
+          }
+          if (!calmo && !pausadoPelaPessoa) figura.play().catch(() => {});
+        }
+      },
+      { rootMargin: '200px 0px' },
+    );
+    observador.observe(figura);
+
+    figura.addEventListener('play', () => pintar(true));
+    figura.addEventListener('pause', () => pintar(false));
+
+    botao.addEventListener('click', () => {
+      if (figura.paused) {
+        pausadoPelaPessoa = false;
+        figura.play().catch(() => {});
+      } else {
+        pausadoPelaPessoa = true;
+        figura.pause();
+      }
+    });
+  }
+</script>
+
+<style>
+  /* Enquanto o pôster não pinta, o buraco é da cor da superfície e não
+     preto — preto abriria um retângulo que não existe em lugar nenhum do
+     site. */
+  video[data-video] {
+    background-color: var(--color-mata-soft);
+  }
+</style>

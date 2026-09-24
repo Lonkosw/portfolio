@@ -1,0 +1,14 @@
+---
+import { site } from '../data/site';
+---
+
+{
+  site.demo && (
+    <div class="relative z-[60] border-b border-vinho/40 bg-vinho-fundo px-4 py-2 text-center">
+      <p class="text-[12.5px] leading-relaxed text-texto-dim">
+        <strong class="font-semibold text-texto">Protótipo de demonstração.</strong> Esta página não é
+        o site oficial do {site.nome} — é uma proposta de como ele poderia ser.
+      </p>
+    </div>
+  )
+}

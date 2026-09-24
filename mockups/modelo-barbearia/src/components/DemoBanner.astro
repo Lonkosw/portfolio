@@ -1,0 +1,29 @@
+---
+/**
+ * ⚠️ ESTA FAIXA NÃO PODE SAIR ENQUANTO AS FOTOS FOREM DE BANCO.
+ *
+ * Ela cumpre duas funções que não são decorativas:
+ *
+ * 1. Diz que é um MODELO. Sem isso, um dono de barbearia que abre o link
+ *    pensa que recebeu o site de outra pessoa por engano.
+ * 2. Cumpre a licença do Pexels, que proíbe sugerir que a pessoa retratada
+ *    endossa o negócio. Nenhum dos modelos das fotos tem relação com
+ *    barbearia nenhuma, e a faixa declara isso.
+ *
+ * Quando este modelo virar o site de um cliente de verdade, entram as
+ * fotos DELE e aí sim `demo` pode virar false.
+ */
+import { site } from '../data/site';
+---
+
+{
+  site.demo && (
+    <div class="relative z-[60] border-b border-linha bg-tijolo-fundo px-4 py-2 text-center">
+      <p class="text-[12.5px] leading-relaxed text-texto-dim">
+        <strong class="font-semibold text-texto">Modelo de demonstração.</strong> Não é o site de
+        nenhuma barbearia: o nome é fictício e as fotos são de banco de imagens. No seu, entram o
+        seu nome e as suas fotos.
+      </p>
+    </div>
+  )
+}

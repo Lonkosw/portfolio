@@ -1,0 +1,230 @@
+---
+// Cormorant só nos subsets latinos e só nos pesos usados: o peso 600 estava
+// sendo declarado sem nenhum elemento pedir (display e numerais são 500), e
+// cirílico/grego/vietnamita não têm uso num site em português.
+// O Inter variável não expõe subsets separados — só `index.css` — mas o
+// `unicode-range` já impede o navegador de baixar o que não vai usar.
+import '@fontsource/cormorant-garamond/latin-400.css';
+import '@fontsource/cormorant-garamond/latin-ext-400.css';
+import '@fontsource/cormorant-garamond/latin-500.css';
+import '@fontsource/cormorant-garamond/latin-ext-500.css';
+import '@fontsource-variable/inter';
+import { getImage } from 'astro:assets';
+import '../styles/global.css';
+import { site, og, sobre } from '../data/site';
+import { img } from '../lib/images';
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+
+/**
+ * Prévia do link no WhatsApp — que é exatamente como este site vai circular.
+ *
+ * 1,91:1 é o recorte que WhatsApp e Instagram usam. O que NÃO dá para fazer
+ * é pedir 1200 de largura: a foto de origem tem 857px (é recorte de post do
+ * Instagram deles), e **o Astro não faz upscale** — ele devolveria um arquivo
+ * de 857px em silêncio enquanto o `<meta>` anunciava 1200. Prévia com medida
+ * mentirosa é prévia que o WhatsApp descarta.
+ *
+ * Daí as duas regras aqui: pedir a largura NATIVA, e escrever no `<meta>` o
+ * que o `getImage` DEVOLVEU, nunca o que foi pedido. Assim, se um dia
+ * chegarem os originais em alta, é só trocar o arquivo — o número se corrige
+ * sozinho.
+ */
+const preview = await getImage({
+  src: img(og.imagem),
+  width: 856,
+  height: 448,
+  fit: 'cover',
+  format: 'jpg',
+});
+const previewUrl = new URL(preview.src, Astro.site ?? Astro.url).href;
+const previewW = String(preview.attributes.width ?? preview.options.width);
+const previewH = String(preview.attributes.height ?? preview.options.height);
+const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url).href;
+
+/**
+ * Dados estruturados. Num site de espaço de eventos isso não é enfeite: é o
+ * que faz o Google entender endereço, telefone e tipo de negócio — que é
+ * justamente o argumento de venda contra "ter só Instagram".
+ */
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'EventVenue',
+  name: site.nome,
+  description: site.descricao,
+  telephone: `+${site.whatsapp}`,
+  url: canonical,
+  image: previewUrl,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: `${site.logradouro} — ${site.bairro}`,
+    addressLocality: site.cidade,
+    addressRegion: site.estado,
+    postalCode: site.cep,
+    addressCountry: 'BR',
+  },
+  sameAs: [site.instagram],
+  maximumAttendeeCapacity: sobre.numeros[0].valor,
+};
+---
+
+<html lang="pt-BR" class="js-anim">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#0f1712" />
+
+    {/*
+      Enquanto for protótipo, fora da busca. Sem isto o demo pode ranquear
+      para "recanto paraíso maringá" e competir com o Instagram do próprio
+      espaço — atrapalhar o negócio dele antes da primeira conversa.
+      Vira indexável sozinho quando `demo` virar false em src/data/site.ts.
+    */}
+    {site.demo && <meta name="robots" content="noindex, nofollow" />}
+
+    <link rel="canonical" href={canonical} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content={site.nome} />
+    <meta property="og:image" content={previewUrl} />
+    <meta property="og:image:width" content={previewW} />
+    <meta property="og:image:height" content={previewH} />
+    <meta property="og:image:alt" content={site.descricao} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <script is:inline>
+      // Roda antes da pintura: sem JS ou com reduced-motion o conteúdo nunca
+      // fica preso invisível (o CSS só esconde quando .js-anim está presente).
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.documentElement.classList.remove('js-anim');
+      }
+      // Marca que há JS: os controles do simulador só aparecem com ele.
+      document.documentElement.classList.add('js');
+    </script>
+  </head>
+
+  <body>
+    <a
+      href="#conteudo"
+      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-cristal focus:px-5 focus:py-3 focus:font-medium focus:text-mata"
+    >
+      Pular para o conteúdo
+    </a>
+
+    <slot />
+
+    {/* Cursor decorativo — aria-hidden e pointer-events:none por definição */}
+    <div
+      data-cursor
+      aria-hidden="true"
+      class="pointer-events-none fixed left-0 top-0 z-[90] hidden h-3 w-3 rounded-full bg-cristal mix-blend-difference [@media(pointer:fine)]:block"
+    >
+    </div>
+
+    <script>
+      import '../scripts/motion';
+    </script>
+
+    <style is:global>
+      /* Header muda de fundo ao sair do topo */
+      [data-header] {
+        transition:
+          background-color var(--dur-base) var(--ease-out-expo),
+          border-color var(--dur-base) var(--ease-out-expo),
+          backdrop-filter var(--dur-base) var(--ease-out-expo);
+      }
+      [data-header].is-stuck {
+        background-color: rgb(15 23 18 / 0.85);
+        backdrop-filter: blur(14px);
+        border-color: var(--color-line);
+      }
+
+      /* Leque do menu mobile: abre a partir do canto do botão.
+         `visibility` entra na transição para o painel não ficar clicável
+         enquanto está invisível — e ainda assim animar a saída. */
+      [data-menu-panel] {
+        transform-origin: top right;
+        opacity: 0;
+        transform: scale(0.94) translateY(-8px);
+        visibility: hidden;
+        pointer-events: none;
+        transition:
+          opacity var(--dur-base) var(--ease-out-expo),
+          transform var(--dur-base) var(--ease-out-expo),
+          visibility var(--dur-base);
+      }
+      [data-menu-panel].is-open {
+        opacity: 1;
+        transform: none;
+        visibility: visible;
+        pointer-events: auto;
+      }
+
+      /* Barra flutuante do simulador — só aparece depois da primeira escolha.
+         Fica FORA do header de propósito: `position: fixed` dentro de um
+         elemento com `backdrop-filter` deixa de ser fixo (o filtro cria bloco
+         de contenção) e o painel ficaria preso no topo. */
+      [data-orc-pill] {
+        opacity: 0;
+        transform: translateY(120%);
+        visibility: hidden;
+        pointer-events: none;
+        transition:
+          opacity var(--dur-base) var(--ease-out-expo),
+          transform var(--dur-slow) var(--ease-out-expo),
+          visibility var(--dur-slow);
+      }
+      [data-orc-pill].is-visivel {
+        opacity: 1;
+        transform: none;
+        visibility: visible;
+        pointer-events: auto;
+      }
+
+      /* SplitText precisa que as linhas sejam blocos */
+      .split-line {
+        display: block;
+      }
+
+      /* Marquee contínuo em CSS puro — mais leve que animar via JS */
+      @keyframes marquee-scroll {
+        from {
+          transform: translateX(0);
+        }
+        to {
+          transform: translateX(-50%);
+        }
+      }
+      .marquee-track {
+        animation: marquee-scroll 38s linear infinite;
+      }
+      /* Deixa ler a faixa parada. Só no mouse: no toque, "hover" fica preso
+         depois do primeiro toque e a faixa nunca mais voltaria a andar. */
+      @media (pointer: fine) {
+        .marquee-track:hover {
+          animation-play-state: paused;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .marquee-track {
+          animation: none;
+        }
+      }
+    </style>
+  </body>
+</html>

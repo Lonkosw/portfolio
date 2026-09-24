@@ -1,0 +1,20 @@
+---
+import { site } from '../data/site';
+---
+
+{
+  site.demo && (
+    <div class="border-b border-acento/25 bg-cobre/20">
+      {/*
+        O aviso das fotos vive AQUI, junto do aviso de protótipo, e não numa
+        faixa própria: é um lugar só para olhar, e some junto quando o
+        `demo` virar false — momento em que as fotos reais já terão entrado.
+      */}
+      <p class="shell py-2.5 text-center text-[13px] leading-snug text-texto-dim">
+        <span class="font-semibold text-acento">Protótipo de demonstração.</span>{' '}
+        Esta página não é o site oficial do {site.nome} — é uma proposta de como ele
+        poderia ser. As fotos são de banco de imagens, não são trabalhos do salão.
+      </p>
+    </div>
+  )
+}

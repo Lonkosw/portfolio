@@ -1,0 +1,45 @@
+---
+import Layout from '../layouts/Layout.astro';
+import DemoBanner from '../components/DemoBanner.astro';
+import Header from '../components/Header.astro';
+// Abertura cinematográfica desligada — componente e motor continuam no repo.
+// Para religar: descomentar o import, o <HeroCinema /> abaixo e a chamada de
+// setupCinema() em src/scripts/motion.ts. Ver ABERTURA-CINEMATOGRAFICA.md.
+// import HeroCinema from '../components/HeroCinema.astro';
+import Hero from '../components/Hero.astro';
+import Marquee from '../components/Marquee.astro';
+import Sobre from '../components/Sobre.astro';
+import Especialidades from '../components/Especialidades.astro';
+import Cardapio from '../components/Cardapio.astro';
+import Criacoes from '../components/Criacoes.astro';
+import Processo from '../components/Processo.astro';
+import Depoimentos from '../components/Depoimentos.astro';
+import Orcamento from '../components/Orcamento.astro';
+import Orcamentador from '../components/Orcamentador.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../data/site';
+---
+
+<Layout
+  title={`${site.nome} — Doces finos para casamentos e eventos em ${site.cidade}`}
+  description={site.descricao}
+>
+  {site.demo && <DemoBanner />}
+  <Header />
+
+  <main id="conteudo">
+    {/* <HeroCinema /> */}
+    <Hero />
+    <Marquee />
+    <Sobre />
+    <Especialidades />
+    <Cardapio />
+    <Criacoes />
+    <Processo />
+    <Depoimentos />
+    <Orcamento />
+  </main>
+
+  <Orcamentador />
+  <Footer />
+</Layout>

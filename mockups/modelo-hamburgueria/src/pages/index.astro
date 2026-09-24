@@ -1,0 +1,53 @@
+---
+import Layout from '../layouts/Layout.astro';
+import DemoBanner from '../components/DemoBanner.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import Marquee from '../components/Marquee.astro';
+import Cardapio from '../components/Cardapio.astro';
+import Ambiente from '../components/Ambiente.astro';
+import Depoimentos from '../components/Depoimentos.astro';
+import Pedir from '../components/Pedir.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../data/site';
+
+const title = `${site.nome} — Hamburgueria artesanal em ${site.cidade}`;
+---
+
+<Layout title={title} description={site.descricao}>
+  <DemoBanner />
+  <Header />
+
+  {/*
+    ORDEM, com intenção:
+
+      HERO com vídeo é a primeira coisa vista — pedido do Théo.
+
+      CARDÁPIO em seguida: é a pergunta que qualquer visitante faz primeiro
+      num site de hamburgueria ("o que eles vendem?").
+
+      AMBIENTE depois do cardápio: já convencido pela comida, mostra que dá
+      pra comer no local também, não só delivery.
+
+      DEPOIMENTOS ficam perto do fim — é o empurrão antes do pedido, não a
+      abertura.
+
+      PEDIR fecha a página: é o CTA principal do site (delivery/retirada é
+      o foco do negócio).
+
+      Nada de animação 3D ou scroll-scrub aqui — decisão do Théo, 15/09:
+      voltar ao padrão enxuto do modelo-b (site rápido e bem otimizado em
+      vez de peça de impacto pesada). Ver git/histórico se precisar
+      resgatar a versão com Three.js e a montagem por scroll.
+  */}
+  <main id="conteudo">
+    <Hero />
+    <Marquee />
+    <Cardapio />
+    <Ambiente />
+    <Depoimentos />
+    <Pedir />
+  </main>
+
+  <Footer />
+</Layout>

@@ -1,0 +1,76 @@
+---
+import { Image } from 'astro:assets';
+import { site, especialidades, orcamento } from '../data/site';
+import { img } from '../lib/images';
+import { wa } from '../lib/wa';
+---
+
+<section id="especialidades" class="border-t border-line bg-noir-soft py-24 lg:py-32">
+  <div class="shell">
+    <div data-centro-mobile class="max-w-2xl">
+      <p data-reveal class="eyebrow">{especialidades.eyebrow}</p>
+      <h2
+        data-reveal
+        data-reveal-delay="0.06"
+        class="mt-6 font-[family-name:var(--font-display)] text-[clamp(2rem,5.5vw,3.25rem)] text-cream"
+      >
+        {especialidades.titulo}
+      </h2>
+    </div>
+
+    <ul class="mt-14 grid gap-6 md:grid-cols-3">
+      {
+        especialidades.itens.map((item, i) => {
+          const link = wa(
+            site.whatsapp,
+            `${orcamento.mensagem} Tenho interesse em: ${item.nome}.`,
+          );
+          return (
+            <li data-reveal data-reveal-delay={i * 0.1}>
+              <a
+                href={link}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="group flex h-full flex-col overflow-hidden rounded-[1.5rem] border border-line bg-surface transition-colors duration-300 hover:border-gold/60"
+              >
+                <div class="relative overflow-hidden">
+                  <Image
+                    src={img(item.imagem)}
+                    alt={item.alt}
+                    widths={[400, 640, 800]}
+                    sizes="(min-width: 768px) 30vw, 92vw"
+                    loading="lazy"
+                    class="h-60 w-full object-cover brightness-[0.82] saturate-[0.85] transition-[transform,filter] duration-[900ms] ease-[var(--ease-out-expo)] group-hover:scale-[1.06] group-hover:brightness-100 group-hover:saturate-100"
+                  />
+                  <div
+                    aria-hidden="true"
+                    class="pointer-events-none absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent"
+                  />
+                </div>
+
+                <div class="flex flex-1 flex-col p-7">
+                  <h3 class="font-[family-name:var(--font-display)] text-2xl text-cream transition-colors group-hover:text-gold">
+                    {item.nome}
+                  </h3>
+                  <p class="mt-3 flex-1 text-[15px] leading-relaxed text-cream-dim">
+                    {item.descricao}
+                  </p>
+                  <span class="mt-6 inline-flex items-center gap-2 text-sm font-medium text-gold">
+                    Pedir orçamento
+                    <svg
+                      width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                      stroke-width="2" aria-hidden="true"
+                      class="transition-transform duration-300 ease-[var(--ease-out-expo)] group-hover:translate-x-1"
+                    >
+                      <path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                  </span>
+                </div>
+              </a>
+            </li>
+          );
+        })
+      }
+    </ul>
+  </div>
+</section>

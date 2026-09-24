@@ -1,0 +1,112 @@
+---
+import { site, nav, visite } from '../data/site';
+---
+
+<footer id="visite" class="border-t border-linha bg-superficie">
+  <div class="shell py-16 lg:py-20">
+    <div data-reveal data-centro-mobile class="max-w-2xl">
+      <p class="eyebrow">{visite.eyebrow}</p>
+      <h2 class="mt-6 text-[clamp(2rem,5vw,3.2rem)] text-texto">{visite.titulo}</h2>
+    </div>
+
+    <div class="mt-14 grid gap-12 lg:grid-cols-[1.3fr_1fr_1fr]">
+      <div data-centro-mobile class="max-w-sm">
+        <p class="flex items-baseline gap-[0.34em] text-[26px] leading-none">
+          <span class="font-[family-name:var(--font-display)] text-texto">Ana</span>
+          <span class="font-[family-name:var(--font-display)] italic text-acento">Bistrô</span>
+        </p>
+        <p class="mt-3 text-[15px] italic text-texto-dim">{site.tagline}</p>
+        <p class="mt-5 text-[14.5px] leading-relaxed text-texto-dim">{site.descricao}</p>
+      </div>
+
+      <div data-centro-mobile>
+        <h3 class="text-[12px] font-semibold uppercase tracking-[0.22em] text-acento">Contato</h3>
+        <ul class="mt-5 space-y-0.5">
+          <li>
+            <a
+              href={`tel:+${site.whatsapp}`}
+              class="flex min-h-[44px] items-center text-[15px] text-texto-dim transition-colors duration-[var(--dur-fast)] hover:text-texto"
+            >
+              {site.whatsappExibicao}
+            </a>
+          </li>
+          <li>
+            <a
+              href={site.instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="flex min-h-[44px] items-center text-[15px] text-texto-dim transition-colors duration-[var(--dur-fast)] hover:text-texto"
+            >
+              {site.instagramExibicao}
+            </a>
+          </li>
+          <li>
+            <a
+              href={site.instagramChef}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="flex min-h-[44px] items-center text-[15px] text-texto-dim transition-colors duration-[var(--dur-fast)] hover:text-texto"
+            >
+              {site.instagramChefExibicao}
+            </a>
+          </li>
+          <li>
+            <span class="flex min-h-[44px] items-center text-[15px] leading-snug text-texto-dim">
+              {`${site.endereco} · ${site.cidade} — ${site.estado}`}
+            </span>
+          </li>
+        </ul>
+      </div>
+
+      <div data-centro-mobile>
+        <h3 class="text-[12px] font-semibold uppercase tracking-[0.22em] text-acento">Horários</h3>
+        <ul class="mt-5 space-y-3">
+          {
+            site.horarios.map((h) => (
+              <li class="text-[15px] leading-snug text-texto-dim">
+                <span class="block text-texto">{h.dias}</span>
+                <span data-tabular>{h.horas}</span>
+              </li>
+            ))
+          }
+        </ul>
+
+        {/* `min-w-[44px]` além da altura: "A casa" e "A chef" são curtos e
+            ficavam com 39–41px de largura. O padding transforma o vão
+            entre os itens em área clicável em vez de espaço morto. */}
+        <nav aria-label="Navegação do rodapé" class="-mx-2 mt-8">
+          <ul class="flex flex-wrap gap-x-1 gap-y-1">
+            {
+              nav.map((item) => (
+                <li>
+                  <a
+                    href={item.href}
+                    class="flex min-h-[44px] min-w-[44px] items-center justify-center px-2 text-[14px] text-texto-dim transition-colors duration-[var(--dur-fast)] hover:text-texto"
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+      </div>
+    </div>
+
+    <div class="mt-16 border-t border-linha pt-8">
+      <p class="text-center text-[13px] leading-relaxed text-texto-dim">
+        {`© ${new Date().getFullYear()} ${site.nome} · ${site.cidade} — ${site.estado}`}
+      </p>
+
+      {
+        site.demo && (
+          <p class="mx-auto mt-4 max-w-2xl text-center text-[12.5px] leading-relaxed text-texto-dim">
+            Esta página é um <strong class="font-semibold text-texto">protótipo de demonstração</strong> e
+            não é o site oficial do {site.nome}. As fotos são ilustrativas e os preços da carta
+            não foram confirmados com o restaurante.
+          </p>
+        )
+      }
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,25 @@
+# build
+dist/
+.astro/
+.vercel/
+
+# deps
+node_modules/
+
+# ambiente
+.env
+.env.production
+
+# sistema
+.DS_Store
+Thumbs.db
+
+# logs de verificação (gerados por tools/)
+*.log
+qa*.png
+sec*.png
+desk*.png
+conferir*.png
+
+# originais das fotos antes do corte
+.imagens-originais/

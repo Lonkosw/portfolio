@@ -1,0 +1,25 @@
+---
+import { depoimentos } from '../data/site';
+---
+
+<section class="py-24 lg:py-32">
+  <div class="shell">
+    <div
+      data-reveal
+      class="flex flex-col items-center justify-center rounded-[1.5rem] border border-dashed border-line px-6 py-20 text-center"
+    >
+      <span
+        aria-hidden="true"
+        class="font-[family-name:var(--font-display)] text-5xl leading-none text-gold/30"
+      >
+        &ldquo;
+      </span>
+      <p class="mt-5 font-[family-name:var(--font-display)] text-2xl text-cream-dim">
+        {depoimentos.placeholder}
+      </p>
+      <p class="mt-4 max-w-md text-sm leading-relaxed text-cream-dim/70">
+        {depoimentos.placeholderNota}
+      </p>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,92 @@
+---
+import { Image } from 'astro:assets';
+import { site, espaco } from '../data/site';
+import { img } from '../lib/images';
+
+const foto = img(espaco.imagem);
+---
+
+<section id="espaco" class="border-t border-linha bg-fundo py-24 lg:py-32">
+  <div class="shell">
+    <div class="grid items-center gap-12 lg:grid-cols-[1fr_1.15fr] lg:gap-16">
+      <div data-reveal data-centro-mobile class="max-w-xl">
+        <p class="eyebrow">{espaco.eyebrow}</p>
+        <h2 class="mt-5 text-[clamp(2.3rem,6vw,3.8rem)] text-texto">{espaco.titulo}</h2>
+
+        {
+          espaco.paragrafos.map((p) => (
+            <p class="mt-5 text-[16.5px] leading-relaxed text-texto-dim">{p}</p>
+          ))
+        }
+
+        {/* As quatro palavras são VERBATIM da descrição que eles escreveram
+            no perfil do Google. Não é slogan meu — ver o comentário no
+            site.ts. */}
+        <ul data-reveal-grupo class="mt-9 flex flex-wrap gap-2.5">
+          {
+            espaco.valores.map((v) => (
+              <li class="rounded-full border border-linha bg-superficie px-4 py-2 text-[12.5px] font-semibold uppercase tracking-[0.13em] text-acento">
+                {v}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      {/* A única foto nativamente horizontal do acervo — por isso ela, e só
+          ela, ocupa o bloco largo. Três níveis de aninhamento: a moldura
+          recorta, o <div> recebe o transform do reveal e a <Image> recebe o
+          do parallax. Dois transforms no mesmo nó se apagariam. */}
+      <div
+        data-parallax-frame
+        class="relative aspect-[16/10] overflow-hidden rounded-[2rem] border border-linha"
+      >
+        <div data-reveal-img class="h-full w-full">
+          <div class="h-full w-full">
+            <Image
+              src={foto}
+              alt={espaco.alt}
+              widths={[640, 1024, 1600]}
+              sizes="(min-width: 1024px) 56vw, 92vw"
+              loading="lazy"
+              data-parallax="5"
+              class="parallax-folga object-cover"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {/* Três fotos de apoio. É o que prova o que o texto acabou de afirmar:
+        espelhos em onda, cordas, lavatórios, plantas. */}
+    <div class="mt-8 grid gap-4 sm:grid-cols-3 lg:mt-10 lg:gap-5">
+      {
+        espaco.galeria.map((g) => {
+          const f = img(g.imagem);
+          return (
+            <figure class="group relative overflow-hidden rounded-2xl border border-linha">
+              <div data-reveal-img class="aspect-[4/5] w-full">
+                <div class="h-full w-full">
+                  <Image
+                    src={f}
+                    alt={g.alt}
+                    widths={[360, 540, 800]}
+                    sizes="(min-width: 640px) 31vw, 92vw"
+                    loading="lazy"
+                    class="h-full w-full object-cover [@media(hover:hover)]:transition-transform [@media(hover:hover)]:duration-[var(--dur-slower)] [@media(hover:hover)]:ease-[var(--ease-out)] [@media(hover:hover)]:group-hover:scale-[1.05]"
+                  />
+                </div>
+              </div>
+              {g.legenda && (
+                <figcaption data-sobre-foto
+                class="pointer-events-none absolute inset-x-0 bottom-0 veu-legenda px-5 pb-4 pt-12 text-[13px] leading-snug tracking-wide text-creme">
+                  {g.legenda}
+                </figcaption>
+              )}
+            </figure>
+          );
+        })
+      }
+    </div>
+  </div>
+</section>

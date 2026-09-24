@@ -1,0 +1,179 @@
+---
+/**
+ * Depoimentos como CONVERSA que chega sozinha.
+ *
+ * POR QUE ASSIM, E NÃO EM CARTÕES COM ASPAS:
+ * a fonte deste formato não é um formulário de avaliação — são prints de
+ * conversa que clientes mandam depois do pedido, que a casa republica.
+ * Eles já NASCEM em balão. Transformá-los em cartão com aspas douradas
+ * descaracterizaria a única coisa que os torna críveis: parecem o que são.
+ * (Neste mockup os três exemplos são fictícios — ver aviso no site.ts.)
+ *
+ * ⚠️ O QUE ISTO DELIBERADAMENTE NÃO É: uma imitação da tela do WhatsApp.
+ * Nada de verde-WhatsApp, tique duplo azul, barra de status ou nome no
+ * topo. Copiar a interface de outro aplicativo e colocar o texto de outra
+ * pessoa dentro lê como print forjado — que é o oposto do que a seção
+ * precisa provar. Aqui é balão estilizado na cor da casa: fica claro que é
+ * CITAÇÃO, não captura de tela.
+ *
+ * ACESSIBILIDADE:
+ *  - a marcação é <ol>/<li> com <blockquote>, então o leitor de tela anuncia
+ *    "citação, 1 de 4" e lê o texto inteiro na ordem, sem depender de
+ *    nenhuma animação ter rodado;
+ *  - os três pontinhos de "digitando" são `aria-hidden`: são enfeite, e um
+ *    leitor de tela lendo "digitando" quatro vezes seria ruído puro;
+ *  - com `prefers-reduced-motion` todos os balões nascem visíveis e o
+ *    indicador some (`display: none` no global.css). A informação está no
+ *    texto — ela nunca pode depender do movimento.
+ *
+ * ÍNDICE DA COREOGRAFIA: `--i` é a posição GLOBAL do balão na conversa
+ * inteira, contada abaixo no `frontmatter`. O CSS multiplica por 550ms.
+ * Não é por grupo: se fosse, os quatro grupos começariam ao mesmo tempo.
+ */
+import { site, depoimentos } from '../data/site';
+import { wa } from '../lib/wa';
+
+const linkFecho = wa(site.whatsapp, depoimentos.fechoMensagem);
+
+// Numera os balões na ordem em que aparecem na tela. `inicio` é o índice do
+// primeiro balão do grupo — é ele que o indicador de "digitando" usa.
+let contador = 0;
+const grupos = depoimentos.conversa.map((item) => {
+  const inicio = contador;
+  const mensagens = item.mensagens.map((texto) => ({ texto, i: contador++ }));
+  return { ...item, inicio, mensagens };
+});
+// O balão de fecho é o último da fila.
+const iFecho = contador;
+---
+
+<section
+  id="depoimentos"
+  data-secao-adiavel
+  data-tema="realce"
+  class="border-t border-linha bg-fundo py-24 lg:py-32"
+>
+  {/* DUAS COLUNAS no desktop, e não uma coluna centralizada.
+      Centralizada, a conversa começava 260px à direita do título e a
+      diferença lia como desalinho, não como decisão. Aqui o título fica
+      grudado (`sticky`) enquanto as mensagens sobem ao lado — que é como se
+      lê uma conversa: o assunto parado, as falas passando.               */}
+  <div class="shell grid gap-12 lg:grid-cols-[1fr_1.05fr] lg:gap-16">
+    <div
+      data-reveal
+      data-centro-mobile
+      class="max-w-xl lg:sticky lg:top-28 lg:self-start"
+    >
+      <p class="eyebrow">{depoimentos.eyebrow}</p>
+      <h2 class="mt-5 text-[clamp(2.3rem,6vw,3.8rem)] text-texto">{depoimentos.titulo}</h2>
+      <p class="mt-5 text-[16.5px] leading-relaxed text-texto-dim">{depoimentos.texto}</p>
+
+      {/* A nota do Google fica NESTA coluna, junto do título: as quatro
+          mensagens ao lado são quatro, e sozinhas poderiam ser as quatro
+          melhores de cem. O número diz que não são exceção — e dito antes
+          da leitura, ele enquadra o que vem a seguir. */}
+      <a
+        href={site.avaliacoesGoogle}
+        target="_blank"
+        rel="noopener noreferrer"
+        data-press
+        class="mt-8 inline-flex min-h-[44px] flex-wrap items-center gap-x-3 gap-y-1 rounded-full border border-linha px-5 py-2.5 transition-colors duration-[var(--dur-fast)] hover:border-acento hover:bg-superficie"
+      >
+        <span aria-hidden="true" class="flex gap-0.5 text-acento">
+          {
+            Array.from({ length: 5 }).map(() => (
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                <path d="m12 2 2.9 6.3 6.8.8-5 4.7 1.3 6.8L12 17.3 6 20.6l1.3-6.8-5-4.7 6.8-.8L12 2Z" />
+              </svg>
+            ))
+          }
+        </span>
+        <span class="text-[14.5px] text-texto">
+          <strong class="font-semibold" data-tabular>{site.google.nota}</strong>
+          <span class="text-texto-dim">
+            {` em ${site.google.avaliacoes} avaliações no Google · `}
+          </span>
+          <span class="font-semibold text-acento">{depoimentos.ctaAvaliacoes}</span>
+        </span>
+      </a>
+    </div>
+
+    {/* A conversa. `data-conversa` é o gatilho: o observer põe `.is-visivel`
+        aqui e o CSS escalona tudo lá dentro a partir de `--i`. */}
+    <ol data-conversa class="space-y-10">
+      {
+        grupos.map((grupo) => (
+          <li>
+            {/* Linha reservada para os pontinhos. A altura é FIXA (26px) de
+                propósito: quando o indicador apaga, o espaço vira o vão
+                entre as mensagens. Se ele saísse do fluxo, cada balão
+                puxaria a página para cima ao chegar — quatro saltos de
+                layout durante a leitura. */}
+            <div
+              data-digitando
+              aria-hidden="true"
+              style={`--i:${grupo.inicio}`}
+              class="mb-2 flex h-[26px] items-center"
+            >
+              <span class="flex items-center gap-1 rounded-full bg-superficie px-3 py-1.5">
+                <span data-ponto="0" class="block h-1.5 w-1.5 rounded-full bg-texto-dim" />
+                <span data-ponto="1" class="block h-1.5 w-1.5 rounded-full bg-texto-dim" />
+                <span data-ponto="2" class="block h-1.5 w-1.5 rounded-full bg-texto-dim" />
+              </span>
+            </div>
+
+            <blockquote class="space-y-2">
+              {grupo.mensagens.map((m) => (
+                <p
+                  data-balao
+                  style={`--i:${m.i}`}
+                  class="w-fit max-w-[92%] rounded-[1.25rem] rounded-bl-md bg-superficie px-5 py-3.5 text-[15.5px] leading-relaxed text-texto shadow-[0_10px_24px_-18px_rgb(20_30_18/0.9)] sm:max-w-[85%]"
+                >
+                  {m.texto}
+                </p>
+              ))}
+            </blockquote>
+
+            {/* O contexto no lugar onde um app põe o horário. Diz de que
+                serviço a mensagem fala, que é a informação que falta quando
+                o nome não pode aparecer. */}
+            <p class="mt-2 pl-1 text-[12.5px] text-texto-dim">
+              <span class="sr-only">Cliente, </span>{grupo.contexto}
+            </p>
+          </li>
+        ))
+      }
+
+      {/* ── O fecho ─────────────────────────────────────────────────────
+          Sai do outro lado, na cor de acento, porque NÃO é um cliente
+          falando: é o site. Está escrito embaixo, em letra pequena, para
+          não restar dúvida. Inventar uma resposta da casa aqui seria pôr
+          palavra na boca dela no meio das mensagens de exemplo. */}
+      <li class="flex flex-col items-end">
+        <div
+          data-balao="salao"
+          style={`--i:${iFecho}`}
+          class="w-fit max-w-[92%] rounded-[1.25rem] rounded-br-md bg-acento px-6 py-5 text-right sm:max-w-[85%]"
+        >
+          <p class="font-[family-name:var(--font-display)] text-[1.7rem] leading-tight text-btn-texto">
+            {depoimentos.fecho}
+          </p>
+          <a
+            href={linkFecho}
+            data-press
+            target="_blank"
+            rel="noopener noreferrer"
+            class="mt-4 inline-flex min-h-[48px] items-center justify-center gap-2.5 rounded-full bg-btn-texto px-6 text-[15px] font-semibold text-btn-texto transition-colors duration-[var(--dur-fast)] hover:bg-acento-hi"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.87 9.87 0 0 0 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2Zm0 18.15h-.01a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24 2.2 0 4.27.86 5.83 2.42a8.19 8.19 0 0 1 2.41 5.83c0 4.54-3.7 8.23-8.24 8.23Zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.24-.64.8-.78.97-.15.16-.29.18-.53.06-.25-.13-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.01-.38.11-.5.11-.11.25-.29.37-.44.13-.15.17-.25.25-.42.08-.16.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.4-.42-.56-.43h-.48c-.16 0-.43.06-.65.31-.22.25-.85.84-.85 2.03 0 1.2.87 2.35.99 2.51.12.16 1.71 2.62 4.15 3.67.58.25 1.03.4 1.39.51.58.19 1.11.16 1.53.1.47-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.15-1.18-.06-.11-.22-.17-.47-.29Z"></path>
+            </svg>
+            {depoimentos.fechoCta}
+          </a>
+        </div>
+        <p class="mt-2 pr-1 text-[12.5px] text-texto-dim">esta mensagem é do site, não da hamburgueria</p>
+      </li>
+    </ol>
+
+  </div>
+</section>

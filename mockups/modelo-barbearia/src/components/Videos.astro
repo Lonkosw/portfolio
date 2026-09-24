@@ -1,0 +1,139 @@
+---
+/**
+ * Duas transformações em vídeo.
+ *
+ * ⚠️ ELES NÃO TOCAM SOZINHOS, e essa é a decisão mais importante deste
+ * arquivo. Juntos pesam ~3,7 MB — muito mais que a página inteira. No
+ * Recanto Paraíso um vídeo de 1,6 MB toca sozinho ao entrar na tela, e ali
+ * isso se defende: é UM arquivo, e a mesa montada só existe em movimento.
+ * Aqui são DOIS, e o pôster já mostra do que se trata: a pessoa decide se
+ * quer ver o resto antes de baixar um byte de vídeo.
+ *
+ * O resultado é que o custo do vídeo só existe para quem pediu. `preload`
+ * fica em `none`, então nem os metadados descem antes do toque.
+ *
+ * O ELEMENTO É UM <button> ATÉ O PRIMEIRO TOQUE. Não é enfeite: antes de
+ * tocar, o bloco é uma imagem que faz uma coisa quando acionada — isso é um
+ * botão, e ganha teclado e leitor de tela de graça. Depois do toque, quem
+ * manda é o `controls` nativo do <video>, que já tem pausa, barra de
+ * progresso e tudo o mais que eu escreveria pior.
+ *
+ * Com `prefers-reduced-motion` nada muda aqui: o vídeo já começa parado. É
+ * o único bloco do site que nasce acessível a movimento reduzido sem
+ * precisar de regra nenhuma.
+ */
+import { Image } from 'astro:assets';
+import { videos } from '../data/site';
+import { img, larguras } from '../lib/images';
+---
+
+<section id="videos" data-secao-adiavel class="border-t border-linha bg-superficie py-20 lg:py-28">
+  <div class="shell">
+    <div data-reveal data-centro-mobile class="max-w-2xl">
+      <p class="eyebrow">{videos.eyebrow}</p>
+      <h2 class="mt-5 text-[clamp(2rem,7vw,3.2rem)] text-texto">{videos.titulo}</h2>
+      <p class="mt-5 text-[16px] leading-relaxed text-texto-dim">{videos.texto}</p>
+    </div>
+
+    <div data-reveal-grupo class="mt-12 grid gap-6 sm:grid-cols-2 lg:mt-16 lg:gap-8">
+      {
+        videos.itens.map((v) => {
+          const poster = img(v.poster);
+          return (
+            <figure class="mx-auto w-full max-w-[22rem]">
+              {/*
+                A caixa reserva a proporção exata ANTES de o vídeo existir na
+                página — sem isso o layout salta quando ele carrega.
+              */}
+              <div
+                data-video-caixa
+                class="relative overflow-hidden rounded-2xl border border-linha bg-fundo"
+                style={`aspect-ratio: ${videos.largura} / ${videos.altura}`}
+              >
+                <Image
+                  src={poster}
+                  alt={v.alt}
+                  widths={larguras(poster, [320, 480, 720])}
+                  sizes="(min-width: 640px) 22rem, 88vw"
+                  loading="lazy"
+                  class="absolute inset-0 h-full w-full object-cover"
+                />
+
+                {/* Véu leve só na metade de baixo: é onde o rótulo fica.
+                    Escurecer o quadro inteiro esconderia a cena que o
+                    pôster existe para mostrar. */}
+                <div
+                  aria-hidden="true"
+                  class="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-fundo via-fundo/70 to-transparent"
+                />
+
+                <button
+                  type="button"
+                  data-video-play
+                  data-src={v.arquivo}
+                  data-press
+                  class="absolute inset-0 grid place-items-center text-texto transition-colors duration-[var(--dur-fast)] [@media(hover:hover)]:hover:bg-fundo/15"
+                >
+                  <span class="grid h-16 w-16 place-items-center rounded-full border border-platina/60 bg-fundo/80 transition-transform duration-[var(--dur-base)] ease-[var(--ease-out)] [@media(hover:hover)]:group-hover:scale-105">
+                    {/* Triângulo deslocado 2px à direita: um "play" centrado
+                        matematicamente parece encostado na esquerda. */}
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                      <path d="M6 3.5 20.5 12 6 20.5Z" transform="translate(2 0)" />
+                    </svg>
+                  </span>
+                  <span class="sr-only">Assistir: {v.titulo}</span>
+                </button>
+
+                {/* O peso fica ESCRITO. Quem está no 4G decide sabendo. */}
+                <span
+                  data-video-peso
+                  class="pointer-events-none absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-fundo/85 px-3 py-1 text-[12.5px] font-medium tracking-wide text-texto-dim"
+                >
+                  Toque para assistir · sem som
+                </span>
+              </div>
+
+              <figcaption class="mt-4 text-center sm:text-left">
+                <h3 class="text-[1.15rem] font-semibold text-texto">{v.titulo}</h3>
+                <p class="mt-1 text-[14.5px] leading-relaxed text-texto-dim">{v.texto}</p>
+              </figcaption>
+            </figure>
+          );
+        })
+      }
+    </div>
+  </div>
+</section>
+
+<script>
+  /**
+   * Troca o pôster pelo <video> no primeiro toque, e só nesse momento cria o
+   * elemento — antes disso não existe nem a tag, então não há como o
+   * navegador buscar nada por conta própria.
+   */
+  document.querySelectorAll<HTMLButtonElement>('[data-video-play]').forEach((botao) => {
+    botao.addEventListener(
+      'click',
+      () => {
+        const caixa = botao.closest<HTMLElement>('[data-video-caixa]');
+        const src = botao.dataset.src;
+        if (!caixa || !src) return;
+
+        const video = document.createElement('video');
+        video.src = src;
+        video.muted = true; // autoplay com som é bloqueado em todo navegador
+        video.loop = true;
+        video.playsInline = true;
+        video.controls = true; // daqui em diante quem manda é o nativo
+        video.className = 'absolute inset-0 h-full w-full object-cover';
+
+        caixa.replaceChildren(video);
+        video.play().catch(() => {
+          // Se o navegador recusar, o `controls` continua lá e a pessoa
+          // toca de novo. Nada a fazer, e nada quebrado.
+        });
+      },
+      { once: true },
+    );
+  });
+</script>

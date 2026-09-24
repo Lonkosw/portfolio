@@ -1,0 +1,41 @@
+---
+import { site, depoimentos } from '../data/site';
+---
+
+{/*
+  Seção deliberadamente vazia. Depoimento inventado é a coisa mais fácil de
+  desmentir num salão de bairro com clientela de décadas — as clientes se conhecem.
+  Diferente dos protótipos anteriores, aqui existe fonte real: eles já têm
+  avaliações no Google. O card aponta para lá enquanto elas não são trazidas
+  para cá com autorização.
+*/}
+<section id="depoimentos" data-secao-adiavel class="border-t border-linha bg-fundo py-24 lg:py-32">
+  <div class="shell">
+    <div data-reveal data-centro-mobile class="max-w-2xl">
+      <p class="eyebrow">{depoimentos.eyebrow}</p>
+      <h2 class="mt-5 text-[clamp(2.1rem,5.5vw,3.4rem)] text-texto">{depoimentos.titulo}</h2>
+    </div>
+
+    <div
+      data-reveal
+      class="mt-12 rounded-[2rem] border border-dashed border-linha bg-superficie/60 px-7 py-14 text-center lg:px-12"
+    >
+      <p class="font-[family-name:var(--font-display)] text-[clamp(1.5rem,4vw,2.1rem)] text-texto-dim">
+        {depoimentos.placeholder}
+      </p>
+      <p class="mx-auto mt-4 max-w-xl text-[15px] leading-relaxed text-texto-dim">
+        {depoimentos.placeholderNota}
+      </p>
+
+      <a
+        href={site.avaliacoesGoogle}
+        target="_blank"
+        rel="noopener noreferrer"
+        data-press
+        class="mt-7 inline-flex min-h-[48px] items-center justify-center rounded-full border border-acento/50 px-6 text-[14.5px] font-semibold text-acento transition-colors duration-[var(--dur-fast)] hover:border-acento hover:bg-acento hover:text-btn-texto"
+      >
+        {depoimentos.ctaAvaliacoes}
+      </a>
+    </div>
+  </div>
+</section>

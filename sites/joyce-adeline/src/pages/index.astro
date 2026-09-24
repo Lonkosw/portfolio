@@ -1,0 +1,47 @@
+---
+import Layout from '../layouts/Layout.astro';
+import DemoBanner from '../components/DemoBanner.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import Portfolio from '../components/Portfolio.astro';
+import Sobre from '../components/Sobre.astro';
+import Planos from '../components/Planos.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../data/site';
+
+const title = `${site.nomeCompleto} — Ensaios de gestante, newborn e corporativo em ${site.cidade}`;
+---
+
+<Layout title={title} description={site.descricao}>
+  <DemoBanner />
+  <Header />
+
+  {/*
+    QUATRO SEÇÕES, e a ordem é a única coisa que este site precisa acertar
+    depois das fotos.
+
+      hero      — quem é e onde, numa foto
+      portfólio — o trabalho, e o mais cedo possível
+      sobre     — quem está atrás da câmera
+      ensaios   — os três tipos, cada um virando conversa
+      contato   — a ação (é o rodapé)
+
+    O PORTFÓLIO VEM ANTES DO "SOBRE", e isso inverte a ordem dos outros
+    sites da pasta. Num salão ou numa confeitaria a pessoa precisa entender
+    o negócio antes de olhar as fotos. Com fotógrafa é o contrário: ninguém
+    contrata por causa da biografia — decide-se olhando as imagens, e o
+    "sobre" só responde a uma pergunta que já nasceu do que se viu.
+
+    O ritmo alterna `bg-fundo` e `bg-superficie` de seção em seção. É pouca
+    diferença de tom de propósito: um contraste forte entre faixas roubaria
+    atenção das fotos, que é o que a página existe para mostrar.
+  */}
+  <main id="conteudo">
+    <Hero />
+    <Portfolio />
+    <Sobre />
+    <Planos />
+  </main>
+
+  <Footer />
+</Layout>

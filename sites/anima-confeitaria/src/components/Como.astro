@@ -1,0 +1,51 @@
+---
+import { como } from '../data/site';
+---
+
+<section id="como" data-secao-adiavel class="bg-fundo py-24 lg:py-32">
+  <div class="shell">
+    <div data-reveal data-centro-mobile class="max-w-2xl">
+      <p class="eyebrow">{como.eyebrow}</p>
+      <h2 class="mt-6 text-[clamp(2.1rem,5.5vw,3.4rem)] text-texto">{como.titulo}</h2>
+    </div>
+
+    {/* Três passos numa grade de 3: uma linha cheia, sem vão. */}
+    <ol data-reveal-grupo class="mt-14 grid gap-8 md:grid-cols-3 lg:mt-16 lg:gap-10">
+      {
+        como.passos.map((p) => (
+          <li class="relative">
+            {/* O número é ornamento tipográfico: quem lê recebe a ordem
+                pela própria <ol>, então ele fica `aria-hidden` para não
+                ser lido duas vezes. */}
+            <span
+              aria-hidden="true"
+              class="block font-[family-name:var(--font-display)] text-[3.2rem] italic leading-none text-acento/25"
+            >
+              {p.numero}
+            </span>
+            <h3 class="mt-3 text-[1.4rem] leading-snug text-texto">{p.nome}</h3>
+            <p class="mt-3 text-[15px] leading-relaxed text-texto-dim">{p.texto}</p>
+          </li>
+        ))
+      }
+    </ol>
+
+    {/* A nota de prazo. Fica num bloco próprio porque é a informação que
+        mais evita frustração — e é a única desta seção que pode custar uma
+        encomenda se for ignorada. */}
+    <p
+      data-reveal
+      class="mt-14 flex items-start gap-3 rounded-lg border border-acento/25 bg-rosa-fundo px-5 py-4 text-[14px] leading-relaxed text-texto lg:mt-16"
+    >
+      <svg
+        class="mt-0.5 shrink-0 text-acento"
+        width="16" height="16" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="1.8" aria-hidden="true"
+      >
+        <circle cx="12" cy="12" r="9" />
+        <path d="M12 7v5.5l3 2" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+      <span>{como.nota}</span>
+    </p>
+  </div>
+</section>

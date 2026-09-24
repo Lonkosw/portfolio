@@ -1,0 +1,271 @@
+---
+import { Image } from 'astro:assets';
+import { brigadeiros, bombons, regras, type Doce } from '../data/cardapio';
+import { imgDoce } from '../lib/images';
+
+const categorias: { id: string; label: string; itens: Doce[] }[] = [
+  { id: 'brigadeiros', label: 'Brigadeiros Gourmet', itens: [...brigadeiros] },
+  { id: 'bombons', label: 'Bombons, Trufas e Doces Finos', itens: [...bombons] },
+];
+
+/**
+ * 52 cards de uma vez viram um paredão. Mostramos uma amostra e o resto
+ * entra a pedido — os itens continuam no HTML (busca do navegador e
+ * indexação enxergam tudo), apenas com `hidden`.
+ */
+const VISIVEIS = 5;
+---
+
+<section id="cardapio" class="border-t border-line bg-noir-soft py-24 lg:py-32">
+  <div class="shell">
+    <div data-centro-mobile class="flex flex-wrap items-end justify-between gap-8">
+      <div class="max-w-2xl">
+        <p data-reveal class="eyebrow">Cardápio</p>
+        <h2
+          data-reveal
+          data-reveal-delay="0.06"
+          class="mt-6 font-[family-name:var(--font-display)] text-[clamp(2rem,5.5vw,3.25rem)] text-cream"
+        >
+          Todos os sabores, feitos à mão
+        </h2>
+        <p data-reveal data-reveal-delay="0.1" class="mt-5 max-w-[52ch] text-cream-dim">
+          Monte a sua seleção misturando quantos sabores quiser. Preços por cento e por
+          unidade — {regras.minimoCento.toLowerCase()} no cento,
+          {' '}{regras.minimoUnitario.toLowerCase()} no unitário.
+        </p>
+        <p data-reveal data-reveal-delay="0.13" class="mt-3 max-w-[52ch] text-sm text-cream-dim/80">
+          Vá adicionando os sabores: a gente soma para você e manda tudo pronto no
+          WhatsApp. A seleção fica salva neste navegador.
+        </p>
+      </div>
+
+      <!-- Filtros de categoria -->
+      <div data-reveal data-reveal-delay="0.14" class="flex flex-wrap justify-center gap-2 lg:justify-start" role="group" aria-label="Filtrar cardápio">
+        <button
+          type="button"
+          data-filtro="todos"
+          aria-pressed="true"
+          class="filtro rounded-full border border-gold bg-gold px-5 py-3 text-sm font-medium text-noir transition-colors duration-300"
+        >
+          Todos
+        </button>
+        {
+          categorias.map((c) => (
+            <button
+              type="button"
+              data-filtro={c.id}
+              aria-pressed="false"
+              class="filtro rounded-full border border-line px-5 py-3 text-sm font-medium text-cream-dim transition-colors duration-300 hover:border-gold hover:text-gold"
+            >
+              {c.id === 'brigadeiros' ? 'Brigadeiros' : 'Bombons e trufas'}
+            </button>
+          ))
+        }
+      </div>
+    </div>
+
+    {
+      categorias.map((cat) => (
+        <div data-grupo={cat.id} class="mt-16 first-of-type:mt-14">
+          <h3
+            data-reveal
+            class="flex items-center gap-4 font-[family-name:var(--font-display)] text-2xl text-gold"
+          >
+            {cat.label}
+            {/* O filete some no celular: numa linha estreita ele vira um
+                tracinho solto entre o título e a contagem. */}
+            <span class="hidden h-px flex-1 bg-line sm:block" />
+            <span class="font-[family-name:var(--font-sans)] text-sm text-cream-dim">
+              {cat.itens.length} sabores
+            </span>
+          </h3>
+
+          <ul class="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            {cat.itens.map((doce, i) => (
+              // Os que já nascem escondidos ficam sem `data-reveal`: o
+              // ScrollTrigger mede display:none como altura zero e o card
+              // apareceria travado em opacity 0 depois do "mostrar mais".
+              <li
+                data-doce={doce.slug}
+                data-extra={i >= VISIVEIS ? '' : undefined}
+                hidden={i >= VISIVEIS}
+                data-reveal={i >= VISIVEIS ? undefined : true}
+                data-reveal-delay={i >= VISIVEIS ? undefined : (i % 3) * 0.05}
+              >
+                <article class="group flex h-full flex-col gap-4 rounded-2xl border border-line bg-surface p-4 transition-colors duration-300 hover:border-gold/60 data-[ativo]:border-gold/70">
+                  <div class="flex flex-1 gap-4">
+                    {/* O alt era só `doce.nome` — que, para "Beijinho",
+                        repetia o nome do arquivo e não dizia nada a quem
+                        usa leitor de tela. Prefixar com o que a imagem É
+                        (uma foto do doce) dá o contexto que faltava, sem
+                        precisar escrever um alt à mão para cada um dos 66. */}
+                    <Image
+                      src={imgDoce(doce.slug)}
+                      alt={`Foto do doce ${doce.nome}`}
+                      widths={[160, 260]}
+                      sizes="6rem"
+                      loading="lazy"
+                      class="h-24 w-24 shrink-0 rounded-xl object-cover transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:scale-[1.04]"
+                    />
+
+                    <div class="flex min-w-0 flex-1 flex-col">
+                      <h4 class="text-[15px] font-semibold leading-snug text-cream">
+                        {doce.nome}
+                      </h4>
+                      <p class="mt-1 line-clamp-3 text-[13px] leading-relaxed text-cream-dim">
+                        {doce.descricao}
+                      </p>
+
+                      {/* flex-wrap + nowrap nos preços: em telas estreitas o
+                          valor unitário desce inteiro para a linha de baixo,
+                          em vez de quebrar "R$ 220,00" no meio. */}
+                      <div class="mt-auto flex flex-wrap items-baseline gap-x-2 gap-y-1 pt-3">
+                        <span class="whitespace-nowrap font-[family-name:var(--font-display)] text-lg text-gold tabular-nums">
+                          R$ {doce.cento}
+                        </span>
+                        <span class="whitespace-nowrap text-[12px] uppercase tracking-wider text-cream-dim">
+                          o cento
+                        </span>
+                        <span class="w-full whitespace-nowrap text-[13px] text-cream-dim tabular-nums xl:ml-auto xl:w-auto">
+                          R$ {doce.unitario} a unidade
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Controle de quantidade — some sem JS (ver Orcamentador.astro) */}
+                  <div data-orc-controle={doce.slug}>
+                    <button
+                      type="button"
+                      data-orc-add
+                      data-orc-acao="add"
+                      data-orc-slug={doce.slug}
+                      class="w-full rounded-xl border border-line py-3 text-sm font-medium text-cream-dim transition-colors duration-300 hover:border-gold hover:text-gold"
+                    >
+                      Adicionar ao orçamento
+                    </button>
+
+                    <div data-orc-stepper hidden class="flex items-center gap-2">
+                      <button
+                        type="button"
+                        data-orc-acao="menos"
+                        data-orc-slug={doce.slug}
+                        class="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-line text-lg leading-none text-cream-dim transition-colors hover:border-gold hover:text-gold"
+                        aria-label={`Diminuir ${doce.nome}`}
+                      >
+                        &minus;
+                      </button>
+                      <input
+                        type="number"
+                        inputmode="numeric"
+                        min="0"
+                        step="1"
+                        data-orc-qtd
+                        data-orc-slug={doce.slug}
+                        class="h-10 min-w-0 flex-1 rounded-xl border border-gold/40 bg-noir text-center text-sm font-medium tabular-nums text-cream [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none"
+                        aria-label={`Quantidade de ${doce.nome}`}
+                      />
+                      <button
+                        type="button"
+                        data-orc-acao="mais"
+                        data-orc-slug={doce.slug}
+                        class="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-line text-lg leading-none text-cream-dim transition-colors hover:border-gold hover:text-gold"
+                        aria-label={`Aumentar ${doce.nome}`}
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+                </article>
+              </li>
+            ))}
+          </ul>
+
+          {cat.itens.length > VISIVEIS && (
+            <div data-mais-wrap={cat.id} class="mt-8 flex justify-center">
+              <button
+                type="button"
+                data-mostrar-mais={cat.id}
+                class="rounded-full border border-line px-7 py-3.5 text-sm font-medium text-cream-dim transition-colors duration-300 hover:border-gold hover:text-gold"
+              >
+                {/* O espaço precisa ser explícito: o Astro colapsa o que
+                    houver entre o texto e a expressão, e sai "mais(+25". */}
+                {'Mostrar mais '}
+                <span class="text-cream-dim/70">
+                  (+<span data-restantes>{cat.itens.length - VISIVEIS}</span> sabores)
+                </span>
+              </button>
+            </div>
+          )}
+        </div>
+      ))
+    }
+
+    <p data-reveal class="mt-12 rounded-2xl border border-line bg-surface/60 p-6 text-sm leading-relaxed text-cream-dim">
+      <strong class="text-cream">Peso médio:</strong> {regras.pesoMedio}. {regras.observacao}
+      {' '}Forminha de acetato transparente disponível por R$ 0,10 a unidade — ou traga a sua,
+      sem custo adicional.
+    </p>
+  </div>
+</section>
+
+<script>
+  // Filtro de categoria: mostra/esconde grupos inteiros. Sem framework,
+  // sem re-render — apenas alterna hidden e o estado dos botões.
+  const botoes = document.querySelectorAll<HTMLButtonElement>('.filtro');
+  const grupos = document.querySelectorAll<HTMLElement>('[data-grupo]');
+
+  botoes.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const alvo = btn.dataset.filtro;
+
+      botoes.forEach((b) => {
+        const ativo = b === btn;
+        b.setAttribute('aria-pressed', String(ativo));
+        b.classList.toggle('border-gold', ativo);
+        b.classList.toggle('bg-gold', ativo);
+        b.classList.toggle('text-noir', ativo);
+        b.classList.toggle('border-line', !ativo);
+        b.classList.toggle('text-cream-dim', !ativo);
+      });
+
+      grupos.forEach((g) => {
+        g.hidden = alvo !== 'todos' && g.dataset.grupo !== alvo;
+      });
+
+      avisarLayout();
+    });
+  });
+
+  // "Mostrar mais": revela um lote por clique, em vez de despejar os 30 de
+  // uma vez. O contador no botão diz quanto ainda falta.
+  const LOTE = 10;
+
+  document.querySelectorAll<HTMLButtonElement>('[data-mostrar-mais]').forEach((btn) => {
+    const id = btn.dataset.mostrarMais!;
+    const grupo = document.querySelector<HTMLElement>(`[data-grupo="${id}"]`);
+    const wrap = document.querySelector<HTMLElement>(`[data-mais-wrap="${id}"]`);
+    const contador = btn.querySelector<HTMLElement>('[data-restantes]');
+    if (!grupo) return;
+
+    const escondidos = () =>
+      Array.from(grupo.querySelectorAll<HTMLElement>('li[data-extra][hidden]'));
+
+    btn.addEventListener('click', () => {
+      escondidos()
+        .slice(0, LOTE)
+        .forEach((li) => (li.hidden = false));
+
+      const faltam = escondidos().length;
+      if (contador) contador.textContent = String(faltam);
+      if (!faltam && wrap) wrap.hidden = true;
+
+      avisarLayout();
+    });
+  });
+
+  /** A página cresceu: os gatilhos de scroll precisam remedir. */
+  function avisarLayout() {
+    window.dispatchEvent(new CustomEvent('layout:mudou'));
+  }
+</script>

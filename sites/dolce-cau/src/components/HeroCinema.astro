@@ -1,0 +1,41 @@
+---
+/**
+ * Abertura cinematográfica controlada por rolagem.
+ *
+ * O palco começa escondido (`hidden`) de propósito: sem JS, com
+ * `prefers-reduced-motion` ou se o GSAP falhar ao carregar, a seção ocupa
+ * altura zero e o visitante cai direto no hero real — nada de um bloco preto
+ * vazio. É o `cinema.ts` que remove o `hidden` quando decide rodar.
+ *
+ * O id #topo fica aqui porque esta é a primeira seção da página; assim o
+ * link do logo continua levando ao início mesmo com a abertura desativada.
+ */
+---
+
+<section id="topo" data-cinema class="relative bg-noir">
+  <div data-cinema-stage hidden class="relative h-[100svh] w-full overflow-hidden">
+    <canvas
+      data-cinema-canvas
+      aria-hidden="true"
+      class="absolute inset-0 h-full w-full"
+    ></canvas>
+
+    {/* Dica de rolagem — some conforme a sequência avança */}
+    <div
+      data-cinema-cue
+      class="pointer-events-none absolute inset-x-0 bottom-10 flex flex-col items-center gap-3 text-center"
+    >
+      <p class="text-[11px] uppercase tracking-[0.28em] text-gold">Role para revelar</p>
+      <span aria-hidden="true" class="block h-10 w-px bg-gradient-to-b from-gold to-transparent"></span>
+    </div>
+
+    {/*
+      Texto acessível: descreve a abertura para quem usa leitor de tela, já
+      que o canvas é puramente decorativo (aria-hidden).
+    */}
+    <p class="sr-only">
+      Animação de abertura: um bombom artesanal gira, abre-se em camadas e revela o site da
+      DolceCau.
+    </p>
+  </div>
+</section>

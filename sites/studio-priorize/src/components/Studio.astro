@@ -1,0 +1,88 @@
+---
+import { Image } from 'astro:assets';
+import { studio } from '../data/site';
+import { img } from '../lib/images';
+
+const foto = img(studio.imagem);
+---
+
+<section id="studio" class="bg-fundo py-24 lg:py-32">
+  <div class="shell grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+    <div data-reveal data-centro-mobile class="max-w-xl">
+      <p class="eyebrow">{studio.eyebrow}</p>
+      <h2 class="mt-5 text-[clamp(2.1rem,5.5vw,3.4rem)] text-texto">{studio.titulo}</h2>
+
+      {
+        studio.paragrafos.map((p) => (
+          <p class="mt-5 text-[16.5px] leading-relaxed text-texto-dim">{p}</p>
+        ))
+      }
+
+      {/* As seis palavras estão escritas na parede da recepção. É conteúdo
+          real do salão, não slogan inventado. */}
+      <ul data-reveal-grupo class="mt-9 flex flex-wrap gap-2.5">
+        {
+          studio.valores.map((v) => (
+            <li class="rounded-full border border-linha bg-superficie px-4 py-2 text-[13px] font-semibold uppercase tracking-[0.14em] text-acento">
+              {v}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    {/* Três níveis: a moldura recorta, o <div> recebe o transform do reveal
+        e a <Image> recebe o do parallax. Dois transforms no mesmo nó se
+        apagariam. */}
+    <div
+      data-parallax-frame
+      class="relative aspect-[4/5] overflow-hidden rounded-[2rem] border border-linha"
+    >
+      <div data-reveal-img class="h-full w-full">
+        <div class="h-full w-full">
+          <Image
+            src={foto}
+            alt={studio.alt}
+            widths={[480, 720, 1080]}
+            sizes="(min-width: 1024px) 44vw, 92vw"
+            data-parallax="5"
+            class="parallax-folga object-cover"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {/* Duas fotos da fachada. Estão aqui, e não no hero, porque é este texto
+      que afirma "esquina, dois andares" — a afirmação e a prova ficam juntas.
+      A segunda não tem legenda de propósito: é a placa com o nome escrito,
+      e legendar "placa da fachada" seria repetir o que a foto já diz. */}
+  <div class="shell mt-8 grid gap-4 sm:grid-cols-2 lg:mt-10 lg:gap-5">
+    {
+      studio.galeria.map((g) => {
+        const f = img(g.imagem);
+        return (
+          <figure class="group relative overflow-hidden rounded-2xl border border-linha">
+            <div data-reveal-img class="aspect-[4/5] w-full sm:aspect-[3/4]">
+              <div class="h-full w-full">
+                <Image
+                  src={f}
+                  alt={g.alt}
+                  widths={[420, 640, 900]}
+                  sizes="(min-width: 640px) 46vw, 92vw"
+                  loading="lazy"
+                  class="h-full w-full object-cover [@media(hover:hover)]:transition-transform [@media(hover:hover)]:duration-[var(--dur-slower)] [@media(hover:hover)]:ease-[var(--ease-out)] [@media(hover:hover)]:group-hover:scale-[1.05]"
+                />
+              </div>
+            </div>
+            {g.legenda && (
+              <figcaption class="pointer-events-none absolute inset-x-0 bottom-0 bg-fundo/75 bg-gradient-to-t from-fundo via-fundo/70 to-transparent px-5 pb-4 pt-12 text-[13px] tracking-wide text-texto">
+                {g.legenda}
+              </figcaption>
+            )}
+          </figure>
+        );
+      })
+    }
+  </div>
+</section>

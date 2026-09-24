@@ -1,0 +1,128 @@
+---
+import { site, nav, visite } from '../data/site';
+---
+
+{/* O rodapé fecha no verde da parede. É a última coisa que a pessoa vê, e é
+    a cor que ela vai lembrar do salão. */}
+<footer id="visite" data-tema="realce" class="border-t border-linha bg-fundo">
+  <div class="shell py-16 lg:py-20">
+    <div data-reveal data-centro-mobile class="max-w-2xl">
+      <p class="eyebrow">{visite.eyebrow}</p>
+      <h2 class="mt-5 text-[clamp(2rem,5.5vw,3.2rem)] text-texto">{visite.titulo}</h2>
+    </div>
+
+    <div class="mt-12 grid gap-12 lg:grid-cols-[1.2fr_1fr_1fr]">
+      <div data-centro-mobile class="max-w-sm">
+        <p class="flex flex-wrap items-baseline gap-[0.28em]">
+          <span class="font-[family-name:var(--font-display)] text-[26px] text-texto">Karol</span>
+          <span class="font-[family-name:var(--font-display)] text-[26px] italic text-acento">
+            Nails
+          </span>
+        </p>
+        <p class="mt-2 text-[15px] italic text-texto-dim">{site.tagline}</p>
+
+        {/* A nota também aqui: quem rola direto para o rodapé procurando
+            endereço é exatamente quem ainda está decidindo se vai. */}
+        <p class="mt-5 flex flex-wrap items-center gap-2 text-[14.5px] text-texto-dim">
+          <span aria-hidden="true" class="flex gap-0.5 text-acento">
+            {
+              Array.from({ length: 5 }).map(() => (
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="m12 2 2.9 6.3 6.8.8-5 4.7 1.3 6.8L12 17.3 6 20.6l1.3-6.8-5-4.7 6.8-.8L12 2Z" />
+                </svg>
+              ))
+            }
+          </span>
+          <span>
+            <strong class="font-semibold text-texto" data-tabular>{site.google.nota}</strong>
+            {` em ${site.google.avaliacoes} avaliações no Google`}
+          </span>
+        </p>
+      </div>
+
+      <div data-centro-mobile>
+        <h3 class="text-[13px] font-semibold uppercase tracking-[0.18em] text-acento">Contato</h3>
+        <ul class="mt-5 space-y-1">
+          <li>
+            <a
+              href={`tel:+${site.whatsapp}`}
+              class="flex min-h-[44px] items-center text-[15px] text-texto-dim transition-colors duration-[var(--dur-fast)] hover:text-texto"
+            >
+              {site.whatsappExibicao}
+            </a>
+          </li>
+          <li>
+            <a
+              href={site.instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="flex min-h-[44px] items-center text-[15px] text-texto-dim transition-colors duration-[var(--dur-fast)] hover:text-texto"
+            >
+              {site.instagramExibicao}
+            </a>
+          </li>
+          <li>
+            <a
+              href={site.maps}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="flex min-h-[44px] items-center text-[15px] leading-snug text-texto-dim transition-colors duration-[var(--dur-fast)] hover:text-texto"
+            >
+              {`${site.endereco} · ${site.bairro} · ${site.cidade}/${site.estado} · ${site.cep}`}
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div data-centro-mobile>
+        <h3 class="text-[13px] font-semibold uppercase tracking-[0.18em] text-acento">Horários</h3>
+        {/* Quatro linhas, e não "segunda a sexta": a quarta abre 8h e fecha
+            16h30, então agrupá-la com o resto seria publicar horário errado
+            para o dia em que a pessoa mais chega cedo. */}
+        <ul class="mt-5 space-y-2">
+          {
+            site.horarios.map((h) => (
+              <li class="text-[15px] leading-snug text-texto-dim">
+                <span class="block font-semibold text-texto">{h.dias}</span>
+                <span data-tabular>{h.horas}</span>
+              </li>
+            ))
+          }
+        </ul>
+
+        <nav aria-label="Navegação do rodapé" class="mt-7">
+          <ul class="flex flex-wrap gap-x-5 gap-y-1">
+            {
+              nav.map((item) => (
+                <li>
+                  <a
+                    href={item.href}
+                    class="-mx-2 flex min-h-[44px] items-center px-2 text-[14px] text-texto-dim transition-colors duration-[var(--dur-fast)] hover:text-texto"
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+      </div>
+    </div>
+
+    <div class="mt-14 border-t border-linha pt-8">
+      <p class="text-center text-[13px] leading-relaxed text-texto-dim">
+        {`© ${new Date().getFullYear()} ${site.nome} · ${site.cidade} — ${site.estado}`}
+      </p>
+
+      {
+        site.demo && (
+          <p class="mx-auto mt-4 max-w-2xl text-center text-[12.5px] leading-relaxed text-texto-dim">
+            Esta página é um <strong class="font-semibold">protótipo de demonstração</strong> e não é
+            o site oficial do {site.nome}. As fotos e os depoimentos pertencem ao próprio salão e
+            foram usados apenas para montar esta proposta.
+          </p>
+        )
+      }
+    </div>
+  </div>
+</footer>

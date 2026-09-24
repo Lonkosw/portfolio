@@ -1,0 +1,125 @@
+---
+/**
+ * Pilar 3 — Unhas.
+ *
+ * Mais enxuta que os outros dois pilares de propósito: há três fotos boas de
+ * unha no acervo, não trinta. Inflar a seção com repetição de enquadramento
+ * faria a mais fraca puxar as outras duas para baixo.
+ *
+ * Cada item da lista abre o WhatsApp com o serviço já escrito — é onde o
+ * preço, que não está no site, vem a ser dito.
+ */
+import { Image } from 'astro:assets';
+import { site, unhas } from '../data/site';
+import { img, Q_FOTO, Q_MINI, W_MEDIA, W_MINI } from '../lib/images';
+import { wa } from '../lib/wa';
+
+const foto = img(unhas.imagem);
+---
+
+<section id="unhas" data-secao-adiavel class="border-t border-linha bg-fundo py-24 lg:py-32">
+  <div class="shell">
+    <div class="grid items-center gap-12 lg:grid-cols-[1.1fr_1fr] lg:gap-16">
+      <div data-reveal data-centro-mobile class="max-w-xl">
+        <p class="eyebrow">{unhas.eyebrow}</p>
+        <h2 class="mt-5 text-[clamp(2.3rem,6vw,3.8rem)] text-texto">{unhas.titulo}</h2>
+        <p class="mt-5 text-[16.5px] leading-relaxed text-texto-dim">{unhas.texto}</p>
+
+        {/* Cada item é um LINK. Numa seção sem preço, o card que não leva a
+            lugar nenhum é uma pergunta sem resposta. */}
+        <ul data-reveal-grupo class="mt-9 grid gap-3 sm:grid-cols-2">
+          {
+            unhas.itens.map((item) => {
+              const link = wa(
+                site.whatsapp,
+                `Olá! Vi o modelo de site. No meu salão eu gostaria de destacar: ${item.nome}.`,
+              );
+              return (
+                <li>
+                  <a
+                    href={link}
+                    data-press
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="group flex h-full flex-col rounded-2xl border border-linha bg-superficie p-5 text-left transition-colors duration-[var(--dur-fast)] hover:border-acento/50 hover:bg-superficie-hi"
+                  >
+                    <h3 class="text-[1.15rem] text-texto">{item.nome}</h3>
+                    <p class="mt-1 flex-1 text-[14.5px] leading-relaxed text-texto-dim">
+                      {item.texto}
+                    </p>
+                    <span class="mt-3 flex items-center gap-1.5 text-[12.5px] font-semibold text-acento">
+                      Perguntar no WhatsApp
+                      <svg
+                        width="13"
+                        height="13"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2.5"
+                        aria-hidden="true"
+                        class="transition-transform duration-[var(--dur-fast)] ease-[var(--ease-standard)] [@media(hover:hover)]:group-hover:translate-x-0.5"
+                      >
+                        <path d="m9 18 6-6-6-6" stroke-linecap="round" stroke-linejoin="round" />
+                      </svg>
+                    </span>
+                  </a>
+                </li>
+              );
+            })
+          }
+        </ul>
+      </div>
+
+      <div class="grid gap-4">
+        <div
+          data-parallax-frame
+          class="moldura-onda relative aspect-[4/5] overflow-hidden border border-linha"
+        >
+          <div class="h-full w-full">
+            <div class="h-full w-full">
+              <Image
+                src={foto}
+                alt={unhas.alt}
+                widths={W_MEDIA}
+                quality={Q_FOTO}
+                sizes="(min-width: 1024px) 40vw, 92vw"
+                loading="lazy"
+                data-parallax="4"
+                class="parallax-folga object-cover"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          {
+            unhas.galeria.map((g) => {
+              const f = img(g.imagem);
+              return (
+                <figure class="group relative overflow-hidden rounded-2xl border border-linha">
+                  <div data-reveal-img class="aspect-square w-full">
+                    <div class="h-full w-full">
+                      <Image
+                        src={f}
+                        alt={g.alt}
+                        widths={W_MINI}
+                        quality={Q_MINI}
+                        sizes="(min-width: 1024px) 20vw, 46vw"
+                        loading="lazy"
+                        class="h-full w-full object-cover [@media(hover:hover)]:transition-transform [@media(hover:hover)]:duration-[var(--dur-slower)] [@media(hover:hover)]:ease-[var(--ease-out)] [@media(hover:hover)]:group-hover:scale-[1.06]"
+                      />
+                    </div>
+                  </div>
+                  <figcaption data-sobre-foto
+                class="pointer-events-none absolute inset-x-0 bottom-0 veu-legenda px-4 pb-3 pt-10 text-[12.5px] leading-snug tracking-wide text-creme">
+                    {g.legenda}
+                  </figcaption>
+                </figure>
+              );
+            })
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

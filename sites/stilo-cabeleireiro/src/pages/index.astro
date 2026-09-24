@@ -1,0 +1,59 @@
+---
+import Layout from '../layouts/Layout.astro';
+import DemoBanner from '../components/DemoBanner.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import Marquee from '../components/Marquee.astro';
+import Casa from '../components/Casa.astro';
+import Mechas from '../components/Mechas.astro';
+import TiposCabelo from '../components/TiposCabelo.astro';
+import AntesDepois from '../components/AntesDepois.astro';
+import MegaHair from '../components/MegaHair.astro';
+import Noivas from '../components/Noivas.astro';
+import Producao from '../components/Producao.astro';
+import Servicos from '../components/Servicos.astro';
+import Depoimentos from '../components/Depoimentos.astro';
+import Agendar from '../components/Agendar.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../data/site';
+
+const title = `${site.nome} — Salão de beleza em ${site.cidade} desde ${site.fundacao}`;
+---
+
+<Layout title={title} description={site.descricao}>
+  <DemoBanner />
+  <Header />
+
+  {/*
+    O site é escuro do topo ao rodapé. O ritmo vem da alternância entre
+    `bg-fundo` e `bg-superficie` de uma seção para a outra, não de trocar o
+    tema — é o que separa os blocos sem estourar o contraste do texto.
+
+    A ORDEM tem intenção, e ela é diferente da do Priorize porque aqui são
+    QUATRO pilares em vez de dois:
+
+    1. Casa vem antes de tudo. 1978 é o único argumento que nenhum salão novo
+       de Maringá consegue copiar — gastá-lo no rodapé seria desperdício.
+    2. Mechas → tipos → antes/depois: promete, deixa escolher, prova. Provar
+       antes de prometer não funciona; depois da galeria já seria tarde.
+    3. Mega hair puxa o antes/depois de novo, agora com o par de comprimento —
+       é o serviço de decisão mais lenta e precisa da prova mais perto.
+    4. Noivas → Produção coladas: é a mesma cliente, com e sem casamento.
+  */}
+  <main id="conteudo">
+    <Hero />
+    <Marquee />
+    <Casa />
+    <Mechas />
+    <TiposCabelo />
+    <AntesDepois />
+    <MegaHair />
+    <Noivas />
+    <Producao />
+    <Servicos />
+    <Depoimentos />
+    <Agendar />
+  </main>
+
+  <Footer />
+</Layout>

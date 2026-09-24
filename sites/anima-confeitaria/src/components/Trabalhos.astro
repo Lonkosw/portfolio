@@ -1,0 +1,85 @@
+---
+import { Image } from 'astro:assets';
+import { trabalhos } from '../data/site';
+import { img } from '../lib/images';
+---
+
+<section
+  id="trabalhos"
+  data-secao-adiavel
+  class="border-y border-linha bg-superficie py-24 lg:py-32"
+>
+  <div class="shell">
+    <div data-reveal data-centro-mobile class="max-w-2xl">
+      <p class="eyebrow">{trabalhos.eyebrow}</p>
+      <h2 class="mt-6 text-[clamp(2.1rem,5.5vw,3.4rem)] text-texto">{trabalhos.titulo}</h2>
+      <p class="mt-6 text-[16.5px] leading-relaxed text-texto-dim">{trabalhos.texto}</p>
+    </div>
+
+    {/*
+      `grid-auto-flow: dense` é obrigatório com tiles de 1 e 2 colunas
+      misturados: um tile largo que não cabe no resto da linha pula para a
+      próxima e deixa o buraco para trás. Com dense o navegador puxa uma
+      foto estreita de baixo para tapar o vão. Só vale porque são figuras,
+      não controles: a ordem visual pode divergir da ordem do DOM.
+    */}
+    <div class="mt-14 grid gap-5 [grid-auto-flow:dense] sm:grid-cols-2 lg:mt-16 lg:grid-cols-3 lg:gap-6">
+      {
+        trabalhos.itens.map((item) => {
+          const foto = img(item.imagem);
+          const largo = item.formato === 'largo';
+          return (
+            <figure
+              class:list={[
+                'group relative overflow-hidden rounded-[1.25rem] border border-linha',
+                largo ? 'sm:col-span-2' : '',
+              ]}
+            >
+              <div
+                data-reveal-img
+                class:list={['h-full w-full', largo ? 'aspect-[16/10]' : 'aspect-[4/5]']}
+              >
+                <div class="h-full w-full">
+                  <Image
+                    src={foto}
+                    alt={item.alt}
+                    widths={[420, 660, 1000, 1400]}
+                    sizes={
+                      largo
+                        ? '(min-width: 1024px) 62vw, 92vw'
+                        : '(min-width: 1024px) 31vw, (min-width: 640px) 46vw, 92vw'
+                    }
+                    loading="lazy"
+                    class="h-full w-full object-cover [@media(hover:hover)]:transition-transform [@media(hover:hover)]:duration-[var(--dur-slower)] [@media(hover:hover)]:ease-[var(--ease-out)] [@media(hover:hover)]:group-hover:scale-[1.04]"
+                  />
+                </div>
+              </div>
+
+              {/*
+                Legenda OPCIONAL. Quando a foto se explica sozinha, o campo
+                simplesmente fica vazio no `site.ts` e a faixa não aparece —
+                legenda que só repete o que a imagem mostra é ruído.
+
+                A legenda não pode ser creme direto sobre a foto: aqui as
+                fotos são bolo branco e docinho em forminha perolizada, e
+                claro sobre claro some. O véu (`.veu-legenda`, no
+                `global.css`) é o piso de contraste — o comentário de lá
+                explica por que ele é mais escuro que a própria página e por
+                que não tem cor sólida por baixo.
+
+                `data-sobre-foto` marca o elemento para o `tools/contraste.mjs`:
+                a ferramenta só lê `background-color`, e aqui a cor vem de
+                `background-image`. Sem a marca ela acusaria 1:1.
+              */}
+              {item.legenda && (
+                <figcaption data-sobre-foto class="veu-legenda pointer-events-none absolute inset-x-0 bottom-0 px-5 pb-4 pt-14 text-[13.5px] font-medium tracking-wide text-creme">
+                  {item.legenda}
+                </figcaption>
+              )}
+            </figure>
+          );
+        })
+      }
+    </div>
+  </div>
+</section>

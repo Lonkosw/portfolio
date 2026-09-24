@@ -1,0 +1,70 @@
+---
+import { Image } from 'astro:assets';
+import { galeria } from '../data/site';
+import { img, larguras } from '../lib/images';
+---
+
+<section id="espaco" class="border-t border-line/60 py-24 lg:py-32">
+  <div class="shell">
+    <div data-reveal data-centro-mobile class="max-w-2xl">
+      <p class="eyebrow">{galeria.eyebrow}</p>
+      <h2 class="mt-5 text-[clamp(2.1rem,5.5vw,3.5rem)] text-cream">{galeria.titulo}</h2>
+      <p class="mt-5 text-[16.5px] leading-relaxed text-cream-dim">{galeria.texto}</p>
+    </div>
+
+    {/*
+      `grid-auto-flow: dense` é obrigatório aqui. Com tiles de 1 e de 2
+      colunas misturados, um tile largo que não cabe no resto da linha pula
+      para a próxima e deixa o buraco para trás — eram 3 slots vazios em 9
+      fotos. Com `dense`, o navegador puxa uma foto estreita de baixo para
+      tapar o vão. Só vale porque são figuras, não controles: a ordem visual
+      pode divergir da ordem do DOM sem prejudicar a navegação.
+
+      Sem `<figcaption>`: a galeria é só foto (ver a nota em `galeria` no
+      `site.ts`). O `<figure>` continua sendo o elemento certo mesmo sem
+      legenda — é conteúdo referenciado, não decoração.
+    */}
+    <div class="mt-14 grid gap-4 [grid-auto-flow:dense] sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
+      {
+        galeria.itens.map((item) => {
+          const foto = img(item.imagem);
+          const largo = item.formato === 'largo';
+          return (
+            <figure
+              class:list={[
+                'group relative overflow-hidden rounded-2xl border border-line',
+                largo ? 'sm:col-span-2' : '',
+              ]}
+            >
+              {/*
+                Três níveis de propósito: a moldura recorta, o <div> recebe o
+                transform do GSAP na entrada e o <img> recebe o zoom do CSS no
+                hover. Se os dois transforms caíssem no mesmo nó, um apagaria
+                o outro.
+              */}
+              <div
+                data-reveal-img
+                class:list={['h-full w-full', largo ? 'aspect-[16/10]' : 'aspect-[4/5]']}
+              >
+                <div class="h-full w-full">
+                  <Image
+                    src={foto}
+                    alt={item.alt}
+                    widths={larguras(foto, [400, 640, 900])}
+                    sizes={
+                      largo
+                        ? '(min-width: 1024px) 62vw, (min-width: 640px) 92vw, 92vw'
+                        : '(min-width: 1024px) 31vw, (min-width: 640px) 46vw, 92vw'
+                    }
+                    loading="lazy"
+                    class="h-full w-full object-cover transition-transform duration-[900ms] ease-[var(--ease-out-expo)] group-hover:scale-[1.06]"
+                  />
+                </div>
+              </div>
+            </figure>
+          );
+        })
+      }
+    </div>
+  </div>
+</section>

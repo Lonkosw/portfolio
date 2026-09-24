@@ -1,0 +1,60 @@
+---
+/**
+ * A galeria — e a única seção que este site precisa acertar.
+ *
+ * TRÊS DECISÕES QUE PARECEM PEQUENAS E NÃO SÃO:
+ *
+ * 1. SEM LEGENDA, e sem véu escuro por cima. Numa galeria de fotógrafa,
+ *    escrever "gestante" sob a foto de uma gestante não informa nada e
+ *    ainda escurece o rodapé da imagem — que costuma ser onde está a luz.
+ *    O `alt` continua lá para quem usa leitor de tela.
+ *
+ * 2. DUAS COLUNAS NO CELULAR, e não uma. Uma coluna daria fotos maiores,
+ *    mas o acervo tem ~550px de largura útil (são recortes de tela — ver
+ *    `scripts/processar-fotos.py`): esticada em 92vw num aparelho de DPR 3,
+ *    a foto sai visivelmente mole. Em duas colunas cada célula pede ~570px
+ *    e a imagem chega no tamanho em que ela ainda é nítida. O limite do
+ *    arquivo escolheu o layout, não o contrário.
+ *
+ * 3. `loading="lazy"` EM TODAS, inclusive as duas primeiras. Este bloco
+ *    fica abaixo da dobra em qualquer aparelho, e marcar a primeira como
+ *    `eager` roubaria banda da foto do hero, que é o LCP.
+ */
+import { Image } from 'astro:assets';
+import { portfolio } from '../data/site';
+import { img } from '../lib/images';
+---
+
+<section id="portfolio" data-secao-adiavel class="border-t border-linha bg-fundo py-20 lg:py-28">
+  <div class="shell">
+    <div data-reveal data-centro-mobile class="max-w-2xl">
+      <p class="eyebrow">{portfolio.eyebrow}</p>
+      <h2 class="mt-5 text-[clamp(2rem,7vw,3.2rem)] text-texto">{portfolio.titulo}</h2>
+      <p class="mt-5 text-[16px] leading-relaxed text-texto-dim">{portfolio.texto}</p>
+    </div>
+
+    {/* O `--i` escalona a entrada; quem escreve é o script, um por filho. */}
+    <div data-reveal-grupo class="mt-12 grid grid-cols-2 gap-2.5 sm:gap-3 lg:mt-16 lg:grid-cols-3 lg:gap-4">
+      {
+        portfolio.fotos.map((f) => (
+          <figure class="group overflow-hidden rounded-lg border border-linha lg:rounded-xl">
+            {/* O zoom de hover vive no <img>; o de entrada, no pai. Dois
+                `transform` no mesmo nó se apagam. */}
+            <div data-reveal-img class="aspect-[4/5] w-full">
+              <div class="h-full w-full">
+                <Image
+                  src={img(f.imagem)}
+                  alt={f.alt}
+                  widths={[280, 400, 560]}
+                  sizes="(min-width: 1024px) 30vw, 46vw"
+                  loading="lazy"
+                  class="h-full w-full object-cover [@media(hover:hover)]:transition-transform [@media(hover:hover)]:duration-[var(--dur-slower)] [@media(hover:hover)]:ease-[var(--ease-out)] [@media(hover:hover)]:group-hover:scale-[1.04]"
+                />
+              </div>
+            </div>
+          </figure>
+        ))
+      }
+    </div>
+  </div>
+</section>

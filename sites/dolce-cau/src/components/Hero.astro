@@ -1,0 +1,97 @@
+---
+import { Image } from 'astro:assets';
+import { site, hero, orcamento } from '../data/site';
+import { img } from '../lib/images';
+import { wa } from '../lib/wa';
+
+const link = wa(site.whatsapp, orcamento.mensagem);
+const foto = img('hero-mesa-lustre');
+---
+
+{/* Com a abertura desligada, o hero voltou a ser a primeira seção — e com ela
+    o id #topo, que o logo do cabeçalho usa para voltar ao início. */}
+<section id="topo" data-hero class="relative overflow-hidden">
+  <div class="shell grid items-center gap-10 pb-16 pt-10 lg:grid-cols-[1.05fr_1fr] lg:gap-16 lg:pb-28 lg:pt-16">
+    <!-- Coluna de texto -->
+    <div data-centro-mobile class="relative z-10">
+      <p data-hero-fade class="eyebrow">{hero.eyebrow}</p>
+
+      <h1
+        data-hero-title
+        class="mt-6 font-[family-name:var(--font-display)] text-[clamp(2.75rem,10vw,5.5rem)] leading-[0.98] text-cream"
+      >
+        {hero.titulo[0]}<br />
+        {hero.titulo[1]}<br />
+        <em class="not-italic text-gold">{hero.titulo[2]}</em>
+      </h1>
+
+      <p data-hero-fade class="mt-7 max-w-[52ch] text-[17px] leading-relaxed text-cream-dim">
+        {hero.texto}
+      </p>
+
+      <div data-hero-fade class="mt-9 flex flex-wrap items-center justify-center gap-3 lg:justify-start">
+        <a
+          href={link}
+          target="_blank"
+          rel="noopener noreferrer"
+          data-magnetic="0.3"
+          data-orc-cta
+          class="group inline-flex items-center gap-2.5 rounded-full bg-gold px-7 py-4 font-medium text-noir transition-colors duration-300 hover:bg-gold-hi"
+        >
+          {hero.cta}
+          <svg
+            width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" aria-hidden="true"
+            class="transition-transform duration-300 ease-[var(--ease-out-expo)] group-hover:translate-x-1"
+          >
+            <path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </a>
+
+        <a
+          href="#cardapio"
+          class="inline-flex items-center rounded-full border border-line px-7 py-4 font-medium text-cream transition-colors duration-300 hover:border-gold hover:text-gold"
+        >
+          {hero.ctaSecundario}
+        </a>
+      </div>
+
+      {/* Ícone inline, não como irmão flex: quando o texto quebrava em duas
+          linhas o flex jogava o pin para a ponta esquerda, descolado. */}
+      <p data-hero-fade class="mt-8 text-sm text-cream-dim">
+        <svg
+          width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="1.5" aria-hidden="true" class="mr-1.5 inline-block align-[-3px]"
+        >
+          <path d="M12 21s7-6.2 7-11a7 7 0 10-14 0c0 4.8 7 11 7 11z" stroke-linejoin="round"></path>
+          <circle cx="12" cy="10" r="2.5"></circle>
+        </svg>
+        {site.cidade} — {site.estado} · Atendimento com hora marcada
+      </p>
+    </div>
+
+    <!-- Coluna da foto -->
+    <div data-hero-media class="relative">
+      <div class="relative overflow-hidden rounded-[1.75rem] border border-line/70">
+        <div data-parallax="8">
+          <Image
+            src={foto}
+            alt="Mesa de doces montada pela DolceCau sob lustre de cristal em casamento"
+            widths={[480, 768, 1024]}
+            sizes="(min-width: 1024px) 46vw, 92vw"
+            loading="eager"
+            fetchpriority="high"
+            class="h-[clamp(20rem,52vw,34rem)] w-full scale-105 object-cover"
+          />
+        </div>
+        <!-- Vinheta: integra a foto ao fundo escuro em vez de deixar um retângulo colado -->
+        <div
+          aria-hidden="true"
+          class="pointer-events-none absolute inset-0 bg-gradient-to-t from-noir/75 via-noir/10 to-transparent"
+        >
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>

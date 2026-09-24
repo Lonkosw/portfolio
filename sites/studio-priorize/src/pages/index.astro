@@ -1,0 +1,48 @@
+---
+import Layout from '../layouts/Layout.astro';
+import DemoBanner from '../components/DemoBanner.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import Marquee from '../components/Marquee.astro';
+import Studio from '../components/Studio.astro';
+import Cabelo from '../components/Cabelo.astro';
+import TiposCabelo from '../components/TiposCabelo.astro';
+import AntesDepois from '../components/AntesDepois.astro';
+import Noivas from '../components/Noivas.astro';
+import Servicos from '../components/Servicos.astro';
+import Depoimentos from '../components/Depoimentos.astro';
+import Agendar from '../components/Agendar.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../data/site';
+
+const title = `${site.nome} — Salão de beleza, cabelo e noivas em ${site.cidade}`;
+---
+
+<Layout title={title} description={site.descricao}>
+  <DemoBanner />
+  <Header />
+
+  {/*
+    O site é escuro do topo ao rodapé. O ritmo vem da alternância entre
+    `bg-fundo` e `bg-superficie` de uma seção para a outra, não de trocar o
+    tema — é o que separa os blocos sem estourar o contraste do texto.
+
+    A ORDEM tem intenção: o antes/depois vem logo depois de Cabelo porque é a
+    prova do que a seção acabou de prometer. Provar antes de explicar não
+    funciona; e depois da galeria já seria tarde.
+  */}
+  <main id="conteudo">
+    <Hero />
+    <Marquee />
+    <Studio />
+    <Cabelo />
+    <TiposCabelo />
+    <AntesDepois />
+    <Noivas />
+    <Servicos />
+    <Depoimentos />
+    <Agendar />
+  </main>
+
+  <Footer />
+</Layout>

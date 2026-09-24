@@ -1,0 +1,30 @@
+---
+import { depoimentos } from '../data/site';
+---
+
+{/*
+  Seção deliberadamente vazia. Depoimento inventado é a coisa mais fácil de
+  desmentir e a que mais destrói confiança numa proposta comercial: quem
+  recebe sabe de cor quem já casou lá. O card pontilhado mostra o lugar
+  reservado sem preencher com mentira.
+*/}
+<section id="depoimentos" class="border-t border-line/60 py-24 lg:py-32">
+  <div class="shell">
+    <div data-reveal data-centro-mobile class="max-w-2xl">
+      <p class="eyebrow">{depoimentos.eyebrow}</p>
+      <h2 class="mt-5 text-[clamp(2.1rem,5.5vw,3.5rem)] text-cream">{depoimentos.titulo}</h2>
+    </div>
+
+    <div
+      data-reveal
+      class="mt-12 rounded-3xl border border-dashed border-line bg-mata-soft/60 px-7 py-14 text-center lg:px-12"
+    >
+      <p class="font-[family-name:var(--font-display)] text-[clamp(1.5rem,4vw,2.1rem)] text-cream-dim">
+        {depoimentos.placeholder}
+      </p>
+      <p class="mx-auto mt-4 max-w-xl text-[15px] leading-relaxed text-cream-dim/80">
+        {depoimentos.placeholderNota}
+      </p>
+    </div>
+  </div>
+</section>

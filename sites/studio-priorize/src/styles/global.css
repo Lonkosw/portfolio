@@ -1,0 +1,423 @@
+@import 'tailwindcss';
+
+/* ══════════════════════════════════════════════════════════════════════
+   PALETA DA MARCA — tirada das fotos da fachada e do interior do studio:
+   o vinho da placa e do logo, o dourado do aro do monograma, o marfim e
+   o rosé do mobiliário. Nada de rosa-choque: a marca deles não é isso.
+   ══════════════════════════════════════════════════════════════════════ */
+@theme {
+  /* Bordô da placa e do logo. Fica reservado para PREENCHIMENTO — botão,
+     faixa, véu sobre foto — nunca para texto: sobre o fundo escuro ele dá
+     2.14:1 e some. */
+  --color-vinho: #8e1b3c;
+  --color-vinho-hi: #a8244a;
+
+  /* Dourado do aro do monograma. É o acento de texto do site. */
+  --color-dourado: #c39b4e;
+  --color-dourado-hi: #dcb878;
+
+  /* Bege — a família de texto. "Bege escuro" é o secundário: quente e
+     rebaixado, em vez do creme quase branco que endurecia a leitura. */
+  --color-bege: #efe3d6;
+  --color-bege-dim: #c4ac9e;
+  --color-rose: #e8d5d0; /* apoio — as poltronas do salão */
+
+  /* ── Tipografia ─────────────────────────────────────────────────────
+     Prata é uma didone: eixo vertical, contraste alto entre haste e
+     filete. É a letra de revista de beleza — e nada a ver com a Cormorant
+     do site do Recanto nem com script de convite de casamento.          */
+  --font-display: 'Prata', ui-serif, Georgia, serif;
+  --font-sans: 'Manrope Variable', ui-sans-serif, system-ui, sans-serif;
+
+  /* ── Tokens de movimento ────────────────────────────────────────────
+     Uma escala só para o site inteiro. Duração cresce com o tamanho da
+     superfície; a direção do movimento escolhe a curva.                */
+  --dur-instant: 0ms;
+  --dur-fast: 150ms; /* hover, press, cor */
+  --dur-base: 200ms; /* toggles, revelações pequenas */
+  --dur-slow: 300ms; /* painéis, modais, superfícies grandes */
+  --dur-slower: 450ms; /* transições de tela inteira */
+  /* Faixa "cena": só para a abertura, que acontece UMA vez por visita.
+     Fora daqui, nada passa de --dur-slower — duração longa em ação
+     repetida vira imposto, não charme.
+
+     Estes são os valores de CELULAR. O desktop os aumenta logo abaixo: numa
+     tela grande a abertura tem espaço para respirar, e o gesto lento lê como
+     apresentação. Num telefone segurado na mão, a mesma duração lê como
+     espera — a pessoa veio ver cabelo, não assistir a uma vinheta. */
+  --dur-cena: 1100ms;
+  --dur-cena-longa: 1500ms;
+
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-out: cubic-bezier(0.05, 0.7, 0.1, 1); /* entrando: desacelera */
+  --ease-in: cubic-bezier(0.3, 0, 0.8, 0.15); /* saindo: acelera */
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1); /* atravessando a tela */
+
+  /* ══════════════════════════════════════════════════════════════════
+     TOKENS SEMÂNTICOS — é o que faz o site alternar claro/escuro sem
+     duplicar classe: o componente escreve `bg-fundo text-texto` e não
+     sabe em que tema está. Trocar o tema é trocar o atributo na <section>.
+
+     O site é escuro do topo ao rodapé. A hierarquia de profundidade vem
+     de três níveis de superfície, não de trocar o tema por seção.
+
+     ATENÇÃO: os valores aqui têm de ser cores FINAIS, nunca
+     `var(--outra-coisa)`. Propriedade customizada resolve no elemento
+     onde é DECLARADA, e o `@theme` do Tailwind vira `:root` — um `var()`
+     aqui congela o valor e o herda assim para a página inteira. Foi o
+     bug que deixou texto claro sobre fundo claro na versão anterior.
+     ══════════════════════════════════════════════════════════════════ */
+  --color-fundo: #1f0a10; /* bordô quase preto — a base */
+  --color-superficie: #2c1119; /* cards e painéis */
+  --color-superficie-hi: #3a1722; /* hover de card, faixas */
+  --color-texto: #efe3d6; /* bege claro */
+  --color-texto-dim: #c4ac9e; /* bege escuro — texto secundário */
+  --color-acento: #c39b4e; /* dourado */
+  --color-acento-hi: #dcb878;
+  --color-linha: #402029;
+  --color-btn: #8e1b3c; /* o botão é bordô: é a cor da marca */
+  --color-btn-texto: #efe3d6;
+}
+
+/* A abertura mais longa é só de tela grande — ver o comentário em
+   `--dur-cena`. Fica fora do `@theme` porque lá não cabe media query. */
+@media (min-width: 1024px) {
+  :root {
+    --dur-cena: 1600ms;
+    --dur-cena-longa: 2200ms;
+  }
+}
+
+@layer base {
+  html {
+    /* Lenis controla o scroll; sem isto o CSS smooth briga com o JS */
+    scroll-behavior: auto;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: var(--color-fundo);
+    color: var(--color-texto);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.65;
+    overflow-x: hidden;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-weight: 400; /* Prata só tem um peso; hierarquia vem de tamanho e cor */
+    line-height: 1.1;
+    letter-spacing: -0.005em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* Foco visível — nunca removido, apenas estilizado. Sombra em vez de
+     outline para respeitar o raio dos cantos arredondados. */
+  :focus-visible {
+    outline: none;
+    box-shadow:
+      0 0 0 2px var(--color-fundo),
+      0 0 0 4px var(--color-acento);
+    border-radius: 4px;
+  }
+
+  ::selection {
+    background: var(--color-acento);
+    color: var(--color-btn-texto);
+  }
+
+  /* Qualquer número que muda no lugar (contadores, horários do simulador)
+     não pode empurrar o layout a cada dígito. */
+  [data-tabular] {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@layer components {
+  .shell {
+    width: 100%;
+    max-width: 80rem;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+
+  @media (min-width: 768px) {
+    .shell {
+      padding-inline: 2.5rem;
+    }
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-acento);
+  }
+
+  .eyebrow::before {
+    content: '';
+    width: 2rem;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.7;
+  }
+
+  .numeral {
+    font-family: var(--font-display);
+    line-height: 1;
+    color: var(--color-acento);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Foto com folga para o parallax deslocar sem abrir faixa vazia. */
+  .parallax-folga {
+    width: 100%;
+    height: 112%;
+    margin-top: -6%;
+  }
+
+  /* Os campos numéricos têm botões −/+ próprios; as setinhas nativas
+     competiam com eles e comiam a área de digitação. */
+  input[type='number'] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+  }
+  input[type='number']::-webkit-outer-spin-button,
+  input[type='number']::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
+
+/* Controles que só fazem sentido com JavaScript. Sem script eles somem e
+   o restante do formulário continua utilizável. */
+html:not(.js) [data-so-com-js] {
+  display: none;
+}
+
+/* ── Seções pesadas: só renderizam quando chegam perto da tela ──────────
+   O site tem 25 imagens em 11 seções. Sem isto, o navegador calcula estilo,
+   layout e camadas de TODAS elas a cada quadro do scroll, mesmo as que estão
+   a três telas de distância — foi o que apareceu no trace como `Layerize`
+   acima de 1,3 segundo.
+
+   `content-visibility: auto` manda pular esse trabalho enquanto a seção está
+   longe. O `contain-intrinsic-size` é obrigatório junto: ele diz que altura
+   supor para a seção não renderizada. Sem ele a barra de rolagem pularia de
+   tamanho conforme as seções entram — o valor é uma estimativa generosa,
+   substituída pela altura real assim que a seção renderiza.
+
+   NÃO se aplica ao hero nem ao header: os dois já estão visíveis na abertura,
+   e adiar o que já está na tela só atrasa a primeira pintura.              */
+[data-secao-adiavel] {
+  content-visibility: auto;
+  /* `auto <valor>` faz o navegador MEMORIZAR a altura real depois que a
+     seção renderiza uma vez, e usar a memorizada dali em diante. Sem o
+     `auto`, ele volta ao chute de 900px toda vez que a seção sai da tela e
+     a barra de rolagem pula durante o scroll de volta. */
+  contain-intrinsic-size: auto 900px;
+}
+
+/* Vale nos dois tamanhos. Testamos desligar no desktop (a teoria era que com
+   CPU sobrando o adiamento só concentraria o trabalho num quadro só): o pior
+   quadro SUBIU de 41ms para 132ms. Medir foi mais barato que teorizar. */
+
+/* ── Centralização no celular ───────────────────────────────────────────
+   No desktop as seções abrem à esquerda, ao lado de uma foto. No celular
+   não há coluna ao lado: texto encostado à esquerda briga com a marca,
+   que é centralizada no topo.                                           */
+@media (max-width: 1023px) {
+  [data-centro-mobile] {
+    text-align: center;
+  }
+
+  [data-centro-mobile] .eyebrow {
+    justify-content: center;
+  }
+
+  /* O filete do eyebrow rouba espaço numa linha estreita e força quebras
+     feias. Some no celular. */
+  [data-centro-mobile] .eyebrow::before {
+    display: none;
+  }
+
+  [data-centro-mobile],
+  [data-centro-mobile] > * {
+    margin-inline: auto;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   ANIMAÇÕES DE ENTRADA — CSS puro
+   ══════════════════════════════════════════════════════════════════════
+
+   Toda a coreografia do site vive aqui. O JavaScript (`base.ts`) faz uma
+   coisa só: adicionar `.is-pronto` no hero e `.is-visivel` no que entra na
+   tela. Nenhuma biblioteca participa.
+
+   Isso não é purismo — é peso. O GSAP custava 89 KB no celular para fazer
+   exatamente estas transições de `opacity` e `transform`, disparadas uma vez.
+   O CSS faz o mesmo movimento, no compositor, sem baixar nada.
+
+   `html.js-anim` protege o conteúdo: se o JavaScript não rodar, a classe
+   continua no HTML mas nada esconde nada — os estados iniciais abaixo só
+   valem sob `.js-anim`, e o script inline do <head> a remove quando o
+   sistema pede menos movimento.
+   ══════════════════════════════════════════════════════════════════════ */
+
+/* ── Revelações de seção ─────────────────────────────────────────────────
+   Travessia curta (10px) de propósito: distância grande lê como "página
+   pesada".                                                               */
+html.js-anim [data-reveal] {
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    opacity 900ms var(--ease-out),
+    transform 900ms var(--ease-out);
+  /* O atraso vem do HTML quando a seção quer escalonar irmãos. */
+  transition-delay: var(--reveal-delay, 0ms);
+}
+html.js-anim [data-reveal].is-visivel {
+  opacity: 1;
+  transform: none;
+}
+
+/* Grupos: os filhos entram em cascata. O índice chega em `--i`, escrito
+   uma vez por filho pelo JS; o passo de 90ms é o que o olho lê como onda e
+   não como fila de espera. */
+html.js-anim [data-reveal-grupo] > * {
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity 900ms var(--ease-out),
+    transform 900ms var(--ease-out);
+}
+html.js-anim [data-reveal-grupo].is-visivel > * {
+  opacity: 1;
+  transform: none;
+  transition-delay: calc(var(--i, 0) * 90ms);
+}
+
+/* Imagens entram com leve zoom-out. O alvo é o filho, nunca o mesmo nó que
+   recebe o zoom de hover — dois `transform` no mesmo elemento se apagam. */
+html.js-anim [data-reveal-img] > * {
+  transform: scale(1.1);
+  transition: transform 1800ms var(--ease-out);
+}
+html.js-anim [data-reveal-img].is-visivel > * {
+  transform: none;
+}
+
+/* ── Abertura do hero ────────────────────────────────────────────────────
+   A sequência inteira é esta: a foto entra primeiro e mais devagar (é pano
+   de fundo, não assunto), o título sobe linha por linha, e só então o resto
+   aparece.
+
+   O conteúdo NASCE INVISÍVEL e só é revelado com `.is-pronto`. Sem isso o
+   título pintava na posição final, ficava parado, e depois saltava para fora
+   da tela para animar de volta — o "corte seco" que lê como travada. Agora o
+   primeiro quadro que a pessoa vê já é o começo do movimento.
+
+   As linhas do título já vêm separadas em <span> do `site.ts`: cada uma tem
+   a própria máscara de `overflow`, e é por isso que o site não precisa de
+   plugin de split.                                                        */
+/* A FOTO NÃO TEM FADE — só o zoom. E isso é sobre velocidade, não gosto.
+
+   A foto do hero é o elemento LCP (é o maior da primeira tela). Com
+   `opacity: 0` no estado inicial, o navegador só contava o LCP quando ela
+   terminava de aparecer: a métrica saltou de 1,1s para 3,0s, ou seja, o
+   site *parecia* três vezes mais lento sem ter ficado mais lento.
+
+   Entrando só com escala, ela pinta no primeiro quadro possível — o LCP
+   volta ao que era — e o movimento de assentar continua lá. */
+html.js-anim [data-hero-media] {
+  transform: scale(1.08);
+  transition: transform var(--dur-cena-longa) var(--ease-out);
+}
+html.js-anim [data-hero].is-pronto [data-hero-media] {
+  transform: none;
+}
+
+html.js-anim [data-hero-linha] {
+  display: block;
+  overflow: hidden;
+}
+html.js-anim [data-hero-linha] > span {
+  display: block;
+  transform: translateY(115%);
+  transition: transform var(--dur-cena) var(--ease-out);
+  /* 180ms entre as linhas: o suficiente para ler como sequência. */
+  transition-delay: calc(350ms + var(--i, 0) * 180ms);
+}
+html.js-anim [data-hero].is-pronto [data-hero-linha] > span {
+  transform: none;
+}
+
+html.js-anim [data-hero-fade] {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity calc(var(--dur-cena) * 0.8) var(--ease-out),
+    transform calc(var(--dur-cena) * 0.8) var(--ease-out);
+  transition-delay: calc(950ms + var(--i, 0) * 160ms);
+}
+html.js-anim [data-hero].is-pronto [data-hero-fade] {
+  opacity: 1;
+  transform: none;
+}
+
+/* REDE DE SEGURANÇA: se o JavaScript falhar ou nunca chegar, o hero não pode
+   ficar invisível para sempre. Depois de 1,2s isto revela tudo sozinho. O
+   caminho normal continua ganhando: `.is-pronto` vem depois na cascata. */
+@keyframes hero-resgate {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+html.js-anim [data-hero]:not(.is-pronto) [data-hero-media],
+html.js-anim [data-hero]:not(.is-pronto) [data-hero-fade] {
+  animation: hero-resgate var(--dur-slower) var(--ease-out) 1200ms forwards;
+}
+html.js-anim [data-hero]:not(.is-pronto) [data-hero-linha] > span {
+  animation: hero-resgate var(--dur-slower) var(--ease-out) 1200ms forwards;
+}
+
+/* ── Movimento reduzido ──────────────────────────────────────────────────
+   Reduzido não é ausente: o conteúdo aparece no estado final, na hora, sem
+   travessia. Nada fica escondido esperando gatilho.                       */
+@media (prefers-reduced-motion: reduce) {
+  html.js-anim [data-reveal],
+  html.js-anim [data-reveal-grupo] > *,
+  html.js-anim [data-reveal-img] > *,
+  html.js-anim [data-hero-media],
+  html.js-anim [data-hero-fade],
+  html.js-anim [data-hero-linha] > span {
+    opacity: 1;
+    transform: none;
+    transition: none;
+    animation: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

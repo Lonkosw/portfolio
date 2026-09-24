@@ -1,0 +1,162 @@
+---
+/**
+ * Bloco de vídeo do espaço.
+ *
+ * ⚠️ ESTE BLOCO ESTÁ MONTADO E VAZIO, e é de propósito.
+ *
+ * O vídeo do salão ainda não chegou. Em vez de deixar a seção fora e ter de
+ * remontá-la depois (com nova medição de LCP, novo teste de contraste, nova
+ * conferência de acessibilidade), ela está aqui inteira. Enquanto
+ * `video.src` estiver vazio, o bloco mostra o cartaz — que já é uma foto boa
+ * do salão — e não finge ser um player.
+ *
+ * ISSO IMPORTA: um botão de play que não toca nada é uma promessa quebrada
+ * no primeiro toque. Sem vídeo, não há botão.
+ *
+ * PARA LIGAR:
+ *   1. ponha o arquivo em `public/video/` (recomendado: .mp4 H.264,
+ *      ≤ 8 MB, ≤ 30s, sem áudio relevante);
+ *   2. escreva o caminho em `video.src` no `src/data/site.ts`.
+ * Nada mais precisa mudar.
+ *
+ * QUANDO LIGADO, o vídeo entra:
+ *   - `muted` + `playsinline` + `autoplay` + `loop` — sem isso o iOS
+ *     recusa a reprodução automática e mostra um quadrado preto;
+ *   - `preload="none"` e fora do caminho da primeira pintura — vídeo é a
+ *     coisa mais pesada de uma página, e esta seção está abaixo da dobra;
+ *   - PARADO se o sistema pedir menos movimento. Vídeo em loop é a forma
+ *     mais agressiva de movimento involuntário que uma página pode ter.
+ *     Nesse caso ele ganha `controls` e a pessoa decide.
+ */
+import { Image } from 'astro:assets';
+import { site, video } from '../data/site';
+import { img, Q_FOTO, Q_MINI, W_GRANDE } from '../lib/images';
+
+const poster = img(video.poster);
+const temVideo = video.src.length > 0;
+
+// O <video> precisa de uma URL de imagem, não do objeto do Astro.
+//
+// O `poster` NÃO tem carga preguiçosa: `loading="lazy"` não existe em
+// <video>, então este arquivo desce na primeira visita mesmo com a seção
+// lá embaixo e o vídeo segurado por `data-src`. Por isso ele é o mais
+// espremido da página — 1024px e webp, em vez dos 1600 em jpg de antes
+// (que o fonte de 720px nem tinha para dar).
+const { getImage } = await import('astro:assets');
+const posterUrl = temVideo
+  ? (await getImage({ src: poster, width: 1024, format: 'webp', quality: Q_MINI })).src
+  : '';
+---
+
+{/* Fundo `superficie`, e NÃO o tema verde: o cartaz do vídeo já é a foto da
+    parede verde do salão. Verde em volta de verde some — a moldura tem de
+    contrastar com a foto, não repeti-la. */}
+<section id="video" data-secao-adiavel class="border-t border-linha bg-superficie py-20 lg:py-28">
+  <div class="shell">
+    <figure data-reveal class="mx-auto max-w-5xl">
+      <div class="relative overflow-hidden rounded-[2rem] border border-linha">
+        {
+          temVideo ? (
+            <video
+              data-video
+              class="aspect-video h-full w-full object-cover"
+              poster={posterUrl}
+              preload="none"
+              muted
+              loop
+              playsinline
+              autoplay
+              aria-label={video.alt}
+            >
+              {/* O caminho fica em `data-src`, não em `src`: com `autoplay`
+                  o navegador IGNORA o `preload="none"` e baixa o arquivo na
+                  primeira pintura. Medido: 930 KB antes de qualquer scroll,
+                  num site cujo resto pesa 285 KB. O script abaixo entrega o
+                  arquivo só quando a seção chega perto da tela. */}
+              <source data-src={video.src} type="video/mp4" />
+            </video>
+          ) : (
+            <div data-reveal-img class="aspect-video w-full">
+              <div class="h-full w-full">
+                <Image
+                  src={poster}
+                  alt={video.alt}
+                  widths={W_GRANDE}
+                  quality={Q_FOTO}
+                  sizes="(min-width: 1024px) 64rem, 92vw"
+                  loading="lazy"
+                  class="h-full w-full object-cover"
+                />
+              </div>
+            </div>
+          )
+        }
+      </div>
+
+      <figcaption class="mt-4 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
+        <span class="text-[15px] text-texto">{video.legenda}</span>
+
+        {/* O aviso só existe enquanto NÃO há vídeo, e só no protótipo.
+            Some sozinho nas duas condições — não há o que lembrar de
+            apagar depois. */}
+        {
+          !temVideo && site.demo && (
+            <span class="rounded-full border border-dashed border-linha px-3.5 py-1.5 text-[12.5px] text-texto-dim">
+              {video.avisoSemVideo}
+            </span>
+          )
+        }
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+{
+  temVideo && (
+    <script>
+      {/* Movimento reduzido: em vez de tocar sozinho, o vídeo para e ganha
+          os controles nativos. Reduzido não é ausente — o conteúdo continua
+          acessível, só que sob comando da pessoa. */}
+      const v = document.querySelector('[data-video]');
+      if (v && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        v.autoplay = false;
+        v.loop = false;
+        v.controls = true;
+        v.pause();
+      }
+    </script>
+  )
+}
+
+<script>
+  /**
+   * Entrega o vídeo só quando a seção se aproxima da tela.
+   *
+   * O `autoplay` é o que dá o efeito do bloco — mas ele anula o
+   * `preload="none"`: com `src` no HTML, o navegador baixa o arquivo inteiro
+   * antes da primeira pintura, mesmo com a seção três telas abaixo. Deixando
+   * o caminho em `data-src` e só promovendo a `src` quando o observador
+   * dispara, o autoplay continua e o custo sai do caminho crítico.
+   */
+  const video = document.querySelector<HTMLVideoElement>('[data-video]');
+  const fonte = video?.querySelector<HTMLSourceElement>('source[data-src]');
+
+  if (video && fonte) {
+    const observador = new IntersectionObserver(
+      (entradas) => {
+        for (const entrada of entradas) {
+          if (!entrada.isIntersecting) continue;
+          fonte.src = fonte.dataset.src!;
+          video.load();
+          video.play().catch(() => {
+            // Navegador recusou o autoplay: o pôster continua na tela e os
+            // controles nativos seguem disponíveis. Nada quebrado.
+          });
+          observador.disconnect();
+        }
+      },
+      { rootMargin: '300px 0px' },
+    );
+    observador.observe(video);
+  }
+</script>

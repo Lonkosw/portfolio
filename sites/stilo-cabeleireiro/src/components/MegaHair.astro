@@ -1,0 +1,109 @@
+---
+import { Image } from 'astro:assets';
+import { site, megaHair } from '../data/site';
+import { img } from '../lib/images';
+import { wa } from '../lib/wa';
+
+const foto = img(megaHair.imagem);
+const link = wa(
+  site.whatsapp,
+  `Olá, ${site.nome}! Vim pelo site e queria tirar dúvidas sobre mega hair.`,
+);
+---
+
+{/*
+  Este pilar EXPLICA em vez de exibir — ver o comentário em `megaHair` no
+  site.ts. A imagem vem à esquerda (o inverso de Mechas) para o olho não
+  descer a página achando que é a mesma seção repetida com outro texto.
+*/}
+<section id="mega-hair" class="border-t border-linha bg-superficie py-24 lg:py-32">
+  <div class="shell">
+    <div class="grid items-start gap-12 lg:grid-cols-2 lg:gap-16">
+      <div
+        data-parallax-frame
+        class="relative order-2 aspect-[4/5] overflow-hidden rounded-[2rem] border border-linha lg:order-1 lg:sticky lg:top-28"
+      >
+        <div data-reveal-img class="h-full w-full">
+          <div class="h-full w-full">
+            <Image
+              src={foto}
+              alt={megaHair.alt}
+              widths={[480, 720, 1080]}
+              sizes="(min-width: 1024px) 44vw, 92vw"
+              data-parallax="4"
+              class="parallax-folga object-cover"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div data-reveal data-centro-mobile class="order-1 max-w-xl lg:order-2">
+        <p class="eyebrow">{megaHair.eyebrow}</p>
+        <h2 class="mt-5 text-[clamp(2.1rem,5.5vw,3.4rem)] text-texto">{megaHair.titulo}</h2>
+        <p class="mt-5 text-[16.5px] leading-relaxed text-texto-dim">{megaHair.texto}</p>
+
+        <ul data-reveal-grupo class="mt-9 space-y-px overflow-hidden rounded-2xl border border-linha">
+          {
+            megaHair.itens.map((item) => (
+              <li class="bg-fundo p-5 text-left transition-colors duration-[var(--dur-fast)] hover:bg-superficie-hi">
+                <h3 class="text-[1.15rem] font-semibold text-texto">{item.nome}</h3>
+                <p class="mt-1 text-[15px] leading-relaxed text-texto-dim">{item.texto}</p>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+
+    {/*
+      As dúvidas usam <details>/<summary> nativo de propósito: abre e fecha
+      sem uma linha de JS, o teclado já navega, o leitor de tela anuncia
+      "expandido/recolhido" sozinho, e o Ctrl+F do navegador acha texto
+      dentro dos fechados. Uma sanfona feita à mão perderia as quatro coisas.
+    */}
+    <div
+      data-reveal
+      class="mt-16 rounded-[2rem] border border-linha bg-fundo p-6 sm:p-9 lg:mt-24 lg:p-12"
+    >
+      <h3 data-centro-mobile class="text-[clamp(1.7rem,4.5vw,2.5rem)] text-texto">
+        {megaHair.duvidas.titulo}
+      </h3>
+
+      <div data-reveal-grupo class="mt-9 divide-y divide-linha border-y border-linha">
+        {
+          megaHair.duvidas.itens.map((d) => (
+            <details class="group">
+              <summary class="flex min-h-[60px] cursor-pointer list-none items-center justify-between gap-5 py-4 text-left text-[1.05rem] font-semibold text-texto transition-colors duration-[var(--dur-fast)] hover:text-acento focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-acento [&::-webkit-details-marker]:hidden">
+                {d.pergunta}
+                {/* O sinal gira 45° e vira X ao abrir — mesma forma, dois
+                    estados, sem trocar de ícone no meio do caminho. */}
+                <span
+                  aria-hidden="true"
+                  class="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-linha text-acento transition-transform duration-[var(--dur-base)] ease-[var(--ease-standard)] group-open:rotate-45"
+                >
+                  +
+                </span>
+              </summary>
+              <p class="pb-5 pr-12 text-[15.5px] leading-relaxed text-texto-dim">{d.resposta}</p>
+            </details>
+          ))
+        }
+      </div>
+
+      <p class="mt-7 text-[13px] leading-relaxed text-texto-dim">
+        As respostas acima valem para o serviço em geral. O que se aplica ao seu
+        cabelo só se define olhando o fio de perto.
+      </p>
+
+      <a
+        href={link}
+        data-press
+        target="_blank"
+        rel="noopener noreferrer"
+        class="mt-6 inline-flex min-h-[52px] items-center justify-center rounded-full bg-btn px-7 text-[15px] font-semibold text-btn-texto transition-colors duration-[var(--dur-fast)] hover:bg-cobre"
+      >
+        {megaHair.cta}
+      </a>
+    </div>
+  </div>
+</section>

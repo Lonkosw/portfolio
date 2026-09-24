@@ -1,0 +1,83 @@
+---
+import { Image } from 'astro:assets';
+import { site, fazemos } from '../data/site';
+import { img } from '../lib/images';
+import { wa } from '../lib/wa';
+---
+
+<section id="fazemos" data-secao-adiavel class="bg-fundo py-24 lg:py-32">
+  <div class="shell">
+    <div data-reveal data-centro-mobile class="max-w-2xl">
+      <p class="eyebrow">{fazemos.eyebrow}</p>
+      <h2 class="mt-6 text-[clamp(2.1rem,5.5vw,3.4rem)] text-texto">{fazemos.titulo}</h2>
+      <p class="mt-6 text-[16.5px] leading-relaxed text-texto-dim">{fazemos.texto}</p>
+    </div>
+
+    {/*
+      SEIS categorias numa grade de 3: duas linhas cheias, sem vão.
+      Mexeu na lista em `fazemos.itens`? Mantenha múltiplo de 3, ou de 2 se
+      preferir duas colunas — senão sobra buraco na última linha.
+
+      Cada card é um LINK para o WhatsApp com o assunto já escrito. É o que
+      substitui o cardápio: como não há preço para mostrar, o que o site
+      pode fazer é encurtar o caminho até a pergunta certa.
+    */}
+    <ul
+      data-reveal-grupo
+      class="mt-14 grid gap-6 sm:grid-cols-2 lg:mt-16 lg:grid-cols-3 lg:gap-8"
+    >
+      {
+        fazemos.itens.map((item) => {
+          const foto = img(item.imagem);
+          const link = wa(
+            site.whatsapp,
+            `Olá, Ânima! Vim pelo site e gostaria de um orçamento de ${item.nome.toLowerCase()}.`,
+          );
+          return (
+            <li>
+              <a
+                href={link}
+                data-press
+                target="_blank"
+                rel="noopener noreferrer"
+                class="group flex h-full flex-col overflow-hidden rounded-[1.25rem] border border-linha bg-superficie transition-colors duration-[var(--dur-base)] hover:border-acento/50"
+              >
+                <div class="overflow-hidden">
+                  <div class="aspect-[4/5] w-full">
+                    <Image
+                      src={foto}
+                      alt={item.alt}
+                      widths={[400, 620, 880]}
+                      sizes="(min-width: 1024px) 30vw, (min-width: 640px) 46vw, 92vw"
+                      loading="lazy"
+                      class="h-full w-full object-cover [@media(hover:hover)]:transition-transform [@media(hover:hover)]:duration-[var(--dur-slower)] [@media(hover:hover)]:ease-[var(--ease-out)] [@media(hover:hover)]:group-hover:scale-[1.04]"
+                    />
+                  </div>
+                </div>
+
+                <div class="flex flex-1 flex-col p-6">
+                  <h3 class="text-[1.3rem] leading-snug text-texto">{item.nome}</h3>
+                  <p class="mt-2 flex-1 text-[14.5px] leading-relaxed text-texto-dim">
+                    {item.texto}
+                  </p>
+                  <span
+                    class="mt-4 inline-flex items-center gap-1.5 text-[13.5px] font-semibold text-acento"
+                  >
+                    Pedir orçamento
+                    <svg
+                      width="13" height="13" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2.4" aria-hidden="true"
+                      class="[@media(hover:hover)]:transition-transform [@media(hover:hover)]:duration-[var(--dur-fast)] [@media(hover:hover)]:group-hover:translate-x-0.5"
+                    >
+                      <path d="m9 18 6-6-6-6" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                  </span>
+                </div>
+              </a>
+            </li>
+          );
+        })
+      }
+    </ul>
+  </div>
+</section>

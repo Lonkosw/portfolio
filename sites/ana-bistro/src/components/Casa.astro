@@ -1,0 +1,63 @@
+---
+import { Image } from 'astro:assets';
+import { casa } from '../data/site';
+import { img } from '../lib/images';
+
+const foto = img(casa.imagem);
+---
+
+<section id="casa" data-secao-adiavel class="bg-fundo py-24 lg:py-32">
+  <div class="shell grid items-center gap-14 lg:grid-cols-[1fr_1.1fr] lg:gap-20">
+    <div data-reveal data-centro-mobile class="max-w-xl">
+      <p class="eyebrow">{casa.eyebrow}</p>
+      <h2 class="mt-6 text-[clamp(2.3rem,6vw,3.9rem)] text-texto">{casa.titulo}</h2>
+
+      {
+        casa.paragrafos.map((p) => (
+          <p class="mt-6 text-[16.5px] leading-relaxed text-texto-dim">{p}</p>
+        ))
+      }
+
+      {/*
+        A citação da matéria. Sem aspas gigantes decorativas e sem barra
+        colorida na lateral — os dois clichês de bloco de citação. O que
+        marca é a própria Bodoni em itálico, num corpo maior, e um filete
+        curto acima. A atribuição vem depois, menor, para não competir.
+      */}
+      <figure class="mt-12 border-t border-linha pt-8">
+        <blockquote>
+          <p class="font-[family-name:var(--font-display)] text-[clamp(1.3rem,3.4vw,1.75rem)] italic leading-snug text-texto">
+            {casa.citacao}
+          </p>
+        </blockquote>
+        <figcaption class="mt-4 text-[12px] uppercase tracking-[0.22em] text-acento">
+          {casa.citacaoFonte}
+        </figcaption>
+      </figure>
+    </div>
+
+    {/*
+      Revelação por cortina: a faixa escura sobe e descobre a foto, como
+      quem levanta a tampa de um prato. É o único efeito do site que se
+      permite ser notado — por isso está aqui, na primeira foto grande
+      depois da abertura, e não repetido em toda seção.
+    */}
+    <div
+      data-cortina
+      class="relative aspect-[16/10] overflow-hidden rounded-sm border border-linha lg:aspect-[16/11]"
+    >
+      <div data-reveal-img class="h-full w-full">
+        <div class="h-full w-full">
+          <Image
+            src={foto}
+            alt={casa.alt}
+            widths={[640, 1024, 1400]}
+            sizes="(min-width: 1024px) 55vw, 92vw"
+            loading="lazy"
+            class="h-full w-full object-cover"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

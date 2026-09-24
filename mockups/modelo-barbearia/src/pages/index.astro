@@ -1,0 +1,51 @@
+---
+import Layout from '../layouts/Layout.astro';
+import DemoBanner from '../components/DemoBanner.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import Videos from '../components/Videos.astro';
+import Portfolio from '../components/Portfolio.astro';
+import Servicos from '../components/Servicos.astro';
+import Sobre from '../components/Sobre.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../data/site';
+
+const title = `${site.nomeCompleto} — Modelo de site para barbearia`;
+---
+
+<Layout title={title} description={site.descricao}>
+  <DemoBanner />
+  <Header />
+
+  {/*
+    CINCO SEÇÕES — uma a menos que o modelo do salão, que tem "antes e
+    depois" além destas. Aqui essa seção não entra: ver o comentário em
+    `data/site.ts` sobre por que não achei par verificável no banco de
+    imagem. A ordem que sobra:
+
+      hero      — o que a barbearia faz e onde, numa foto
+      vídeos    — corte e barba em movimento, sob toque
+      trabalhos — o acervo, mostrando que não é um caso isolado
+      serviços  — os quatro, cada um virando conversa
+      a barbearia — endereço e como funciona
+      contato   — a ação (é o rodapé)
+
+    Os vídeos vêm logo depois do hero porque são a prova mais forte que esta
+    versão tem — sem comparador arrastável, é o vídeo que mostra a técnica
+    em ação antes de qualquer texto. Quem já se convenceu ali simplesmente
+    rola para a galeria.
+
+    O ritmo alterna `bg-fundo` e `bg-superficie` de seção em seção, com
+    pouca diferença de tom: contraste forte entre faixas roubaria atenção
+    das fotos, que é o que a página existe para mostrar.
+  */}
+  <main id="conteudo">
+    <Hero />
+    <Videos />
+    <Portfolio />
+    <Servicos />
+    <Sobre />
+  </main>
+
+  <Footer />
+</Layout>

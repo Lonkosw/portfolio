@@ -1,0 +1,20 @@
+---
+import { marquee } from '../data/site';
+
+// A lista é duplicada porque o keyframe desloca -50%: com uma cópia só, a
+// faixa "acabaria" no meio da volta e abriria um vão.
+const fila = [...marquee, ...marquee];
+---
+
+<div class="overflow-hidden border-y border-linha bg-superficie py-4" aria-hidden="true">
+  <div class="marquee-track flex w-max items-center gap-10 whitespace-nowrap">
+    {
+      fila.map((palavra) => (
+        <span class="flex items-center gap-10 text-[12.5px] uppercase tracking-[0.28em] text-texto-dim">
+          {palavra}
+          <span class="h-[5px] w-[5px] rounded-full bg-acento/60" />
+        </span>
+      ))
+    }
+  </div>
+</div>

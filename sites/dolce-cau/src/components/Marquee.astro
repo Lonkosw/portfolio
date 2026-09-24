@@ -1,0 +1,36 @@
+---
+import { marquee } from '../data/site';
+
+// Duplicado para o loop ser contínuo (a animação translada -50%)
+const itens = [...marquee, ...marquee];
+---
+
+<div
+  class="relative overflow-hidden border-y border-line bg-noir-soft py-5"
+  aria-label={`Especialidades: ${marquee.join(', ')}`}
+>
+  <div class="marquee-track flex w-max items-center gap-10 pr-10">
+    {
+      itens.map((item) => (
+        <div class="flex shrink-0 items-center gap-10" aria-hidden="true">
+          <span class="font-[family-name:var(--font-display)] text-xl text-cream-dim sm:text-2xl">
+            {item}
+          </span>
+          <span class="h-1.5 w-1.5 shrink-0 rotate-45 bg-gold" />
+        </div>
+      ))
+    }
+  </div>
+
+  <!-- Esmaece as pontas para o texto não "bater" na borda da tela -->
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-noir-soft to-transparent sm:w-28"
+  >
+  </div>
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-noir-soft to-transparent sm:w-28"
+  >
+  </div>
+</div>

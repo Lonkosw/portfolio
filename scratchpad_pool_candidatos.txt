@@ -1,0 +1,44 @@
+=== POOL DE CANDIDATOS (6 melhores por cidade, por nota) ===
+
+--- Curitiba (101 no total) ---
+  5.0  Tio Ge Salão de Cabeleireiro Infantil e Família / Tio Ge Store [endereço ok]
+  5.0  Randi Barbearia Visagista | Curitiba | Sitio Cercado    [endereço ok]
+  5.0  Espaço 897                                              [endereço quebrado]
+  5.0  Tomp Casa da Beleza                                     [endereço quebrado]
+  5.0  848 Beauty Concept - Studio de Beleza e Maquiagem Curitiba [endereço ok]
+  5.0  Salão Secreto                                           [endereço ok]
+
+--- Londrina (89 no total) ---
+  5.0  Espaço Carlota                                          [endereço quebrado]
+  5.0  Gente Bonita                                            [endereço quebrado]
+  5.0  Darlene Souza Estúdio de Beleza                         [endereço quebrado]
+  5.0  Studio Lena Cauassu Cabeleireira                        [endereço quebrado]
+  5.0  Studio La Belle                                         [endereço quebrado]
+  5.0  Salão de Beleza Studio Caroline Ferreira                [endereço quebrado]
+
+--- Cascavel (74 no total) ---
+  5.0  Studio Juliana Tauffer - Cascavel                       [endereço quebrado]
+  5.0  Be You Studio Hair                                      [endereço quebrado]
+  5.0  Salão de Beleza Elaine Ayala - Cabeleireiras Especialistas em Mechas - Manicure - Sobrancelhas - Cascavel [endereço quebrado]
+  5.0  Glamour Experience                                      [endereço quebrado]
+  5.0  Sua Raiz - Salão De Beleza Para Cacheadas               [endereço quebrado]
+  5.0  Madô Espaço de Beleza                                   [endereço ok]
+
+--- Foz do Iguaçu (45 no total) ---
+  5.0  Harmonia - Centro de Beleza e Saúde                     [endereço quebrado]
+  5.0  ✨ Katrin Shelda | Especialista em Lash Design em Foz do Iguaçu – PR ✨ [endereço quebrado]
+  5.0  Studio Bella Rosa                                       [endereço quebrado]
+  5.0  Limma Concepts Hair | Salão de Beleza em Foz do Iguaçu  [endereço quebrado]
+  5.0  Espaço Andressa Bendo                                   [endereço quebrado]
+  5.0  Suelen Hair - Especialista em Alisamentos               [endereço quebrado]
+
+--- Campo Mourão (37 no total) ---
+  5.0  Maiara Almeida Beauty                                   [endereço quebrado]
+  5.0  Aliny Bonotto Espaço de Beleza                          [endereço quebrado]
+  5.0  Edilaine Machado Nail Designer                          [endereço quebrado]
+  5.0  Studio Doppio Nails                                     [endereço ok]
+  5.0  Fabiana Fantachole - Reflexologia                       [endereço ok]
+  5.0  Dakota Estúdio, Barbearia e Prótese Capilar             [endereço ok]
+
+=== CASO A PARTE: Studio Priorize apareceu na lista ===
+  Studio Priorize • Salão de Beleza, Estética e Noivas • Campo Mourão — Campo Mourão — nota 4,9

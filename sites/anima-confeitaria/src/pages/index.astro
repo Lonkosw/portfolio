@@ -1,0 +1,52 @@
+---
+import Layout from '../layouts/Layout.astro';
+import DemoBanner from '../components/DemoBanner.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import Marquee from '../components/Marquee.astro';
+import Sobre from '../components/Sobre.astro';
+import Fazemos from '../components/Fazemos.astro';
+import Trabalhos from '../components/Trabalhos.astro';
+import Como from '../components/Como.astro';
+import Orcamento from '../components/Orcamento.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../data/site';
+
+const title = `${site.nomeCompleto} — Bolos e docinhos por encomenda em ${site.cidade}`;
+---
+
+<Layout title={title} description={site.descricao}>
+  <DemoBanner />
+  <Header />
+
+  {/*
+    A ORDEM responde às perguntas na sequência em que elas aparecem:
+
+      hero      — o que é, numa foto
+      sobre     — por que "artesanal" muda alguma coisa
+      fazemos   — o que dá para encomendar
+      trabalhos — prova de que já foi feito
+      como      — "e como funciona?" — a pergunta que substitui o preço
+      orçamento — a ação
+
+    "Como encomendar" vem ANTES do orçamento de propósito. Como a
+    confeitaria não publica preço, a dúvida que trava a pessoa não é
+    "quanto custa" — é "será que ainda dá tempo, e o que preciso informar".
+    Responder isso antes do formulário tira o atrito de quem nunca
+    encomendou nada por conta.
+
+    O ritmo visual alterna `bg-fundo` e `bg-superficie` de seção em seção —
+    é o que separa os blocos num site claro, onde não há troca de tema.
+  */}
+  <main id="conteudo">
+    <Hero />
+    <Marquee />
+    <Sobre />
+    <Fazemos />
+    <Trabalhos />
+    <Como />
+    <Orcamento />
+  </main>
+
+  <Footer />
+</Layout>

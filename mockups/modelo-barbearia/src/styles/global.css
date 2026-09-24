@@ -1,0 +1,418 @@
+@import 'tailwindcss';
+
+/* ══════════════════════════════════════════════════════════════════════
+   PALETA — CARVÃO E VERMELHO-TIJOLO, e ela não foi escolhida: foi lida das
+   fotos. O avental do barbeiro no hero é vermelho, a fachada vintage é de
+   tijolo pintado de vermelho, e o poste giratório clássico é literalmente
+   vermelho, branco e azul — é a cor mais "barbearia" que existe, e nenhum
+   outro site da pasta usa vermelho como acento principal.
+
+   ⚠️ É O QUARTO NEGÓCIO DA PASTA e o risco de cara de template é real.
+   A separação aqui é de tom, não só de matiz:
+     · o fundo puxa para MARROM-CAFÉ escuro (#161210), não para o cinza-frio
+       do Claus nem o preto-quente do Stilo — é a cor do couro das cadeiras
+       e da madeira escura do balcão nas próprias fotos;
+     · o acento é um vermelho-tijolo QUEIMADO (#C1432B), nunca o vermelho
+       puro de alerta — sobre fundo escuro, vermelho puro vibra demais e lê
+       como aviso, não como marca.
+
+   Preto puro está fora, pelo mesmo motivo de sempre: nenhuma sombra do
+   acervo chega tão fundo, e a foto ficaria parecendo colada por cima.
+   ══════════════════════════════════════════════════════════════════════ */
+@theme {
+  /* ── Marca ──────────────────────────────────────────────────────── */
+  --color-carvao: #161210; /* o FUNDO — quase-preto com fundo de couro/madeira */
+  --color-carvao-2: #201a17; /* superfícies */
+
+  /* O vermelho COMO ELE APARECE nas fotos (avental, fachada) é este —
+     decorativo, NUNCA usado como texto: contra o fundo escuro ele mede
+     ~3,6:1, abaixo do 4,5:1 que título pequeno e eyebrow exigem. */
+  --color-tijolo: #c1432b;
+  --color-tijolo-fundo: #2e1a14; /* o mesmo tom rebaixado, para superfícies */
+
+  /* O ACENTO FUNCIONAL é o mesmo vermelho CLAREADO até passar contraste
+     como texto — meça com `tools/contraste.mjs` antes de escurecer de
+     volta para o tom "correto" das fotos; foi tentado e mede abaixo de
+     4,5:1. */
+  --color-tijolo-claro: #e0654a;
+  --color-tijolo-claro-hi: #ee8367;
+
+  --color-marfim: #f2ede6; /* o texto — nunca branco puro */
+  --color-marfim-dim: #ada39a; /* texto secundário */
+
+  /* ── Tipografia ─────────────────────────────────────────────────────
+     Fraunces de novo, sem instalar fonte nova — só muda o eixo:
+
+       Ânima     → SOFT 40, WONK 1, peso 600 — serifa arredondada, artesanal
+       Joyce     → SOFT 0,  WONK 0, peso 400 — didone fina, de revista
+       Claus     → SOFT 0,  WONK 1, peso 600 — serifa alta de vitrine
+       Barbearia → SOFT 0,  WONK 0, peso 700 — a WONK ZERADA tira a torção
+                   e o peso 700 engrossa a haste: sai uma serifa reta e
+                   pesada, mais placa de barbearia que convite de casamento.
+
+     Instalar uma quinta família custaria ~30 KB por peso, e economizar era
+     instrução explícita.                                                  */
+  --font-display: 'Fraunces Variable', ui-serif, Georgia, serif;
+  --font-sans: 'Figtree Variable', ui-sans-serif, system-ui, sans-serif;
+
+  /* ── Movimento ──────────────────────────────────────────────────────
+     Uma escala só para o site inteiro. Duração cresce com o tamanho da
+     superfície; a direção do movimento escolhe a curva.                 */
+  --dur-fast: 150ms;
+  --dur-base: 200ms;
+  --dur-slow: 300ms;
+  --dur-slower: 450ms;
+
+  /* Faixa "cena": SÓ a abertura, uma vez por visita. Estes são os valores
+     de celular — o desktop os aumenta logo abaixo. */
+  --dur-cena: 1100ms;
+  --dur-cena-longa: 1500ms;
+
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-out: cubic-bezier(0.05, 0.7, 0.1, 1);
+  --ease-in: cubic-bezier(0.3, 0, 0.8, 0.15);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ── Semânticos ─────────────────────────────────────────────────────
+     ATENÇÃO: cores FINAIS, nunca `var()` de outra variável. Propriedade
+     customizada resolve no elemento onde é DECLARADA, e o `@theme` do
+     Tailwind vira `:root` — um `var()` aqui congela o valor e o herda
+     assim para a página inteira.                                        */
+  --color-fundo: #161210;
+  --color-superficie: #201a17;
+  --color-superficie-hi: #2b241f;
+  --color-texto: #f2ede6;
+  --color-texto-dim: #ada39a;
+  /* Sobre fundo escuro o hover CLAREIA. A direção do feedback acompanha a
+     base, não o nome do token.
+
+     ⚠️ Semântico usa o vermelho CLARO (--color-tijolo-claro), não o
+     --color-tijolo cru: este último é decorativo (o vermelho real do
+     avental/fachada) e mede abaixo de 4,5:1 como texto. */
+  --color-acento: #e0654a;
+  --color-acento-hi: #ee8367;
+  --color-linha: #332a24;
+  --color-btn: #e0654a;
+  --color-btn-texto: #161210;
+}
+
+/* A abertura mais longa é só de tela grande: numa tela cheia ela lê como
+   apresentação; num telefone na mão, a mesma duração lê como espera. */
+@media (min-width: 1024px) {
+  :root {
+    --dur-cena: 1500ms;
+    --dur-cena-longa: 2000ms;
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: auto; /* o JS controla; o CSS smooth brigaria */
+    -webkit-tap-highlight-color: transparent;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: var(--color-fundo);
+    color: var(--color-texto);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.65;
+    overflow-x: hidden;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    /* `SOFT 0, WONK 0` e peso 700 — ver o comentário da tipografia lá em
+       cima. WONK zerada tira a torção do `g` e do `a` que os outros sites
+       da pasta usam; o peso 700 (mais pesado que os 600 de sempre) engrossa
+       a haste. O resultado é uma serifa reta e pesada — mais placa de
+       barbearia do que convite elegante. */
+    font-weight: 700;
+    font-variation-settings: 'SOFT' 0, 'WONK' 0;
+    line-height: 1.04;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* Foco visível — nunca removido, apenas estilizado. Sombra em vez de
+     outline para respeitar o raio dos cantos. */
+  :focus-visible {
+    outline: none;
+    box-shadow:
+      0 0 0 2px var(--color-fundo),
+      0 0 0 4px var(--color-acento);
+    border-radius: 4px;
+  }
+
+  /* O texto selecionado é ESCURO sobre a areia: o acento é uma cor clara, e
+     creme sobre areia apagaria a seleção. */
+  ::selection {
+    background: var(--color-acento);
+    color: var(--color-btn-texto);
+  }
+
+  [data-tabular] {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@layer components {
+  .shell {
+    width: 100%;
+    max-width: 78rem;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+
+  @media (min-width: 768px) {
+    .shell {
+      padding-inline: 2.5rem;
+    }
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    /* 12px é o piso — abaixo disso o versalete some num celular. */
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--color-acento);
+    text-wrap: balance;
+  }
+
+  .eyebrow::before {
+    content: '';
+    width: 2rem;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.55;
+  }
+
+  /* Foto com folga para o parallax deslocar sem abrir faixa vazia. */
+  .parallax-folga {
+    width: 100%;
+    height: 112%;
+    margin-top: -6%;
+  }
+}
+
+/* Controles que só existem com JavaScript. Sem script eles somem e o resto
+   continua utilizável. */
+html:not(.js) [data-so-com-js] {
+  display: none;
+}
+
+/* ── Âncoras não podem parar atrás do cabeçalho ─────────────────────────
+   O cabeçalho é `sticky`: ao saltar para uma âncora ele fica POR CIMA do
+   topo da seção, e quem clica no menu chega num título cortado ao meio.
+   Vale para o `scrollIntoView` do JS e para o salto nativo do navegador —
+   por isso está no CSS, e não no script.                                */
+:where(section, footer, main)[id] {
+  scroll-margin-top: 84px;
+}
+@media (min-width: 1024px) {
+  :where(section, footer, main)[id] {
+    scroll-margin-top: 96px;
+  }
+}
+
+/* ── Centralização no celular ───────────────────────────────────────────
+   No desktop as seções abrem à esquerda, ao lado de uma foto. No celular
+   não há coluna ao lado: texto encostado à esquerda briga com a marca,
+   que é centralizada no topo.                                           */
+@media (max-width: 1023px) {
+  [data-centro-mobile] {
+    text-align: center;
+  }
+  [data-centro-mobile] .eyebrow {
+    justify-content: center;
+  }
+  /* O filete rouba espaço numa linha estreita e força quebras feias. */
+  [data-centro-mobile] .eyebrow::before {
+    display: none;
+  }
+  [data-centro-mobile],
+  [data-centro-mobile] > * {
+    margin-inline: auto;
+  }
+}
+
+/* ── Seções pesadas: só renderizam perto da tela ────────────────────────
+   Sem isto o navegador calcula estilo, layout e camadas de todas as seções
+   a cada quadro do scroll, mesmo as que estão a três telas de distância.
+   O `auto` no `contain-intrinsic-size` faz ele MEMORIZAR a altura real
+   depois da primeira renderização — sem ele a barra de rolagem pularia
+   toda vez que a seção saísse da tela.                                   */
+[data-secao-adiavel] {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 900px;
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   ANIMAÇÕES DE ENTRADA — CSS puro, sem biblioteca
+
+   Toda a coreografia vive aqui. O JavaScript faz uma coisa: pôr
+   `.is-pronto` no hero e `.is-visivel` no que entra na tela.
+
+   Não é purismo, é peso: no celular estas são transições de `opacity` e
+   `transform` disparadas uma vez — exatamente o que o CSS faz nativamente,
+   no compositor, sem baixar nada.
+   ══════════════════════════════════════════════════════════════════════ */
+
+html.js-anim [data-reveal] {
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity 900ms var(--ease-out),
+    transform 900ms var(--ease-out);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+html.js-anim [data-reveal].is-visivel {
+  opacity: 1;
+  transform: none;
+}
+
+/* Grupos: os filhos entram em cascata. O índice chega em `--i`, escrito
+   uma vez por filho pelo JS; 80ms por item é o que o olho lê como onda e
+   não como fila de espera. */
+html.js-anim [data-reveal-grupo] > * {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 900ms var(--ease-out),
+    transform 900ms var(--ease-out);
+}
+html.js-anim [data-reveal-grupo].is-visivel > * {
+  opacity: 1;
+  transform: none;
+  transition-delay: calc(var(--i, 0) * 80ms);
+}
+
+/* Imagens entram com leve zoom-out. O alvo é o filho, nunca o mesmo nó que
+   recebe o zoom de hover — dois `transform` no mesmo elemento se apagam. */
+html.js-anim [data-reveal-img] > * {
+  transform: scale(1.08);
+  transition: transform 1800ms var(--ease-out);
+}
+html.js-anim [data-reveal-img].is-visivel > * {
+  transform: none;
+}
+
+/* ── Abertura do hero ────────────────────────────────────────────────
+   A foto entra primeiro e mais devagar (é pano de fundo, não assunto), o
+   título sobe linha por linha, e só então o resto aparece.
+
+   A FOTO NÃO TEM FADE — só escala. Ela é o elemento LCP: com `opacity: 0`
+   no estado inicial o navegador só conta o LCP quando ela termina de
+   aparecer, e a métrica triplica sem o site ter ficado mais lento.
+
+   O resto NASCE INVISÍVEL e só é revelado com `.is-pronto`. Sem isso o
+   título pintaria na posição final, ficaria parado, e depois saltaria para
+   fora da tela para animar de volta — o "corte seco" que lê como travada. */
+html.js-anim [data-hero-media] {
+  transform: scale(1.06);
+  transition: transform var(--dur-cena-longa) var(--ease-out);
+}
+html.js-anim [data-hero].is-pronto [data-hero-media] {
+  transform: none;
+}
+
+/* Cada linha do título tem a própria máscara de overflow, montada no
+   build. É o que permite a entrada linha a linha sem plugin de split.
+
+   ⚠️ O `display: block` fica FORA do `.js-anim`, e isto é conserto de bug.
+   Com `prefers-reduced-motion` o script tira `.js-anim` do <html>; se a
+   regra de bloco estivesse aqui dentro, os três <span> voltariam a ser
+   inline e o título viraria uma linha só: "Cada docesai da mãode alguém".
+   Quebrar em linhas é ESTRUTURA do título, não animação — só a máscara de
+   overflow (e o deslocamento) é que dependem do movimento. */
+[data-hero-linha] {
+  display: block;
+}
+html.js-anim [data-hero-linha] {
+  overflow: hidden;
+}
+html.js-anim [data-hero-linha] > span {
+  display: block;
+  transform: translateY(110%);
+  transition: transform var(--dur-cena) var(--ease-out);
+  transition-delay: calc(180ms + var(--i, 0) * 110ms);
+}
+html.js-anim [data-hero].is-pronto [data-hero-linha] > span {
+  transform: none;
+}
+
+/* ESTE BLOCO DECIDE O LCP — e por isso não usa `opacity`.
+ *
+ * No celular a foto do hero fica abaixo da dobra, então quem conta como
+ * "maior elemento pintado" é o PARÁGRAFO. E o navegador só considera
+ * pintado o que está visível: com `opacity: 0` o cronômetro do LCP fica
+ * correndo até a animação terminar. Media 2564ms — o site não estava
+ * lento, o texto é que esperava a vez de entrar.
+ *
+ * `transform`, ao contrário de `opacity`, NÃO adia o LCP: um elemento
+ * deslocado já conta como pintado. Trocando o fade por um deslocamento
+ * um pouco maior, o movimento continua (e a olho quase não se nota a
+ * diferença) enquanto a métrica volta para a casa dos 500ms.
+ *
+ * ⚠️ Não reintroduza `opacity` aqui sem medir o LCP depois.
+ */
+html.js-anim [data-hero-fade] {
+  transform: translateY(22px);
+  transition: transform calc(var(--dur-cena) * 0.6) var(--ease-out);
+  transition-delay: calc(380ms + var(--i, 0) * 110ms);
+}
+html.js-anim [data-hero].is-pronto [data-hero-fade] {
+  transform: none;
+}
+
+/* REDE DE SEGURANÇA: se o JavaScript falhar ou nunca chegar, o hero não
+   pode ficar invisível para sempre. Depois de 1,2s isto revela sozinho. O
+   caminho normal continua ganhando: `.is-pronto` vem depois na cascata. */
+@keyframes hero-resgate {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+html.js-anim [data-hero]:not(.is-pronto) [data-hero-fade],
+html.js-anim [data-hero]:not(.is-pronto) [data-hero-linha] > span {
+  animation: hero-resgate var(--dur-slower) var(--ease-out) 1200ms forwards;
+}
+
+/* ── Movimento reduzido ──────────────────────────────────────────────
+   Reduzido não é ausente: o conteúdo aparece no estado final, na hora, sem
+   travessia. Nada fica escondido esperando gatilho.                      */
+@media (prefers-reduced-motion: reduce) {
+  html.js-anim [data-reveal],
+  html.js-anim [data-reveal-grupo] > *,
+  html.js-anim [data-reveal-img] > *,
+  html.js-anim [data-hero-media],
+  html.js-anim [data-hero-fade],
+  html.js-anim [data-hero-linha] > span {
+    opacity: 1;
+    transform: none;
+    transition: none;
+    animation: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

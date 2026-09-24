@@ -1,0 +1,213 @@
+---
+// Fraunces é variável nos eixos de peso, óptico e "wonk" — um arquivo só
+// cobre todos os pesos que o site usa. Figtree idem.
+import '@fontsource-variable/fraunces';
+import '@fontsource-variable/figtree';
+import { getImage } from 'astro:assets';
+import '../styles/global.css';
+import { site, og } from '../data/site';
+import { img } from '../lib/images';
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+
+// Prévia do link no WhatsApp — o canal real de distribuição deste site.
+// 1200x630 é o recorte que WhatsApp e Instagram usam.
+const preview = await getImage({
+  src: img(og.imagem),
+  width: 1200,
+  height: 630,
+  fit: 'cover',
+  format: 'jpg',
+});
+const previewUrl = new URL(preview.src, Astro.site ?? Astro.url).href;
+const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url).href;
+
+/**
+ * Dados estruturados. É o que faz o Google entender endereço e tipo de
+ * negócio — exatamente o argumento contra "ter só Instagram e um link que
+ * leva ao WhatsApp".
+ *
+ * `Bakery` é o tipo mais próximo no schema.org para confeitaria.
+ * Sem `priceRange`: eles não publicam preço, e inventar uma faixa aqui
+ * contradiria o site inteiro.
+ */
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Bakery',
+  name: site.nomeCompleto,
+  slogan: site.tagline,
+  description: site.descricao,
+  telephone: `+${site.whatsapp}`,
+  url: canonical,
+  image: previewUrl,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: site.endereco,
+    addressLocality: site.cidade,
+    addressRegion: site.estado,
+    postalCode: site.cep,
+    addressCountry: 'BR',
+  },
+  sameAs: [site.instagram],
+};
+---
+
+<html lang="pt-BR" class="js-anim">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    {/* Emenda com o topo da página. É o mesmo cacau do `--color-fundo` —
+        qualquer outro valor cria uma faixa que não existe no site. */}
+    <meta name="theme-color" content="#201713" />
+
+    {/*
+      Enquanto for protótipo, fora da busca. Sem isto o demo pode ranquear
+      para "ânima confeitaria maringá" e competir com os canais da própria
+      confeitaria — atrapalhar o negócio dela antes da primeira conversa.
+    */}
+    {site.demo && <meta name="robots" content="noindex, nofollow" />}
+
+    <link rel="canonical" href={canonical} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content={site.nome} />
+    <meta property="og:image" content={previewUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={site.descricao} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <script is:inline>
+      // Roda antes da pintura: sem JS ou com reduced-motion o conteúdo
+      // nunca fica preso invisível (o CSS só esconde sob .js-anim).
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.documentElement.classList.remove('js-anim');
+      }
+      // Marca que há JS: os controles auxiliares só aparecem com ele.
+      document.documentElement.classList.add('js');
+    </script>
+  </head>
+
+  <body>
+    <a
+      href="#conteudo"
+      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-btn focus:px-5 focus:py-3 focus:font-medium focus:text-btn-texto"
+    >
+      Pular para o conteúdo
+    </a>
+
+    <slot />
+
+    <script>
+      import '../scripts/main';
+    </script>
+
+    <style is:global>
+      /* Header ganha fundo sólido ao sair do topo. Transição nomeando as
+         propriedades — nunca `transition: all`.
+
+         SEM `backdrop-filter`: uma barra fixa da largura toda reprocessa o
+         desfoque a cada quadro, com o site inteiro passando por baixo. É o
+         item mais caro que uma página deste tipo costuma ter, e sobre um
+         fundo liso a diferença visual é praticamente nula.
+
+         O fundo é o `--color-fundo` escrito em rgb() literal, e não
+         `var(...)`: esta regra vive num `<style is:global>`, fora do alcance
+         do `@theme`. Ao mexer na base, mexer aqui junto. */
+      [data-header] {
+        transition:
+          background-color var(--dur-base) var(--ease-standard),
+          border-color var(--dur-base) var(--ease-standard),
+          box-shadow var(--dur-base) var(--ease-standard);
+      }
+      [data-header].is-stuck {
+        background-color: rgb(32 23 19 / 0.97);
+        border-color: var(--color-linha);
+        /* Sobre fundo escuro a sombra não separa nada — nada é mais escuro
+           que a página. O que separa é a BORDA de baixo, que a linha acima
+           acende. A sombra vira só uma vinheta de reforço, quase preta. */
+        box-shadow: 0 1px 24px -12px rgb(0 0 0 / 0.6);
+      }
+
+      /* Leque do menu do celular: abre a partir do canto do botão.
+         `visibility` entra na transição para o painel não ficar clicável
+         enquanto está invisível — e ainda assim animar a saída. */
+      [data-menu-panel] {
+        transform-origin: top right;
+        opacity: 0;
+        transform: scale(0.96) translateY(-6px);
+        visibility: hidden;
+        pointer-events: none;
+        transition:
+          opacity var(--dur-base) var(--ease-out),
+          transform var(--dur-base) var(--ease-out),
+          visibility var(--dur-base);
+      }
+      [data-menu-panel].is-open {
+        opacity: 1;
+        transform: none;
+        visibility: visible;
+        pointer-events: auto;
+      }
+      /* Saída mais rápida que a entrada: uma faixa abaixo na escala. */
+      [data-menu-panel]:not(.is-open) {
+        transition-duration: var(--dur-fast);
+        transition-timing-function: var(--ease-in);
+      }
+
+      /* Marquee contínuo em CSS — mais leve que animar por JS. `linear` é
+         correto aqui: é loop contínuo, não transição de estado. */
+      @keyframes marquee-scroll {
+        from {
+          transform: translateX(0);
+        }
+        to {
+          transform: translateX(-50%);
+        }
+      }
+      .marquee-track {
+        animation: marquee-scroll 46s linear infinite;
+      }
+      /* Pausa para ler. Só no mouse: no toque o hover fica preso depois do
+         primeiro toque e a faixa nunca mais andaria. */
+      @media (pointer: fine) {
+        .marquee-track:hover {
+          animation-play-state: paused;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .marquee-track {
+          animation: none;
+        }
+      }
+
+      /* Feedback de toque. 0.97 é o piso: abaixo disso lê como exagero. */
+      [data-press] {
+        transition: transform var(--dur-fast) var(--ease-standard);
+      }
+      [data-press]:active {
+        transform: scale(0.97);
+      }
+      @media (prefers-reduced-motion: reduce) {
+        [data-press]:active {
+          transform: none;
+        }
+      }
+    </style>
+  </body>
+</html>

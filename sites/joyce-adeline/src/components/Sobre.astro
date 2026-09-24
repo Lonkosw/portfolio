@@ -1,0 +1,52 @@
+---
+import { Image } from 'astro:assets';
+import { sobre } from '../data/site';
+import { img } from '../lib/images';
+
+const foto = img(sobre.imagem);
+---
+
+<section id="sobre" data-secao-adiavel class="border-y border-linha bg-superficie py-24 lg:py-32">
+  <div class="shell grid items-center gap-14 lg:grid-cols-[1.15fr_1fr] lg:gap-20">
+    <div data-reveal data-centro-mobile class="max-w-xl">
+      <p class="eyebrow">{sobre.eyebrow}</p>
+      <h2 class="mt-6 text-[clamp(2.1rem,5.5vw,3.4rem)] text-texto">{sobre.titulo}</h2>
+
+      {
+        sobre.paragrafos.map((p) => (
+          <p class="mt-6 text-[16.5px] leading-relaxed text-texto-dim">{p}</p>
+        ))
+      }
+
+      {/* Três destaques. Nenhum é número inventado — são fatos que dá para
+          conferir no perfil deles. */}
+      <dl data-reveal-grupo class="mt-12 grid gap-px overflow-hidden rounded-lg border border-linha bg-linha sm:grid-cols-3">
+        {
+          sobre.destaques.map((d) => (
+            <div class="bg-fundo p-6">
+              <dt class="text-[12px] uppercase tracking-[0.2em] text-acento">{d.rotulo}</dt>
+              <dd class="mt-2.5 font-[family-name:var(--font-display)] text-[1.2rem] leading-snug text-texto">
+                {d.texto}
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+
+    <div class="overflow-hidden rounded-[1.5rem] border border-linha lg:rounded-[2rem]">
+      <div data-reveal-img class="aspect-[4/5] w-full lg:aspect-[4/5]">
+        <div class="h-full w-full">
+          <Image
+            src={foto}
+            alt={sobre.alt}
+            widths={[420, 560, 651]}
+            sizes="(min-width: 1024px) 44vw, 88vw"
+            loading="lazy"
+            class="h-full w-full object-cover"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

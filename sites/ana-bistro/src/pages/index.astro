@@ -1,0 +1,52 @@
+---
+import Layout from '../layouts/Layout.astro';
+import DemoBanner from '../components/DemoBanner.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import Marquee from '../components/Marquee.astro';
+import Casa from '../components/Casa.astro';
+import Chef from '../components/Chef.astro';
+import Cozinha from '../components/Cozinha.astro';
+import Cardapio from '../components/Cardapio.astro';
+import Agenda from '../components/Agenda.astro';
+import Reservar from '../components/Reservar.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../data/site';
+
+const title = `${site.nome} — Cozinha autoral da chef ${site.chef} em ${site.cidade}`;
+---
+
+<Layout title={title} description={site.descricao}>
+  <DemoBanner />
+  <Header />
+
+  {/*
+    A ORDEM conta uma história, e não é acidental:
+
+      hero      — o lugar, antes de qualquer palavra
+      casa      — por que ele existe
+      chef      — quem assina (é o que diferencia esta casa de qualquer outra)
+      cozinha   — o que sai da cozinha, em foto
+      cardápio  — quanto custa, já que a pessoa quis saber
+      agenda    — motivos para voltar numa data específica
+      reservar  — a ação, depois de todos os argumentos
+
+    O cardápio vem DEPOIS da chef de propósito: preço lido antes de saber
+    quem cozinha é preço caro. Lido depois, é preço justificado.
+
+    O ritmo visual alterna `bg-fundo` e `bg-superficie` de seção em seção —
+    é o que separa os blocos sem trocar o tema nem estourar o contraste.
+  */}
+  <main id="conteudo">
+    <Hero />
+    <Marquee />
+    <Casa />
+    <Chef />
+    <Cozinha />
+    <Cardapio />
+    <Agenda />
+    <Reservar />
+  </main>
+
+  <Footer />
+</Layout>

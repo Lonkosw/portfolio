@@ -1,0 +1,87 @@
+---
+import { Image } from 'astro:assets';
+import { sobre } from '../data/site';
+import { img } from '../lib/images';
+
+const foto = img('bandejas-brigadeiros');
+const textura = img('detalhe-mesa-branca');
+---
+
+<section id="sobre" class="relative py-24 lg:py-36">
+  <div class="shell grid gap-14 lg:grid-cols-2 lg:items-center lg:gap-20">
+    <!-- Fotos -->
+    <div class="relative order-2 lg:order-1">
+      <div data-reveal-img class="overflow-hidden rounded-[1.75rem] border border-line/70">
+        <Image
+          src={foto}
+          alt="Bandejas de cristal com brigadeiros artesanais da DolceCau"
+          widths={[480, 768, 1024]}
+          sizes="(min-width: 1024px) 46vw, 92vw"
+          loading="lazy"
+          class="h-[clamp(18rem,44vw,28rem)] w-full object-cover"
+        />
+      </div>
+
+      <!-- Foto menor sobreposta, cria profundidade -->
+      <div
+        data-reveal-img
+        data-parallax="-14"
+        class="absolute -bottom-10 right-2 hidden w-44 overflow-hidden rounded-2xl border border-line shadow-2xl shadow-black/50 sm:block lg:-right-8 lg:w-52"
+      >
+        <Image
+          src={textura}
+          alt="Detalhe de doces finos em mesa com flores brancas"
+          widths={[240, 420]}
+          sizes="13rem"
+          loading="lazy"
+          class="h-40 w-full object-cover lg:h-48"
+        />
+      </div>
+    </div>
+
+    <!-- Texto -->
+    <div data-centro-mobile class="order-1 lg:order-2">
+      <p data-reveal class="eyebrow">{sobre.eyebrow}</p>
+
+      <h2
+        data-reveal
+        data-reveal-delay="0.06"
+        class="mt-6 font-[family-name:var(--font-display)] text-[clamp(2rem,5.5vw,3.25rem)] text-cream lg:max-w-[18ch]"
+      >
+        {sobre.titulo}
+      </h2>
+
+      {
+        sobre.paragrafos.map((p, i) => (
+          <p
+            data-reveal
+            data-reveal-delay={0.12 + i * 0.06}
+            class="mt-6 max-w-[58ch] leading-relaxed text-cream-dim"
+          >
+            {p}
+          </p>
+        ))
+      }
+
+      <dl class="mt-12 grid grid-cols-2 gap-6 border-t border-line pt-8 text-center lg:text-left">
+        {
+          sobre.numeros.map((n, i) => (
+            <div data-reveal data-reveal-delay={0.2 + i * 0.08}>
+              <dt class="sr-only">{n.label}</dt>
+              <dd>
+                <span class="font-[family-name:var(--font-display)] text-[clamp(1.75rem,5vw,2.75rem)] text-gold">
+                  {/* Valor real no HTML: sem JS (ou com reduced-motion) ele já
+                      aparece correto; o GSAP é que zera antes de contar. */}
+                  <span data-count={n.valor}>{n.valor}</span>{n.sufixo}
+                </span>
+                <span class="mt-1 block text-xs leading-tight text-cream-dim sm:text-sm">
+                  {n.label}
+                </span>
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </div>
+</section>

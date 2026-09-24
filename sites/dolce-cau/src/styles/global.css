@@ -1,0 +1,184 @@
+@import 'tailwindcss';
+
+@theme {
+  /* ── Paleta: dark chocolate cinematográfico ───────────────────────── */
+  --color-noir: #141010; /* fundo base — preto-chocolate quente */
+  --color-noir-soft: #1c1613; /* superfície elevada */
+  --color-surface: #241c17; /* cards */
+  --color-surface-hi: #2f251e; /* card hover / bordas quentes */
+
+  --color-gold: #c89457; /* acento principal — CTA, detalhes */
+  --color-gold-hi: #dcb079; /* hover do acento */
+  --color-cocoa: #7a4a2b; /* marrom chocolate de apoio */
+
+  --color-cream: #f5efe7; /* texto principal */
+  --color-cream-dim: #cbbcab; /* texto secundário (contraste ≥4.5:1 no noir) */
+  --color-line: #3a2d24; /* bordas / divisores */
+
+  /* ── Tipografia ───────────────────────────────────────────────────── */
+  --font-display: 'Playfair Display', ui-serif, Georgia, serif;
+  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+
+  /* ── Motion tokens (ritmo único em todo o site) ───────────────────── */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-fast: 180ms;
+  --dur-base: 280ms;
+  --dur-slow: 520ms;
+}
+
+@layer base {
+  html {
+    /* Lenis controla o scroll; sem isto o CSS smooth briga com o JS */
+    scroll-behavior: auto;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    background-color: var(--color-noir);
+    color: var(--color-cream);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.65;
+    overflow-x: hidden;
+    /* Halo quente no topo: evita o "vazio digital" de um preto chapado */
+    background-image: radial-gradient(
+      ellipse 80% 50% at 50% -10%,
+      rgb(122 74 43 / 0.18),
+      transparent 70%
+    );
+    background-repeat: no-repeat;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+  }
+
+  /* Foco visível — nunca removido, apenas estilizado */
+  :focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  ::selection {
+    background: var(--color-gold);
+    color: var(--color-noir);
+  }
+}
+
+@layer components {
+  /* Container consistente em todas as seções */
+  .shell {
+    width: 100%;
+    max-width: 80rem;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+
+  @media (min-width: 768px) {
+    .shell {
+      padding-inline: 2.5rem;
+    }
+  }
+
+  /* Filete dourado usado como marcador de seção */
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-gold);
+  }
+
+  .eyebrow::before {
+    content: '';
+    width: 2rem;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.7;
+  }
+}
+
+/* ── Âncoras não podem parar atrás do cabeçalho ─────────────────────────
+   O cabeçalho é `sticky`, então ao saltar para uma âncora ele fica POR
+   CIMA do topo da seção: quem clica em "Cardápio" no menu chega num
+   título cortado ao meio. `scroll-margin-top` reserva a altura dele mais
+   um respiro.
+
+   Vale tanto para o scroll do JS quanto para o salto nativo do navegador
+   (quando alguém abre o link com #cardapio direto na barra de endereço),
+   e é por isso que está no CSS e não no script.                          */
+:where(section, footer, main)[id] {
+  scroll-margin-top: 88px;
+}
+@media (min-width: 1024px) {
+  :where(section, footer, main)[id] {
+    scroll-margin-top: 96px;
+  }
+}
+
+/* ── Centralização no celular ───────────────────────────────────────────
+   No desktop as seções abrem alinhadas à esquerda, ao lado de uma foto.
+   No celular não há coluna ao lado: o texto encostado à esquerda briga
+   com a marca, que é centralizada no topo. Abaixo de `lg` os blocos de
+   cabeçalho vão para o centro.                                          */
+@media (max-width: 1023px) {
+  [data-centro-mobile] {
+    text-align: center;
+  }
+
+  [data-centro-mobile] .eyebrow {
+    justify-content: center;
+  }
+
+  /* O filete do eyebrow rouba espaço numa linha estreita e força quebras
+     feias ("MARINGÁ —" / "PR"). Some no celular. */
+  [data-centro-mobile] .eyebrow::before {
+    display: none;
+  }
+
+  /* O próprio bloco entra na conta: quando ele tem `max-w-*` e sobra folga
+     dentro da shell, sem isto o conteúdo fica centralizado dentro de uma
+     caixa que continua encostada à esquerda. */
+  [data-centro-mobile],
+  [data-centro-mobile] > * {
+    margin-inline: auto;
+  }
+}
+
+/* ── Estado inicial das animações de entrada ────────────────────────────
+   Aplicado só quando o JS confirma que vai animar (html.js-anim), para que
+   sem JS ou com reduced-motion o conteúdo apareça normalmente.          */
+html.js-anim [data-reveal] {
+  opacity: 0;
+  transform: translateY(24px);
+}
+
+html.js-anim [data-reveal-img] > * {
+  transform: scale(1.12);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.js-anim [data-reveal],
+  html.js-anim [data-reveal-img] > * {
+    opacity: 1;
+    transform: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

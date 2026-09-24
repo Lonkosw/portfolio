@@ -1,0 +1,92 @@
+---
+/**
+ * Os três tipos de ensaio — o que num site de serviço seria "planos".
+ *
+ * ⚠️ NÃO TEM PREÇO, e a ausência é o desenho. Um cartão de plano com o
+ * espaço do valor vazio grita "faltou preencher". Estes cartões nunca
+ * tiveram uma linha de valor: cada um termina numa conversa de WhatsApp
+ * com o assunto já escrito, que é como ela orça de verdade.
+ *
+ * O campo `inclui` existe no `site.ts` e hoje vem vazio nos três. Enquanto
+ * estiver vazio, a lista simplesmente não renderiza — quando a Joyce
+ * confirmar o que entra em cada ensaio, é só preencher lá.
+ */
+import { Image } from 'astro:assets';
+import { site, planos } from '../data/site';
+import { img } from '../lib/images';
+import { wa } from '../lib/wa';
+---
+
+<section id="planos" data-secao-adiavel class="border-t border-linha bg-superficie py-20 lg:py-28">
+  <div class="shell">
+    <div data-reveal data-centro-mobile class="max-w-2xl">
+      <p class="eyebrow">{planos.eyebrow}</p>
+      <h2 class="mt-5 text-[clamp(2rem,7vw,3.2rem)] text-texto">{planos.titulo}</h2>
+      <p class="mt-5 text-[16px] leading-relaxed text-texto-dim">{planos.texto}</p>
+    </div>
+
+    <div data-reveal-grupo class="mt-12 grid gap-4 sm:grid-cols-2 lg:mt-16 lg:grid-cols-3 lg:gap-5">
+      {
+        planos.itens.map((p) => {
+          // A mensagem já nomeia o ensaio: ela recebe "quero o de gestante"
+          // em vez de "oi", que é a diferença entre uma conversa que começa
+          // e uma que morre no primeiro turno.
+          const link = wa(
+            site.whatsapp,
+            `Olá, Joyce! Vim pelo site e gostaria de saber sobre o ensaio de ${p.nome.toLowerCase()}.`,
+          );
+          return (
+            <a
+              href={link}
+              data-press
+              target="_blank"
+              rel="noopener noreferrer"
+              class="group flex flex-col overflow-hidden rounded-xl border border-linha bg-fundo transition-colors duration-[var(--dur-fast)] hover:border-acento/60"
+            >
+              {/* 4:3 sobre um acervo 4:5 come 25% da altura, e SEM
+                  `object-top`: as três fotos têm o assunto no meio ou na
+                  metade de baixo do quadro (a gestante está sentada, o bebê
+                  deitado). Ancorar no topo enchia o cartão de teto e cortava
+                  justamente quem a foto mostra. */}
+              <div class="aspect-[4/3] w-full overflow-hidden">
+                <Image
+                  src={img(p.imagem)}
+                  alt={p.alt}
+                  widths={[320, 480, 640]}
+                  sizes="(min-width: 1024px) 31vw, (min-width: 640px) 46vw, 92vw"
+                  loading="lazy"
+                  class="h-full w-full object-cover object-center [@media(hover:hover)]:transition-transform [@media(hover:hover)]:duration-[var(--dur-slower)] [@media(hover:hover)]:ease-[var(--ease-out)] [@media(hover:hover)]:group-hover:scale-[1.04]"
+                />
+              </div>
+
+              <div class="flex flex-1 flex-col p-6">
+                <h3 class="text-[1.4rem] leading-tight text-texto">{p.nome}</h3>
+                <p class="mt-3 text-[15px] leading-relaxed text-texto-dim">{p.texto}</p>
+
+                {p.inclui.length > 0 && (
+                  <ul class="mt-5 space-y-2 border-t border-linha pt-5">
+                    {p.inclui.map((linha) => (
+                      <li class="flex gap-2.5 text-[14.5px] leading-snug text-texto-dim">
+                        <span aria-hidden="true" class="mt-[0.55em] h-1 w-1 shrink-0 rounded-full bg-acento" />
+                        {linha}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+
+                {/* `mt-auto` alinha o rodapé dos três cartões mesmo com
+                    textos de alturas diferentes. */}
+                <span class="mt-auto flex items-center gap-1.5 pt-6 text-[14px] font-semibold text-acento transition-colors duration-[var(--dur-fast)] group-hover:text-acento-hi">
+                  Perguntar no WhatsApp
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                    <path d="m9 18 6-6-6-6" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </span>
+              </div>
+            </a>
+          );
+        })
+      }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,152 @@
+---
+import { Image } from 'astro:assets';
+import { site, cabelo, diagnostico } from '../data/site';
+import { img, Q_FOTO, W_MEDIA } from '../lib/images';
+import { wa } from '../lib/wa';
+
+const foto = img(cabelo.imagem);
+const link = wa(site.whatsapp, 'Olá! Vi o modelo de site e queria saber mais.');
+---
+
+<section
+  id="cabelo"
+  data-secao-adiavel
+  class="border-t border-linha bg-fundo py-24 lg:py-32"
+>
+  <div class="shell">
+    <div class="grid items-start gap-12 lg:grid-cols-2 lg:gap-16">
+      <div data-reveal data-centro-mobile class="max-w-xl">
+        <p class="eyebrow">{cabelo.eyebrow}</p>
+        <h2 class="mt-5 text-[clamp(2.1rem,5.5vw,3.4rem)] text-texto">{cabelo.titulo}</h2>
+        <p class="mt-5 text-[16.5px] leading-relaxed text-texto-dim">{cabelo.texto}</p>
+
+        <ul data-reveal-grupo class="mt-9 space-y-px overflow-hidden rounded-2xl border border-linha">
+          {
+            cabelo.itens.map((item) => (
+              <li class="bg-superficie p-5 text-left transition-colors duration-[var(--dur-fast)] hover:bg-superficie-hi">
+                <h3 class="text-[1.15rem] font-semibold text-texto">{item.nome}</h3>
+                <p class="mt-1 text-[15px] leading-relaxed text-texto-dim">{item.texto}</p>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div
+        data-parallax-frame
+        class="relative aspect-[4/5] overflow-hidden rounded-[2rem] border border-linha lg:sticky lg:top-28"
+      >
+        <div data-reveal-img class="h-full w-full">
+          <div class="h-full w-full">
+            <Image
+              src={foto}
+              alt={cabelo.alt}
+              widths={W_MEDIA}
+              quality={Q_FOTO}
+              sizes="(min-width: 1024px) 44vw, 92vw"
+              data-parallax="4"
+              class="parallax-folga object-cover"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {/* ── FERRAMENTA 1 · Diagnóstico ─────────────────────────────────── */}
+    <div
+      data-reveal
+      data-diag
+      data-diag-whatsapp={site.whatsapp}
+      data-diag-padrao="Olá! Vi o modelo de site e queria saber mais."
+      data-diag-encaminhamentos={JSON.stringify(diagnostico.encaminhamentos)}
+      class="mt-16 rounded-[2rem] border border-linha bg-superficie p-6 sm:p-9 lg:mt-24 lg:p-12"
+    >
+      <div class="flex flex-wrap items-end justify-between gap-4">
+        <div data-centro-mobile class="max-w-xl">
+          <p class="eyebrow">{diagnostico.eyebrow}</p>
+          <h3 class="mt-4 text-[clamp(1.7rem,4.5vw,2.5rem)] text-texto">{diagnostico.titulo}</h3>
+          <p class="mt-4 text-[16px] leading-relaxed text-texto-dim">{diagnostico.texto}</p>
+        </div>
+        <p
+          data-diag-progresso
+          data-tabular
+          aria-live="polite"
+          class="rounded-full border border-linha px-4 py-2 text-[13px] font-semibold text-acento"
+        >
+          0 de 3
+        </p>
+      </div>
+
+      <div class="mt-10 grid gap-9 lg:grid-cols-3">
+        {
+          diagnostico.perguntas.map((p, i) => (
+            <fieldset>
+              <legend class="flex items-baseline gap-2 text-sm font-semibold text-texto">
+                <span class="numeral text-[15px]">{String(i + 1).padStart(2, '0')}</span>
+                {p.rotulo}
+              </legend>
+              <div class="mt-4 flex flex-col gap-2">
+                {p.opcoes.map((o) => (
+                  <label class="flex min-h-[48px] cursor-pointer items-center rounded-xl border border-linha bg-fundo px-4 text-[15px] text-texto-dim transition-colors duration-[var(--dur-fast)] hover:border-acento/60 has-[:checked]:border-acento has-[:checked]:bg-acento/10 has-[:checked]:font-semibold has-[:checked]:text-texto has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-acento">
+                    <input
+                      type="radio"
+                      name={`diag-${p.id}`}
+                      value={o}
+                      data-diag-campo={p.id}
+                      class="sr-only"
+                    />
+                    {o}
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+          ))
+        }
+      </div>
+
+      {/*
+        O resultado nasce escondido e só aparece com as três respostas.
+        `hidden` de verdade (não opacity) para o leitor de tela não anunciar
+        um bloco vazio; quando aparece, a página cresce e o motor de
+        animação é avisado para remedir os gatilhos.
+      */}
+      <div
+        data-diag-resultado
+        hidden
+        class="mt-10 rounded-2xl border border-acento/40 bg-acento/8 p-6 sm:p-8"
+      >
+        <p class="text-[12px] font-semibold uppercase tracking-[0.18em] text-acento">
+          Por onde começar
+        </p>
+        <h4 data-diag-res-titulo class="mt-3 text-[1.6rem] text-texto"></h4>
+        <p data-diag-res-texto class="mt-3 max-w-2xl text-[15.5px] leading-relaxed text-texto-dim"></p>
+
+        <p class="mt-5 text-[13px] leading-relaxed text-texto-dim">
+          Isto é uma indicação de ponto de partida, não um diagnóstico fechado: o
+          resultado real depende de ver o seu cabelo de perto.
+        </p>
+
+        <div class="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
+          <a
+            href={link}
+            data-diag-cta
+            data-press
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex min-h-[52px] items-center justify-center rounded-full bg-btn px-7 text-[15px] font-semibold text-btn-texto transition-colors duration-[var(--dur-fast)] hover:bg-acento-hi"
+          >
+            Marcar avaliação no WhatsApp
+          </a>
+          <button
+            type="button"
+            data-diag-limpar
+            data-so-com-js
+            class="inline-flex min-h-[44px] items-center justify-center rounded-full px-4 text-[14px] text-texto-dim transition-colors duration-[var(--dur-fast)] hover:text-texto"
+          >
+            Refazer o diagnóstico
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

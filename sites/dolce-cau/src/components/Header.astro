@@ -1,0 +1,121 @@
+---
+import { site, nav, orcamento } from '../data/site';
+import { wa } from '../lib/wa';
+
+const link = wa(site.whatsapp, orcamento.mensagem);
+---
+
+<header data-header class="sticky top-0 z-40 border-b border-transparent">
+  {/* No celular vira grade de 3 colunas só para a marca cair no centro exato;
+      a partir de lg volta a ser a barra normal alinhada à esquerda. */}
+  <div
+    class="shell grid h-[72px] grid-cols-[1fr_auto_1fr] items-center gap-4 lg:flex lg:justify-between"
+  >
+    <a
+      href="#topo"
+      class="group col-start-2 flex items-baseline py-1 justify-self-center lg:col-start-auto lg:justify-self-auto"
+      aria-label={`${site.nome} — início`}
+    >
+      <span class="font-[family-name:var(--font-display)] text-[22px] tracking-tight text-cream">
+        Dolce
+      </span>
+      <span
+        class="font-[family-name:var(--font-display)] text-[22px] italic tracking-tight text-gold transition-colors group-hover:text-gold-hi"
+      >
+        Cau
+      </span>
+    </a>
+
+    {/* `gap-4` + `px-3 py-3` em vez de `gap-8` com `py-1`: os itens tinham
+        28px de altura e até 39px de largura, abaixo do mínimo de toque. O
+        espaço entre eles vira área clicável em vez de vão morto, e a barra
+        não fica mais larga.
+
+        O sublinhado do hover fica em `bottom-2.5`, não colado no fundo do
+        <a>: com o padding vertical maior ele desceria para longe do texto
+        e pareceria um filete solto. */}
+    <nav aria-label="Navegação principal" class="hidden items-center gap-4 lg:flex">
+      {
+        nav.map((item) => (
+          <a
+            href={item.href}
+            class="group relative flex min-h-[44px] min-w-[44px] items-center justify-center px-3 text-sm text-cream-dim transition-colors hover:text-cream"
+          >
+            {item.label}
+            <span class="absolute bottom-2.5 left-3 right-3 h-px w-0 bg-gold transition-[width] duration-300 ease-[var(--ease-out-expo)] group-hover:w-[calc(100%-1.5rem)]" />
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="col-start-3 flex items-center justify-end gap-3 lg:col-start-auto">
+      <a
+        href={link}
+        target="_blank"
+        rel="noopener noreferrer"
+        data-magnetic="0.25"
+        {/* `min-h-[44px]` com flex: com `py-2.5` o botão fechava em 42px,
+            dois abaixo do mínimo de toque. */}
+        class="hidden min-h-[44px] items-center rounded-full border border-gold/50 px-5 text-sm font-medium text-gold transition-colors duration-300 hover:border-gold hover:bg-gold hover:text-noir lg:inline-flex"
+      >
+        Orçamento
+      </a>
+
+      {/* Um botão só: as barrinhas viram X no mesmo lugar. Antes havia um
+          segundo botão dentro do painel, que ficava sem listener e não fechava. */}
+      <button
+        data-menu-toggle
+        type="button"
+        aria-expanded="false"
+        aria-controls="menu-mobile"
+        class="grid h-11 w-11 place-items-center rounded-full border border-line text-cream transition-colors hover:border-gold hover:text-gold lg:hidden"
+      >
+        <span class="sr-only" data-menu-label>Abrir menu</span>
+        <svg
+          data-menu-icone="barras"
+          width="20" height="20" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="1.5" aria-hidden="true"
+        >
+          <path d="M4 7h16M4 12h16M4 17h16" stroke-linecap="round"></path>
+        </svg>
+        <svg
+          data-menu-icone="x"
+          hidden
+          width="20" height="20" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="1.5" aria-hidden="true"
+        >
+          <path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  {/* Leque compacto, ancorado logo abaixo do botão — não toma a tela toda. */}
+  <div
+    id="menu-mobile"
+    data-menu-panel
+    class="absolute right-5 top-[64px] w-60 rounded-2xl border border-line bg-noir-soft/95 p-2 shadow-2xl shadow-black/60 backdrop-blur-md md:right-10 lg:hidden"
+  >
+    <nav aria-label="Navegação mobile" class="flex flex-col">
+      {
+        nav.map((item) => (
+          <a
+            href={item.href}
+            class="rounded-xl px-4 py-3 text-[15px] text-cream-dim transition-colors hover:bg-surface hover:text-gold"
+          >
+            {item.label}
+          </a>
+        ))
+      }
+
+      <a
+        href={link}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="mt-2 rounded-xl bg-gold px-4 py-3 text-center text-[15px] font-medium text-noir transition-colors hover:bg-gold-hi"
+      >
+        Chamar no WhatsApp
+      </a>
+    </nav>
+  </div>
+</header>

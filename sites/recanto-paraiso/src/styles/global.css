@@ -1,0 +1,223 @@
+@import 'tailwindcss';
+
+@theme {
+  /* ── Paleta: mata e cristal ────────────────────────────────────────────
+     Tirada das fotos do próprio espaço: o verde fechado do bosque em volta,
+     a luz de vela dos lustres de cristal e o terracota das cadeiras de
+     madeira. Deliberadamente diferente do dark-chocolate da DolceCau.      */
+  --color-mata: #0f1712; /* fundo base — verde-mata quente, nunca preto puro */
+  --color-mata-soft: #16211a; /* superfície elevada */
+  --color-surface: #1d2a22; /* cards */
+  --color-surface-hi: #263628; /* card hover / bordas quentes */
+
+  --color-cristal: #d9c28c; /* acento principal — champanhe do lustre */
+  --color-cristal-hi: #ecd9ac; /* hover do acento */
+  --color-terra: #a55e3a; /* terracota das cadeiras — apoio */
+
+  --color-cream: #f3f0e6; /* texto principal */
+  --color-cream-dim: #c3c9bc; /* texto secundário (contraste ≥4.5:1 no mata) */
+  --color-line: #2c3b31; /* bordas / divisores */
+
+  /* ── Tipografia ───────────────────────────────────────────────────────
+     Cormorant Garamond tem eixo vertical fino e serifa alta — lê como
+     convite de casamento sem precisar de script/cursiva.                   */
+  --font-display: 'Cormorant Garamond', ui-serif, Georgia, serif;
+  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+
+  /* ── Motion tokens (ritmo único em todo o site) ───────────────────────── */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-fast: 180ms;
+  --dur-base: 280ms;
+  --dur-slow: 520ms;
+}
+
+@layer base {
+  html {
+    /* Lenis controla o scroll; sem isto o CSS smooth briga com o JS */
+    scroll-behavior: auto;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    background-color: var(--color-mata);
+    color: var(--color-cream);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.65;
+    overflow-x: hidden;
+    /* Luz quente vindo de cima, como o lustre no pé-direito do salão */
+    background-image: radial-gradient(
+      ellipse 80% 50% at 50% -10%,
+      rgb(217 194 140 / 0.13),
+      transparent 70%
+    );
+    background-repeat: no-repeat;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    line-height: 1.08;
+    /* Cormorant já é estreita: apertar mais fecharia demais no display */
+    letter-spacing: 0;
+  }
+
+  /* Foco visível — nunca removido, apenas estilizado */
+  :focus-visible {
+    outline: 2px solid var(--color-cristal);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  ::selection {
+    background: var(--color-cristal);
+    color: var(--color-mata);
+  }
+}
+
+@layer components {
+  /* Container consistente em todas as seções */
+  .shell {
+    width: 100%;
+    max-width: 80rem;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+
+  @media (min-width: 768px) {
+    .shell {
+      padding-inline: 2.5rem;
+    }
+  }
+
+  /* Filete champanhe usado como marcador de seção */
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-cristal);
+  }
+
+  .eyebrow::before {
+    content: '';
+    width: 2rem;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.7;
+  }
+
+  /* Números grandes (capacidade, etapas) — mesma família do display */
+  .numeral {
+    font-family: var(--font-display);
+    font-weight: 500;
+    line-height: 1;
+    color: var(--color-cristal);
+  }
+
+  /* Foto com folga para o parallax deslocar sem abrir faixa vazia na moldura.
+     A sobra de 12% cobre o ±5% de yPercent com margem. Sem parallax (celular),
+     é só um recorte um pouco mais fechado — nunca um buraco. */
+  .parallax-folga {
+    width: 100%;
+    height: 112%;
+    margin-top: -6%;
+  }
+
+  /* O campo de convidados tem botões −/+ próprios; as setinhas nativas ao lado
+     ficavam competindo com eles e encolhiam a área de digitação. */
+  input[type='number'] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+  }
+  input[type='number']::-webkit-outer-spin-button,
+  input[type='number']::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
+
+/* ── Controles que só fazem sentido com JavaScript ──────────────────────
+   Os botões −/+ e o "limpar" do simulador não têm o que fazer sem script.
+   O campo de número continua digitável, então o formulário inteiro segue
+   utilizável — o site nunca depende do JS para funcionar.                */
+html:not(.js) [data-so-com-js] {
+  display: none;
+}
+
+/* ── Âncoras não podem parar atrás do cabeçalho ─────────────────────────
+   O cabeçalho é `sticky`: ao saltar para uma âncora ele fica POR CIMA do
+   topo da seção, e quem clica no menu chega num título cortado ao meio.
+   Vale para o salto nativo do navegador e para o `scrollIntoView` do JS —
+   por isso está no CSS, e não no script.                                 */
+:where(section, footer, main)[id] {
+  scroll-margin-top: 84px;
+}
+@media (min-width: 1024px) {
+  :where(section, footer, main)[id] {
+    scroll-margin-top: 96px;
+  }
+}
+
+/* ── Centralização no celular ───────────────────────────────────────────
+   No desktop as seções abrem alinhadas à esquerda, ao lado de uma foto.
+   No celular não há coluna ao lado: o texto encostado à esquerda briga
+   com a marca, que é centralizada no topo. Abaixo de `lg` os blocos de
+   cabeçalho vão para o centro.                                          */
+@media (max-width: 1023px) {
+  [data-centro-mobile] {
+    text-align: center;
+  }
+
+  [data-centro-mobile] .eyebrow {
+    justify-content: center;
+  }
+
+  /* O filete do eyebrow rouba espaço numa linha estreita e força quebras
+     feias ("MARINGÁ —" / "PR"). Some no celular. */
+  [data-centro-mobile] .eyebrow::before {
+    display: none;
+  }
+
+  /* O próprio bloco entra na conta: quando ele tem `max-w-*` e sobra folga
+     dentro da shell, sem isto o conteúdo fica centralizado dentro de uma
+     caixa que continua encostada à esquerda. */
+  [data-centro-mobile],
+  [data-centro-mobile] > * {
+    margin-inline: auto;
+  }
+}
+
+/* ── Estado inicial das animações de entrada ────────────────────────────
+   Aplicado só quando o JS confirma que vai animar (html.js-anim), para que
+   sem JS ou com reduced-motion o conteúdo apareça normalmente.          */
+html.js-anim [data-reveal] {
+  opacity: 0;
+  transform: translateY(24px);
+}
+
+html.js-anim [data-reveal-img] > * {
+  transform: scale(1.12);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.js-anim [data-reveal],
+  html.js-anim [data-reveal-img] > * {
+    opacity: 1;
+    transform: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

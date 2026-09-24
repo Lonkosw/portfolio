@@ -1,0 +1,112 @@
+---
+import { Image } from 'astro:assets';
+import { site, hero, reservar } from '../data/site';
+import { img } from '../lib/images';
+import { wa } from '../lib/wa';
+
+const foto = img(hero.imagem);
+const link = wa(site.whatsapp, reservar.mensagem);
+---
+
+<section id="topo" data-hero class="relative isolate overflow-hidden bg-fundo">
+  <div data-hero-media class="absolute inset-0 -z-10">
+    <Image
+      src={foto}
+      alt={hero.alt}
+      widths={[640, 1024, 1600, 2000]}
+      sizes="100vw"
+      loading="eager"
+      fetchpriority="high"
+      class="h-full w-full object-cover object-center"
+    />
+    {/*
+      Três camadas de véu. A primeira tinge com o vinho da marca, a
+      segunda garante contraste em qualquer trecho da foto, e o gradiente
+      fecha o pé, que é onde o texto vive.
+
+      Os pesos são baixos de propósito: a foto do salão é o argumento de
+      venda desta página, e um véu pesado a transformaria em textura
+      irreconhecível. Quem olha tem de ver o lugar.
+    */}
+    <div class="absolute inset-0 bg-vinho/20"></div>
+    <div class="absolute inset-0 bg-fundo/45"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-fundo via-fundo/70 to-fundo/25"></div>
+  </div>
+
+  {/* A altura desconta o cabeçalho: ele é `sticky`, então ocupa lugar no
+      fluxo, e um `92svh` cheio empurraria o pé do hero para fora da tela. */}
+  <div
+    class="shell flex min-h-[calc(92svh-68px)] flex-col justify-end pb-14 pt-16 lg:min-h-[calc(94svh-76px)] lg:pb-20"
+  >
+    <div class="max-w-4xl" data-centro-mobile>
+      <p class="eyebrow" data-hero-fade style="--i:0">{hero.eyebrow}</p>
+
+      {/*
+        Cada linha do nome tem a PRÓPRIA máscara de overflow, montada aqui
+        no build. É o que permite a entrada linha a linha sem plugin de
+        split: o `site.ts` já entrega o título como uma lista de linhas.
+        O `--i` é o índice, e o CSS o usa para escalonar o atraso.
+
+        `leading-[0.86]` aperta as três linhas num bloco só: a Bodoni tem
+        haste alta e, no espaçamento normal, "Ana / Empório / Bistrô"
+        pareceria três coisas soltas em vez de um logotipo.
+      */}
+      <h1
+        data-hero-title
+        class="mt-6 text-[clamp(3.2rem,15vw,9.5rem)] leading-[0.86] text-texto"
+      >
+        {
+          hero.titulo.map((linha, i) => (
+            <span data-hero-linha style={`--i:${i}`}>
+              <span class:list={[i === 1 ? 'italic text-acento' : '']}>{linha}</span>
+            </span>
+          ))
+        }
+      </h1>
+
+      {/* O filete que se estende sob o nome, como o traço de uma
+          assinatura sendo puxado. */}
+      <div
+        data-hero-filete
+        aria-hidden="true"
+        class="mt-8 h-px w-full max-w-md bg-gradient-to-r from-acento via-acento/40 to-transparent"
+      >
+      </div>
+
+      <p
+        data-hero-fade
+        style="--i:1"
+        class="mt-8 max-w-xl text-[17px] leading-relaxed text-texto-dim lg:text-[18px]"
+      >
+        {hero.texto}
+      </p>
+
+      <div
+        data-hero-fade
+        style="--i:2"
+        class="mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap lg:items-center"
+      >
+        <a
+          href={link}
+          data-press
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex min-h-[54px] items-center justify-center rounded-full bg-btn px-9 text-[15px] font-semibold tracking-wide text-btn-texto transition-colors duration-[var(--dur-fast)] hover:bg-vinho-hi"
+        >
+          {hero.cta}
+        </a>
+        <a
+          href="#cardapio"
+          data-press
+          class="inline-flex min-h-[54px] items-center justify-center rounded-full border border-texto/25 px-9 text-[15px] font-semibold tracking-wide text-texto transition-colors duration-[var(--dur-fast)] hover:border-texto/60 hover:bg-texto/5"
+        >
+          {hero.ctaSecundario}
+        </a>
+      </div>
+
+      <p data-hero-fade style="--i:3" class="mt-9 text-[13px] tracking-wide text-texto-dim">
+        {`${site.cidade} — ${site.estado} · Cozinha da chef ${site.chef}`}
+      </p>
+    </div>
+  </div>
+</section>

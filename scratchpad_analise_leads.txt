@@ -1,0 +1,72 @@
+Total de leads: 347
+
+=== TAXA DE PREENCHIMENTO ===
+Nome                  347/347 (100%)
+Categoria             347/347 (100%)
+Telefone                0/347 (0%)
+Endereco              347/347 (100%)
+Nota                  343/347 (99%)
+Avaliacoes              0/347 (0%)
+Cidade                347/347 (100%)
+Quadrante             347/347 (100%)
+Termo                 347/347 (100%)
+TelefoneNormalizado     0/347 (0%)
+WhatsApp                0/347 (0%)
+Site                    0/347 (0%)
+Lat                   347/347 (100%)
+Lng                   347/347 (100%)
+LinkMaps              347/347 (100%)
+DataColeta            347/347 (100%)
+Estado                347/347 (100%)
+Pais                  347/347 (100%)
+Relevancia              0/347 (0%)
+NomeLimpo               0/347 (0%)
+Segmento                0/347 (0%)
+TipoNegocio             0/347 (0%)
+Prioridade              0/347 (0%)
+Abordagem               0/347 (0%)
+
+=== CAMPO 'Endereco' ===
+glyph de icone (lixo de scraping): 281
+vazio de verdade: 0
+texto real de endereco: 66
+
+=== DISTRIBUICAO POR CIDADE ===
+Curitiba                  101
+Londrina                  89
+Cascavel                  74
+Foz do Iguaçu             45
+Campo Mourão              38
+
+=== DISTRIBUICAO DE NOTA ===
+''       4
+'3,5'    1
+'3,9'    1
+'4,1'    1
+'4,2'    2
+'4,3'    5
+'4,4'    4
+'4,5'    7
+'4,6'    24
+'4,7'    44
+'4,8'    72
+'4,9'    94
+'5,0'    88
+
+=== POSSIVEIS DUPLICADOS (mesmo nome) ===
+0 nomes que aparecem mais de uma vez
+
+=== CATEGORIA (Termo de busca usado) ===
+salão de beleza                347
+
+=== AMOSTRA (10 primeiros nomes, cidade, nota) ===
+  Maiara Almeida Beauty                    | Campo Mourão         | nota 5,0
+  Studio Cris Aoki                         | Campo Mourão         | nota 4,7
+  Aliny Bonotto Espaço de Beleza           | Campo Mourão         | nota 5,0
+  Edilaine Machado Nail Designer           | Campo Mourão         | nota 5,0
+  Diplomata Cabeleireiros                  | Campo Mourão         | nota 4,7
+  Equipe Paulina Salão / Salão Paulina     | Campo Mourão         | nota 4,2
+  Studiio Woman - Campo Mourão Pr          | Campo Mourão         | nota 4,8
+  Studio Priorize • Salão de Beleza, Estética e Noivas • Campo Mourão | Campo Mourão         | nota 4,9
+  Hairspray - Espaço da Beleza             | Campo Mourão         | nota 4,7
+  Studio Doppio Nails                      | Campo Mourão         | nota 5,0

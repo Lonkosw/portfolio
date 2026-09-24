@@ -1,0 +1,451 @@
+@import 'tailwindcss';
+
+/* ══════════════════════════════════════════════════════════════════════
+   PALETA — tirada das fotos do próprio restaurante.
+
+   O Ana Empório Bistrô tem uma identidade visual já pronta e muito
+   definida, e o site não inventa nenhuma cor: tudo aqui saiu de algum
+   lugar do material deles.
+
+     · o VINHO vem do selo de cera que fecha o Menu Experiência e do
+       xadrez da toalha;
+     · o DOURADO vem das luminárias âmbar do salão;
+     · o VERDE PROFUNDO vem da parede do bar, onde ficam os pratos
+       antigos pendurados;
+     · o CREME vem do papel texturizado dos convites.
+
+   Nada de dourado brilhante sobre preto puro — o clichê de "restaurante
+   caro". O fundo é um marrom-carvão QUENTE, que é o que a fotografia
+   deles realmente tem.
+   ══════════════════════════════════════════════════════════════════════ */
+@theme {
+  /* ── Marca ──────────────────────────────────────────────────────── */
+  --color-vinho: #7a1f26; /* selo de cera — preenchimento, nunca texto */
+  --color-vinho-hi: #96262f;
+  --color-vinho-fundo: #2a1216; /* vinho rebaixado, para superfícies */
+
+  --color-ouro: #c9a227; /* luminárias — acento de texto */
+  --color-ouro-hi: #dcbb52;
+
+  --color-verde: #1f3329; /* a parede do bar */
+  --color-verde-hi: #2b4637;
+
+  --color-creme: #f0e6d6; /* papel dos convites — o texto */
+  --color-creme-dim: #bfae9b; /* creme rebaixado — texto secundário */
+
+  /* ── Tipografia ─────────────────────────────────────────────────────
+     Bodoni Moda é uma didone italiana: contraste altíssimo entre haste e
+     filete, serifas em fio. É a letra de revista de gastronomia e de
+     carta de vinhos — e o itálico dela assina como uma caligrafia, sem
+     precisar de script de convite de casamento (que seria o clichê).
+
+     Karla é uma grotesca de formas abertas e um pouco quentes: segura o
+     texto corrido sem competir com a Bodoni.                            */
+  --font-display: 'Bodoni Moda', ui-serif, Georgia, serif;
+  --font-sans: 'Karla Variable', ui-sans-serif, system-ui, sans-serif;
+
+  /* ── Movimento ──────────────────────────────────────────────────────
+     Uma escala só para o site inteiro. A duração cresce com o tamanho da
+     superfície; a direção do movimento escolhe a curva.                 */
+  --dur-fast: 150ms; /* hover, press, cor */
+  --dur-base: 200ms; /* toggles, revelações pequenas */
+  --dur-slow: 300ms; /* painéis, superfícies grandes */
+  --dur-slower: 450ms; /* transições de tela inteira */
+
+  /* Faixa "cena": SÓ a abertura, que acontece uma vez por visita.
+     Estes são os valores de celular — o desktop os aumenta mais abaixo. */
+  --dur-cena: 1100ms;
+  --dur-cena-longa: 1500ms;
+
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-out: cubic-bezier(0.05, 0.7, 0.1, 1); /* entrando: desacelera */
+  --ease-in: cubic-bezier(0.3, 0, 0.8, 0.15); /* saindo: acelera */
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1); /* atravessando a tela */
+
+  /* ── Semânticos ─────────────────────────────────────────────────────
+     ATENÇÃO: os valores aqui têm de ser cores FINAIS, nunca
+     `var(--outra-coisa)`. Propriedade customizada resolve no elemento
+     onde é DECLARADA, e o `@theme` do Tailwind vira `:root` — um `var()`
+     aqui congela o valor e o herda assim para a página inteira.          */
+  --color-fundo: #14100d; /* marrom-carvão quente, quase preto */
+  --color-superficie: #1e1814; /* cards e painéis */
+  --color-superficie-hi: #2a221c; /* hover de card */
+  --color-texto: #f0e6d6;
+  --color-texto-dim: #bfae9b;
+  --color-acento: #c9a227;
+  --color-acento-hi: #dcbb52;
+  --color-linha: #33291f;
+  --color-btn: #7a1f26;
+  --color-btn-texto: #f0e6d6;
+}
+
+/* A abertura mais longa é só de tela grande: numa tela cheia ela lê como
+   apresentação; num telefone segurado na mão, a mesma duração lê como
+   espera. Fica fora do `@theme` porque lá não cabe media query. */
+@media (min-width: 1024px) {
+  :root {
+    --dur-cena: 1500ms;
+    --dur-cena-longa: 2000ms;
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: auto; /* o JS controla; o CSS smooth brigaria */
+    -webkit-tap-highlight-color: transparent;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: var(--color-fundo);
+    color: var(--color-texto);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.65;
+    overflow-x: hidden;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    line-height: 1.05;
+    /* A Bodoni tem contraste altíssimo: em tamanho grande o espacejamento
+       padrão abre demais e a palavra desmancha. */
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* Foco visível — nunca removido, apenas estilizado. Sombra em vez de
+     outline para respeitar o raio dos cantos. */
+  :focus-visible {
+    outline: none;
+    box-shadow:
+      0 0 0 2px var(--color-fundo),
+      0 0 0 4px var(--color-acento);
+    border-radius: 3px;
+  }
+
+  ::selection {
+    background: var(--color-vinho);
+    color: var(--color-creme);
+  }
+
+  /* Qualquer número que muda no lugar não pode empurrar o layout. */
+  [data-tabular] {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@layer components {
+  .shell {
+    width: 100%;
+    max-width: 78rem;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+
+  @media (min-width: 768px) {
+    .shell {
+      padding-inline: 2.5rem;
+    }
+  }
+
+  /* Sobrescrita do olho: em versalete com muito espacejamento, o filete
+     dá o ar de "seção de revista" que a marca já usa nos impressos. */
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.85rem;
+    /* 12px é o piso. Estava em 0.7rem (11,2px): em versalete com
+       espacejamento largo o texto ainda se lia, mas 11px é pequeno demais
+       num celular na mão de alguém com mais de quarenta anos — e o público
+       de um restaurante caro tem exatamente esse perfil. */
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--color-acento);
+    /* Versalete com espacejamento largo ocupa muita largura: num celular
+       "BISTRÔ E EMPÓRIO · CAMPO MOURÃO — PR" quebrava deixando "— PR"
+       sozinho na segunda linha. O `balance` reparte as duas linhas em
+       tamanhos parecidos em vez de encher a primeira. */
+    text-wrap: balance;
+  }
+
+  .eyebrow::before {
+    content: '';
+    width: 2.25rem;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.6;
+  }
+
+  /* A assinatura da chef. Itálico da Bodoni em vez de uma fonte script:
+     script de convite é o clichê que todo restaurante usa; a itálica de
+     uma didone diz a mesma coisa com mais classe. */
+  .assinatura {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 500;
+    line-height: 1;
+    color: var(--color-acento);
+  }
+
+  /* Foto com folga para o parallax deslocar sem abrir faixa vazia. */
+  .parallax-folga {
+    width: 100%;
+    height: 112%;
+    margin-top: -6%;
+  }
+
+  /* Linha pontilhada que liga o nome do prato ao preço, como numa carta
+     impressa. `flex: 1` num pseudo-elemento com borda inferior — o
+     truque clássico, e o único que sobrevive a texto de tamanho variável. */
+  .pontilhado {
+    flex: 1 1 auto;
+    align-self: end;
+    margin-bottom: 0.35rem;
+    border-bottom: 1px dotted var(--color-linha);
+    min-width: 1.5rem;
+  }
+}
+
+/* Controles que só existem com JavaScript. Sem script eles somem e o
+   resto continua utilizável. */
+html:not(.js) [data-so-com-js] {
+  display: none;
+}
+
+/* ── Âncoras não podem parar atrás do cabeçalho ─────────────────────────
+   O cabeçalho é `sticky`, então ao saltar para uma âncora ele fica POR
+   CIMA do topo da seção: o olho do visitante chega num título cortado ao
+   meio. `scroll-margin-top` reserva a altura dele mais um respiro.
+
+   Vale para o `scrollIntoView` do JS e para o salto nativo do navegador
+   (quando alguém abre o link com #cardapio direto na barra de endereço),
+   e é por isso que está no CSS e não no script.                          */
+:where(section, footer, main)[id] {
+  scroll-margin-top: 84px;
+}
+@media (min-width: 1024px) {
+  :where(section, footer, main)[id] {
+    scroll-margin-top: 96px;
+  }
+}
+
+/* ── Centralização no celular ───────────────────────────────────────────
+   No desktop as seções abrem à esquerda, ao lado de uma foto. No celular
+   não há coluna ao lado: texto encostado à esquerda briga com a marca,
+   que é centralizada no topo.                                           */
+@media (max-width: 1023px) {
+  [data-centro-mobile] {
+    text-align: center;
+  }
+  [data-centro-mobile] .eyebrow {
+    justify-content: center;
+  }
+  /* O filete rouba espaço numa linha estreita e força quebras feias. */
+  [data-centro-mobile] .eyebrow::before {
+    display: none;
+  }
+  [data-centro-mobile],
+  [data-centro-mobile] > * {
+    margin-inline: auto;
+  }
+}
+
+/* ── Seções pesadas: só renderizam perto da tela ────────────────────────
+   Sem isto o navegador calcula estilo, layout e camadas de todas as
+   seções a cada quadro do scroll, mesmo as que estão a três telas de
+   distância. O `contain-intrinsic-size: auto <valor>` faz ele MEMORIZAR
+   a altura real depois da primeira renderização — sem o `auto` a barra
+   de rolagem pularia toda vez que a seção saísse da tela.               */
+[data-secao-adiavel] {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 900px;
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   ANIMAÇÕES DE ENTRADA — CSS puro, sem biblioteca
+
+   Toda a coreografia vive aqui. O JavaScript faz uma coisa só: pôr
+   `.is-pronto` no hero e `.is-visivel` no que entra na tela.
+
+   Isso não é purismo, é peso: no celular estas são transições de
+   `opacity` e `transform` disparadas uma vez — exatamente o que o CSS faz
+   nativamente, no compositor, sem baixar nada.
+   ══════════════════════════════════════════════════════════════════════ */
+
+html.js-anim [data-reveal] {
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity 900ms var(--ease-out),
+    transform 900ms var(--ease-out);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+html.js-anim [data-reveal].is-visivel {
+  opacity: 1;
+  transform: none;
+}
+
+/* Grupos: os filhos entram em cascata. O índice chega em `--i`, escrito
+   uma vez por filho pelo JS; 80ms por item é o que o olho lê como onda e
+   não como fila de espera. */
+html.js-anim [data-reveal-grupo] > * {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 900ms var(--ease-out),
+    transform 900ms var(--ease-out);
+}
+html.js-anim [data-reveal-grupo].is-visivel > * {
+  opacity: 1;
+  transform: none;
+  transition-delay: calc(var(--i, 0) * 80ms);
+}
+
+/* Imagens entram com leve zoom-out. O alvo é o filho, nunca o mesmo nó
+   que recebe o zoom de hover — dois `transform` no mesmo elemento se
+   apagam. */
+html.js-anim [data-reveal-img] > * {
+  transform: scale(1.1);
+  transition: transform 1800ms var(--ease-out);
+}
+html.js-anim [data-reveal-img].is-visivel > * {
+  transform: none;
+}
+
+/* Revelação por CORTINA: a faixa some de baixo para cima, descobrindo a
+   foto. É o gesto de levantar a tampa de um prato — e é o único efeito
+   do site que se permite ser notado. Usa `transform`, não `height`. */
+html.js-anim [data-cortina] {
+  position: relative;
+  overflow: hidden;
+}
+html.js-anim [data-cortina]::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--color-fundo);
+  transform-origin: bottom;
+  transition: transform var(--dur-cena) var(--ease-out);
+  z-index: 2;
+  pointer-events: none;
+}
+html.js-anim [data-cortina].is-visivel::after {
+  transform: scaleY(0);
+}
+
+/* ── Abertura do hero ────────────────────────────────────────────────
+   A foto entra primeiro e mais devagar (é pano de fundo, não assunto), o
+   nome sobe linha por linha, e só então o resto aparece.
+
+   A FOTO NÃO TEM FADE — só escala. Ela é o elemento LCP: com
+   `opacity: 0` no estado inicial o navegador só conta o LCP quando ela
+   termina de aparecer, e a métrica triplica sem o site ter ficado mais
+   lento. Entrando só com escala, ela pinta no primeiro quadro possível.
+
+   O resto NASCE INVISÍVEL e só é revelado com `.is-pronto`. Sem isso o
+   título pintaria na posição final, ficaria parado, e depois saltaria
+   para fora da tela para animar de volta — o "corte seco" que lê como
+   travada.                                                              */
+html.js-anim [data-hero-media] {
+  transform: scale(1.08);
+  transition: transform var(--dur-cena-longa) var(--ease-out);
+}
+html.js-anim [data-hero].is-pronto [data-hero-media] {
+  transform: none;
+}
+
+/* Cada linha do nome tem a própria máscara de overflow, montada no build.
+   É o que permite a entrada linha a linha sem plugin de split. */
+html.js-anim [data-hero-linha] {
+  display: block;
+  overflow: hidden;
+}
+html.js-anim [data-hero-linha] > span {
+  display: block;
+  transform: translateY(110%);
+  transition: transform var(--dur-cena) var(--ease-out);
+  transition-delay: calc(280ms + var(--i, 0) * 150ms);
+}
+html.js-anim [data-hero].is-pronto [data-hero-linha] > span {
+  transform: none;
+}
+
+html.js-anim [data-hero-fade] {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity calc(var(--dur-cena) * 0.8) var(--ease-out),
+    transform calc(var(--dur-cena) * 0.8) var(--ease-out);
+  transition-delay: calc(760ms + var(--i, 0) * 140ms);
+}
+html.js-anim [data-hero].is-pronto [data-hero-fade] {
+  opacity: 1;
+  transform: none;
+}
+
+/* Filete que se estende sob o nome, como o traço de uma assinatura. */
+html.js-anim [data-hero-filete] {
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--dur-cena-longa) var(--ease-out);
+  transition-delay: 700ms;
+}
+html.js-anim [data-hero].is-pronto [data-hero-filete] {
+  transform: none;
+}
+
+/* REDE DE SEGURANÇA: se o JavaScript falhar ou nunca chegar, o hero não
+   pode ficar invisível para sempre. Depois de 1,2s isto revela sozinho.
+   O caminho normal continua ganhando: `.is-pronto` vem depois na cascata. */
+@keyframes hero-resgate {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+html.js-anim [data-hero]:not(.is-pronto) [data-hero-fade],
+html.js-anim [data-hero]:not(.is-pronto) [data-hero-linha] > span,
+html.js-anim [data-hero]:not(.is-pronto) [data-hero-filete] {
+  animation: hero-resgate var(--dur-slower) var(--ease-out) 1200ms forwards;
+}
+
+/* ── Movimento reduzido ──────────────────────────────────────────────
+   Reduzido não é ausente: o conteúdo aparece no estado final, na hora,
+   sem travessia. Nada fica escondido esperando gatilho.                 */
+@media (prefers-reduced-motion: reduce) {
+  html.js-anim [data-reveal],
+  html.js-anim [data-reveal-grupo] > *,
+  html.js-anim [data-reveal-img] > *,
+  html.js-anim [data-hero-media],
+  html.js-anim [data-hero-fade],
+  html.js-anim [data-hero-filete],
+  html.js-anim [data-hero-linha] > span {
+    opacity: 1;
+    transform: none;
+    transition: none;
+    animation: none;
+  }
+  html.js-anim [data-cortina]::after {
+    display: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

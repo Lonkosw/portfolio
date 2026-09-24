@@ -1,0 +1,89 @@
+---
+import { Image } from 'astro:assets';
+import { site, hero } from '../data/site';
+import { img, larguras } from '../lib/images';
+
+const foto = img(hero.imagem);
+---
+
+<section id="topo" data-hero class="relative isolate overflow-hidden">
+  {/* Moldura da foto: o zoom de entrada roda no <div> interno, nunca no mesmo
+      nó que o GSAP anima em outro lugar. */}
+  <div data-hero-media class="absolute inset-0 -z-10">
+    <Image
+      src={foto}
+      alt={hero.alt}
+      widths={larguras(foto, [640, 1024, 1600])}
+      sizes="100vw"
+      loading="eager"
+      fetchpriority="high"
+      class="h-full w-full object-cover object-center"
+    />
+    {/* Escurecimento em duas camadas: um véu geral fraco, que garante um
+        piso de contraste em qualquer trecho da foto, e um vertical forte
+        onde o texto está.
+
+        ⚠️ NÃO ALIVIE O VÉU DE 55%. A tentação é óbvia — a foto do salão de
+        vidro é o argumento de venda e fica subexposta aqui. Baixar para 25%
+        foi tentado e MEDIDO: o eyebrow caiu de 5,12:1 para 2,21:1 e o
+        título, no desktop, para 2,85:1. Reprovado em qualquer leitura.
+
+        A causa é que no celular o bloco de texto ocupa a abertura quase
+        inteira: não existe "parte de cima com foto e parte de baixo com
+        texto" para o gradiente separar — é a mesma área. O espaço aparece
+        de verdade na galeria, no vídeo e nos cartões de evento, onde nada
+        está escrito por cima.
+
+        Medido com `tools/contraste-foto.mjs`, que é o único que enxerga
+        texto sobre imagem — o `contraste.mjs` lê `background-color` e aqui
+        o fundo é foto. */}
+    <div class="absolute inset-0 bg-mata/55"></div>
+    <div
+      class="absolute inset-0 bg-gradient-to-t from-mata via-mata/70 to-mata/25"
+    >
+    </div>
+  </div>
+
+  <div class="shell flex min-h-[86svh] flex-col justify-end pb-16 pt-24 lg:min-h-[92svh] lg:pb-24">
+    <div class="max-w-3xl" data-centro-mobile>
+      <p class="eyebrow" data-hero-fade>{hero.eyebrow}</p>
+
+      <h1
+        data-hero-title
+        class="mt-5 text-[clamp(2.75rem,10vw,6.5rem)] text-cream"
+      >
+        {hero.titulo.map((linha) => <span class="block">{linha}</span>)}
+      </h1>
+
+      <p
+        data-hero-fade
+        class="mt-6 max-w-xl text-[17px] leading-relaxed text-cream-dim lg:text-lg"
+      >
+        {hero.texto}
+      </p>
+
+      <div
+        data-hero-fade
+        class="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap lg:items-center"
+      >
+        <a
+          href="#orcamento"
+          data-magnetic="0.2"
+          class="inline-flex min-h-[52px] items-center justify-center rounded-full bg-cristal px-8 text-[15px] font-medium text-mata transition-colors duration-300 hover:bg-cristal-hi"
+        >
+          {hero.cta}
+        </a>
+        <a
+          href="#espaco"
+          class="inline-flex min-h-[52px] items-center justify-center rounded-full border border-cream/30 px-8 text-[15px] font-medium text-cream transition-colors duration-300 hover:border-cream hover:bg-cream/10"
+        >
+          {hero.ctaSecundario}
+        </a>
+      </div>
+
+      <p data-hero-fade class="mt-8 text-[13px] text-cream-dim/80">
+        {`${site.endereco} · ${site.cidade} — ${site.estado}`}
+      </p>
+    </div>
+  </div>
+</section>

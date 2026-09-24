@@ -1,0 +1,75 @@
+---
+/**
+ * Cardápio em destaque: 3 cartões com foto, nome e descrição — SEM PREÇO
+ * (mesma regra do resto da pasta: preço muda e ninguém atualiza site).
+ *
+ * Cada cartão abre o WhatsApp com o nome do item já escrito, igual ao
+ * "monte sua produção" do modelo-b, só que sem etapa intermediária: aqui
+ * o gesto é "quero isso", não "me ajuda a escolher".
+ */
+import { Image } from 'astro:assets';
+import { site, cardapio } from '../data/site';
+import { img, Q_FOTO, W_MEDIA } from '../lib/images';
+import { wa } from '../lib/wa';
+---
+
+<section id="cardapio" class="border-t border-linha bg-superficie py-24 lg:py-32">
+  <div class="shell">
+    <div data-reveal data-centro-mobile class="mx-auto max-w-2xl text-center">
+      <p class="eyebrow justify-center">{cardapio.eyebrow}</p>
+      <h2 class="mt-5 text-[clamp(2.3rem,6vw,3.8rem)] text-texto">{cardapio.titulo}</h2>
+      <p class="mt-5 text-[16.5px] leading-relaxed text-texto-dim">{cardapio.texto}</p>
+    </div>
+
+    <div data-reveal-grupo class="mt-14 grid gap-6 sm:grid-cols-2 lg:mt-16 lg:grid-cols-3 lg:gap-7">
+      {
+        cardapio.itens.map((item) => {
+          const foto = img(item.imagem);
+          const link = wa(site.whatsapp, `Olá! Vi o modelo de site e queria pedir: ${item.nome}.`);
+          return (
+            <a
+              href={link}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-press
+              class="group flex flex-col overflow-hidden rounded-[1.75rem] border border-linha bg-fundo transition-colors duration-[var(--dur-fast)] hover:border-acento/50"
+            >
+              <div data-reveal-img class="aspect-[4/3] w-full overflow-hidden">
+                <div class="h-full w-full">
+                  <Image
+                    src={foto}
+                    alt={item.alt}
+                    widths={W_MEDIA}
+                    quality={Q_FOTO}
+                    sizes="(min-width: 1024px) 30vw, (min-width: 640px) 46vw, 92vw"
+                    loading="lazy"
+                    class="h-full w-full object-cover [@media(hover:hover)]:transition-transform [@media(hover:hover)]:duration-[var(--dur-slower)] [@media(hover:hover)]:ease-[var(--ease-out)] [@media(hover:hover)]:group-hover:scale-[1.05]"
+                  />
+                </div>
+              </div>
+              <div class="flex flex-1 flex-col p-6">
+                <h3 class="text-[1.4rem] text-texto">{item.nome}</h3>
+                <p class="mt-2 flex-1 text-[14.5px] leading-relaxed text-texto-dim">{item.texto}</p>
+                <span class="mt-5 inline-flex items-center gap-2 text-[14px] font-semibold text-acento">
+                  Pedir este
+                  <svg
+                    width="15"
+                    height="15"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    aria-hidden="true"
+                    class="transition-transform duration-[var(--dur-fast)] group-hover:translate-x-1"
+                  >
+                    <path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </span>
+              </div>
+            </a>
+          );
+        })
+      }
+    </div>
+  </div>
+</section>

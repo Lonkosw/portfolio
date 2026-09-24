@@ -1,0 +1,79 @@
+---
+import { Image } from 'astro:assets';
+import { criacoes } from '../data/site';
+import { img } from '../lib/images';
+
+const total = criacoes.itens.length;
+---
+
+<section id="criacoes" class="py-24 lg:py-32">
+  <div class="shell">
+    <div data-centro-mobile class="flex flex-wrap items-end justify-between gap-6">
+      <div class="max-w-2xl">
+        <p data-reveal class="eyebrow">{criacoes.eyebrow}</p>
+        <h2
+          data-reveal
+          data-reveal-delay="0.06"
+          class="mt-6 font-[family-name:var(--font-display)] text-[clamp(2rem,5.5vw,3.25rem)] text-cream"
+        >
+          {criacoes.titulo}
+        </h2>
+      </div>
+      <p data-reveal data-reveal-delay="0.12" class="max-w-[36ch] text-cream-dim">
+        {criacoes.texto}
+      </p>
+    </div>
+
+    {/*
+      Grid de altura uniforme: a altura vive no <li>, e a imagem preenche
+      com h-full. Assim nunca sobra espaço morto entre foto e legenda.
+      Itens "largo" ocupam 2 colunas só no desktop — em 2 colunas isso
+      abriria buracos no auto-placement.
+    */}
+    <ul class="mt-14 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        criacoes.itens.map((item, i) => (
+          <li
+            data-reveal
+            data-reveal-delay={(i % 3) * 0.08}
+            class={[
+              'group relative h-72 overflow-hidden rounded-2xl border border-line sm:h-80 lg:h-[22rem]',
+              // lg:col-span-1 explícito: sem ele o último item carregaria o
+              // sm:col-span-2 para o desktop e abriria um buraco no grid.
+              item.formato === 'largo' ? 'lg:col-span-2' : 'lg:col-span-1',
+              i === total - 1 ? 'sm:col-span-2' : '',
+            ]
+              .filter(Boolean)
+              .join(' ')}
+          >
+            {/*
+              Duas camadas de transform de propósito: o GSAP escreve style
+              inline no filho de [data-reveal-img], então o zoom de hover
+              precisa morar num elemento separado — senão o inline vence
+              e o hover não acontece.
+            */}
+            <div data-reveal-img class="h-full overflow-hidden">
+              <div class="h-full">
+                <Image
+                  src={img(item.imagem)}
+                  alt={item.alt}
+                  widths={[400, 640, 900]}
+                  sizes="(min-width: 1024px) 32vw, (min-width: 640px) 48vw, 92vw"
+                  loading="lazy"
+                  class="h-full w-full object-cover brightness-[0.82] saturate-[0.85] transition-[transform,filter] duration-[900ms] ease-[var(--ease-out-expo)] group-hover:scale-[1.04] group-hover:brightness-100 group-hover:saturate-100"
+                />
+              </div>
+            </div>
+
+            <div
+              aria-hidden="true"
+              class="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-noir via-noir/60 to-transparent p-5 pt-16"
+            >
+              <p class="text-sm font-medium text-cream">{item.legenda}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

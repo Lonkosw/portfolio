@@ -1,0 +1,198 @@
+---
+/**
+ * Antes e depois com divisor arrastável.
+ *
+ * COMO O RECORTE FUNCIONA (e por que não é `width`):
+ * as duas fotos ficam empilhadas no mesmo lugar, do mesmo tamanho. A de cima
+ * ("depois") é recortada por `clip-path: inset(0 0 0 X%)`. Animar `width`
+ * daria reflow a cada pixel de arrasto — 60 vezes por segundo, com a imagem
+ * sendo redimensionada junto. `clip-path` roda no compositor e não relayouta
+ * nada; a foto de baixo nunca se mexe, então as duas ficam perfeitamente
+ * alinhadas o tempo todo.
+ *
+ * O X vem de uma custom property (`--p`), não de estilo inline em cada nó:
+ * o script escreve um valor só e o recorte e a alça leem os dois dele.
+ *
+ * ACESSIBILIDADE: o controle é um <input type="range"> de verdade,
+ * transparente por cima de tudo. Ganha teclado, leitor de tela e o gesto de
+ * arrastar sem nenhum listener de ponteiro — o navegador já faz. Uma alça
+ * de <div> com mousedown/mousemove seria mais código e inacessível.
+ */
+import { Image } from 'astro:assets';
+import { antesDepois } from '../data/site';
+import { img, Q_FOTO, W_MEDIA } from '../lib/images';
+---
+
+<section id="antes-depois" data-secao-adiavel class="border-t border-linha bg-fundo py-24 lg:py-32">
+  <div class="shell">
+    <div data-reveal data-centro-mobile class="max-w-2xl">
+      <p class="eyebrow">{antesDepois.eyebrow}</p>
+      <h2 class="mt-5 text-[clamp(2.1rem,5.5vw,3.4rem)] text-texto">{antesDepois.titulo}</h2>
+      <p class="mt-5 text-[16.5px] leading-relaxed text-texto-dim">{antesDepois.texto}</p>
+    </div>
+
+    {/*
+      São 5 pares numa grade de 2 colunas: o último cairia sozinho na esquerda,
+      com um vão do lado. O `last:` centraliza o órfão ocupando as duas colunas
+      e limitando a largura à de uma — em vez de esticar o comparador, que
+      quebraria a proporção 4:5 que os pares compartilham.
+      Se um dia forem 6 pares, o `last:` deixa de ter efeito visível sozinho.
+    */}
+    <div class="mt-14 grid gap-8 lg:grid-cols-2 lg:gap-10">
+      {
+        antesDepois.pares.map((par, i) => {
+          const antes = img(par.antes);
+          const depois = img(par.depois);
+          const rotuloRange = `Comparar antes e depois — ${par.titulo}`;
+          const orfao = antesDepois.pares.length % 2 === 1;
+          return (
+            <figure
+              data-reveal
+              data-reveal-delay={i * 0.08}
+              class:list={[orfao ? 'lg:last:col-span-2 lg:last:mx-auto lg:last:w-[calc(50%-1.25rem)]' : '']}
+            >
+              <div
+                data-comparador
+                style="--p:50"
+                class="group relative aspect-[4/5] w-full select-none overflow-hidden rounded-[1.75rem] border border-linha bg-superficie"
+              >
+                {/* ANTES — camada de baixo, sempre inteira. */}
+                <Image
+                  src={antes}
+                  alt={par.antesAlt}
+                  widths={W_MEDIA}
+                  quality={Q_FOTO}
+                  sizes="(min-width: 1024px) 46vw, 92vw"
+                  loading="lazy"
+                  class="absolute inset-0 h-full w-full object-cover"
+                />
+
+                {/*
+                  DEPOIS — camada de cima, recortada pela esquerda.
+                  `will-change` fica só aqui e só enquanto a pessoa arrasta
+                  (classe `is-drag`): declarado de forma permanente ele
+                  segura uma camada de GPU para sempre, em duas imagens
+                  grandes, e é justamente o tipo de coisa que faz o celular
+                  engasgar no resto da página.
+                */}
+                <div
+                  data-comparador-depois
+                  class="absolute inset-0"
+                  style="clip-path: inset(0 0 0 calc(var(--p) * 1%))"
+                >
+                  <Image
+                    src={depois}
+                    alt={par.depoisAlt}
+                    widths={W_MEDIA}
+                    quality={Q_FOTO}
+                    sizes="(min-width: 1024px) 46vw, 92vw"
+                    loading="lazy"
+                    class="h-full w-full object-cover"
+                  />
+                </div>
+
+                {/* Etiquetas. Cada uma some quando o divisor passa por cima
+                    do seu canto — senão "ANTES" fica boiando sobre a foto
+                    do depois e mente sobre o que está sendo mostrado.
+
+                    Fundo opaco, sem backdrop-blur: sobre foto, o desfoque
+                    vira camada de composição própria que é repintada durante
+                    o arrasto — justamente quando cada quadro conta. */}
+                <span
+                  data-comparador-tag="antes"
+                  class="pointer-events-none absolute left-4 top-4 rounded-full bg-fundo px-3.5 py-1.5 text-[12px] font-semibold uppercase tracking-[0.14em] text-texto-dim"
+                >
+                  Antes
+                </span>
+                <span
+                  data-comparador-tag="depois"
+                  class="pointer-events-none absolute right-4 top-4 rounded-full bg-acento px-3.5 py-1.5 text-[12px] font-semibold uppercase tracking-[0.14em] text-fundo"
+                >
+                  Depois
+                </span>
+
+                {/* Linha divisória + alça. Puramente decorativa: quem recebe
+                    o evento é o range invisível logo abaixo. */}
+                <div
+                  aria-hidden="true"
+                  data-comparador-linha
+                  class="pointer-events-none absolute inset-y-0 left-[calc(var(--p)*1%)] w-[2px] -translate-x-1/2 bg-creme/90 shadow-[0_0_0_1px_rgb(35_43_30/0.25)]"
+                >
+                  <span
+                    class="absolute top-1/2 left-1/2 grid h-12 w-12 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-creme/70 bg-fundo text-texto shadow-lg transition-transform duration-[var(--dur-fast)] ease-[var(--ease-standard)] group-hover:scale-110"
+                  >
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                      <path d="m9 7-5 5 5 5M15 7l5 5-5 5" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                  </span>
+                </div>
+
+                {/*
+                  O controle real. `opacity-0` e não `hidden`/`sr-only`: ele
+                  precisa continuar ocupando a área inteira para receber o
+                  arrasto do dedo em cima da foto.
+                  `touch-action: none` impede o navegador de interpretar o
+                  arrasto horizontal como scroll da página e roubar o gesto.
+                */}
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  step="0.5"
+                  value="50"
+                  data-comparador-range
+                  aria-label={rotuloRange}
+                  class="absolute inset-0 h-full w-full cursor-ew-resize appearance-none bg-transparent opacity-0 [touch-action:none]"
+                />
+              </div>
+
+              <figcaption class="mt-5">
+                <h3 class="text-[1.15rem] font-semibold text-texto">{par.titulo}</h3>
+                <p class="mt-1 text-[14.5px] leading-relaxed text-texto-dim">{par.texto}</p>
+              </figcaption>
+            </figure>
+          );
+        })
+      }
+    </div>
+
+    <p class="mt-8 text-center text-[13px] text-texto-dim">{antesDepois.dica}</p>
+  </div>
+</section>
+
+<style>
+  /* A alça do range é invisível, mas precisa existir e ter área generosa —
+     é ela que o navegador usa como alvo do arrasto. 44px é o piso de toque. */
+  [data-comparador-range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 44px;
+    height: 44px;
+  }
+  [data-comparador-range]::-moz-range-thumb {
+    width: 44px;
+    height: 44px;
+    border: 0;
+    background: transparent;
+  }
+
+  /* O foco tem de aparecer na MOLDURA: o input é transparente, então o anel
+     nele seria invisível. Sobe para o contêiner via :has(). */
+  [data-comparador]:has([data-comparador-range]:focus-visible) {
+    outline: 2px solid var(--color-acento);
+    outline-offset: 3px;
+  }
+
+  /* Camada de GPU só durante o arrasto — ver comentário no HTML. */
+  [data-comparador].is-drag [data-comparador-depois] {
+    will-change: clip-path;
+  }
+
+  /* Etiquetas somem quando o divisor cobre o canto delas. Transição de
+     opacidade, curta: é reação a um gesto contínuo, não um evento. */
+  [data-comparador-tag] {
+    transition: opacity var(--dur-fast) var(--ease-standard);
+  }
+  [data-comparador-tag][data-oculta] {
+    opacity: 0;
+  }
+</style>

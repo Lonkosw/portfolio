@@ -1,0 +1,63 @@
+---
+import Layout from '../layouts/Layout.astro';
+import DemoBanner from '../components/DemoBanner.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import Marquee from '../components/Marquee.astro';
+import Espaco from '../components/Espaco.astro';
+import Video from '../components/Video.astro';
+import Cabelo from '../components/Cabelo.astro';
+import TiposCabelo from '../components/TiposCabelo.astro';
+import AntesDepois from '../components/AntesDepois.astro';
+import Producao from '../components/Producao.astro';
+import Unhas from '../components/Unhas.astro';
+import Servicos from '../components/Servicos.astro';
+import Depoimentos from '../components/Depoimentos.astro';
+import Agendar from '../components/Agendar.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../data/site';
+
+const title = `${site.nome} — Salão de beleza, coloração e unhas em ${site.cidade}`;
+---
+
+<Layout title={title} description={site.descricao}>
+  <DemoBanner />
+  <Header />
+
+  {/*
+    O RITMO DE COR alterna creme → superfície → creme, com o VERDE reservado
+    para dois momentos: o carrossel de cabelos e os depoimentos (mais o
+    rodapé, que fecha). Verde é a parede do salão — usá-lo em toda seção o
+    transformaria em papel de parede e ele deixaria de significar alguma
+    coisa.
+
+    A ORDEM tem intenção:
+
+      O ESPAÇO vem antes de tudo porque é o que as avaliações elogiam
+      primeiro ("ambiente acolhedor") e porque estabelece o cenário que
+      aparece atrás de metade das fotos seguintes.
+
+      O ANTES/DEPOIS vem logo depois do carrossel de cabelos: o carrossel
+      promete resultado, o antes/depois prova. Provar antes de prometer não
+      funciona, e provar depois dos outros dois pilares já seria tarde.
+
+      DEPOIMENTOS ficam no fim, entre a última venda e o agendamento — é o
+      empurrão, não a abertura.
+  */}
+  <main id="conteudo">
+    <Hero />
+    <Marquee />
+    <Espaco />
+    <Video />
+    <Cabelo />
+    <TiposCabelo />
+    <AntesDepois />
+    <Producao />
+    <Unhas />
+    <Servicos />
+    <Depoimentos />
+    <Agendar />
+  </main>
+
+  <Footer />
+</Layout>

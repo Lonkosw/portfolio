@@ -1,0 +1,107 @@
+---
+import { site, nav, contato } from '../data/site';
+import { wa } from '../lib/wa';
+
+const link = wa(site.whatsapp, contato.mensagem);
+---
+
+{/*
+  `sticky`, não `fixed`. Com `fixed` a barra sairia do fluxo e passaria por
+  cima da faixa de protótipo que vem logo acima — e no celular as duas
+  brigariam pelos mesmos 68px. Sticky deixa a faixa rolar e sumir, e o
+  cabeçalho gruda no topo a partir daí.
+*/}
+<header data-header class="sticky top-0 z-50 border-b border-transparent">
+  <div class="shell flex h-[68px] items-center justify-between gap-4 lg:h-[76px]">
+    {/* `min-h-[44px]` com padding: a marca é texto e, sem isso, o alvo
+        clicável teria só a altura da linha. */}
+    <a
+      href="#topo"
+      class="-ml-1 flex min-h-[44px] shrink-0 items-baseline gap-[0.3em] px-1 text-[20px] leading-none lg:text-[22px]"
+      aria-label={`${site.nome} — ir para o topo`}
+    >
+      <span class="font-[family-name:var(--font-display)] text-texto">Claus</span>
+      <span class="font-[family-name:var(--font-display)] italic text-acento">cabeleireiros</span>
+    </a>
+
+    {/* `gap-4` + `px-3`: o espaço entre os itens vira área clicável em vez
+        de vão morto, e cada link passa dos 44px sem alargar a barra. */}
+    <nav aria-label="Navegação principal" class="hidden lg:block">
+      <ul class="flex items-center gap-4">
+        {
+          nav.map((item) => (
+            <li>
+              <a
+                href={item.href}
+                class="flex min-h-[44px] min-w-[44px] items-center justify-center px-3 text-[14px] text-texto-dim transition-colors duration-[var(--dur-fast)] hover:text-texto"
+              >
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <a
+      href={link}
+            data-press
+      target="_blank"
+      rel="noopener noreferrer"
+      class="hidden min-h-[44px] items-center rounded-full bg-btn px-6 text-[14px] font-semibold text-btn-texto transition-colors duration-[var(--dur-fast)] hover:bg-acento-hi lg:inline-flex"
+    >
+      WhatsApp
+    </a>
+
+    {/* ── Menu do celular ─────────────────────────────────────────────
+        Um botão só, que alterna. Com dois botões (abrir e fechar), o
+        querySelector pega apenas o primeiro e o de fechar fica morto. */}
+    <div class="relative lg:hidden">
+      <button
+        type="button"
+        data-menu-toggle
+        aria-expanded="false"
+        aria-controls="menu-mobile"
+        class="grid h-11 w-11 place-items-center rounded-full border border-linha text-texto transition-colors duration-[var(--dur-fast)] hover:border-acento hover:text-acento"
+      >
+        <span data-menu-label class="sr-only">Abrir menu</span>
+        <svg data-menu-icone="barras" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+          <path d="M4 7h16M4 12h16M4 17h16" stroke-linecap="round" />
+        </svg>
+        <svg data-menu-icone="x" hidden width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+          <path d="M6 6l12 12M18 6L6 18" stroke-linecap="round" />
+        </svg>
+      </button>
+
+      <div
+        id="menu-mobile"
+        data-menu-panel
+        class="absolute right-0 top-[calc(100%+0.6rem)] w-64 rounded-2xl border border-linha bg-fundo p-2 shadow-xl shadow-black/50"
+      >
+        <ul>
+          {
+            nav.map((item) => (
+              <li>
+                <a
+                  href={item.href}
+                  class="flex min-h-[46px] items-center rounded-xl px-4 text-[15px] text-texto-dim transition-colors duration-[var(--dur-fast)] hover:bg-superficie hover:text-texto"
+                >
+                  {item.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+        <a
+          href={link}
+          data-press
+          target="_blank"
+          rel="noopener noreferrer"
+          class="mt-1 flex min-h-[48px] items-center justify-center rounded-xl bg-btn px-4 text-[15px] font-semibold text-btn-texto transition-colors duration-[var(--dur-fast)] hover:bg-acento-hi"
+        >
+          Chamar no WhatsApp
+        </a>
+      </div>
+    </div>
+  </div>
+</header>

@@ -1,0 +1,47 @@
+---
+import Layout from '../layouts/Layout.astro';
+import DemoBanner from '../components/DemoBanner.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import Marquee from '../components/Marquee.astro';
+import Sobre from '../components/Sobre.astro';
+import Estrutura from '../components/Estrutura.astro';
+import Galeria from '../components/Galeria.astro';
+import Video from '../components/Video.astro';
+import Eventos from '../components/Eventos.astro';
+import Processo from '../components/Processo.astro';
+import Depoimentos from '../components/Depoimentos.astro';
+import Orcamento from '../components/Orcamento.astro';
+import OrcamentoPill from '../components/OrcamentoPill.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../data/site';
+
+const title = `${site.nome} — Espaço para casamentos e eventos em ${site.cidade}`;
+---
+
+<Layout title={title} description={site.descricao}>
+  <DemoBanner />
+  <Header />
+
+  <main id="conteudo">
+    <Hero />
+    <Marquee />
+    <Sobre />
+    <Estrutura />
+    <Galeria />
+    {/* Logo depois da galeria, e não antes: a pessoa acabou de ver oito
+        fotos paradas do salão, e o vídeo é a resposta a "mas na hora, como
+        é?". Antes da galeria ele seria só mais uma imagem. */}
+    <Video />
+    <Eventos />
+    <Processo />
+    <Depoimentos />
+    <Orcamento />
+  </main>
+
+  <Footer />
+
+  {/* Fora do <main> e fora do header: precisa de um contexto sem
+      backdrop-filter para o `position: fixed` valer de verdade. */}
+  <OrcamentoPill />
+</Layout>

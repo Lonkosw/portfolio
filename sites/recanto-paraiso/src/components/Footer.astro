@@ -1,0 +1,94 @@
+---
+import { site, nav } from '../data/site';
+---
+
+<footer class="border-t border-line/60 bg-mata-soft/40">
+  <div class="shell py-16 lg:py-20">
+    <div class="grid gap-12 lg:grid-cols-[1.2fr_1fr_1fr]">
+      <div data-centro-mobile class="max-w-sm">
+        <p class="flex items-baseline gap-[0.28em]">
+          <span class="font-[family-name:var(--font-display)] text-[26px] tracking-wide text-cream">
+            Recanto
+          </span>
+          <span class="font-[family-name:var(--font-display)] text-[26px] italic tracking-wide text-cristal">
+            Paraíso
+          </span>
+        </p>
+        <p class="mt-4 text-[15px] leading-relaxed text-cream-dim">
+          {site.descricao}
+        </p>
+      </div>
+
+      <div data-centro-mobile>
+        <h2 class="text-[13px] uppercase tracking-[0.2em] text-cristal">Contato</h2>
+        <ul class="mt-5 space-y-1">
+          <li>
+            <a
+              href={`tel:+${site.whatsapp}`}
+              class="flex min-h-[44px] items-center text-[15px] text-cream-dim transition-colors hover:text-cream"
+            >
+              {site.whatsappExibicao}
+            </a>
+          </li>
+          <li>
+            <a
+              href={site.instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="flex min-h-[44px] items-center text-[15px] text-cream-dim transition-colors hover:text-cream"
+            >
+              {site.instagramExibicao}
+            </a>
+          </li>
+          <li>
+            <a
+              href={site.maps}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="flex min-h-[44px] items-center text-[15px] leading-snug text-cream-dim transition-colors hover:text-cream"
+            >
+              {site.endereco}
+            </a>
+          </li>
+          <li class="flex min-h-[44px] items-center text-[15px] leading-snug text-cream-dim">
+            {site.atendimento}
+          </li>
+        </ul>
+      </div>
+
+      <nav data-centro-mobile aria-label="Navegação do rodapé">
+        <h2 class="text-[13px] uppercase tracking-[0.2em] text-cristal">Navegar</h2>
+        <ul class="mt-5 space-y-1">
+          {
+            nav.map((item) => (
+              <li>
+                <a
+                  href={item.href}
+                  class="flex min-h-[44px] items-center text-[15px] text-cream-dim transition-colors hover:text-cream"
+                >
+                  {item.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+    </div>
+
+    <div class="mt-14 border-t border-line pt-8">
+      <p class="text-center text-[13px] leading-relaxed text-cream-dim/70">
+        {`© ${new Date().getFullYear()} ${site.nome} · ${site.cidade} — ${site.estado}`}
+      </p>
+
+      {
+        site.demo && (
+          <p class="mx-auto mt-4 max-w-2xl text-center text-[12.5px] leading-relaxed text-cream-dim/75">
+            Esta página é um <strong class="font-medium text-cream-dim">protótipo de demonstração</strong> e
+            não é o site oficial do {site.nome}. As fotos pertencem ao próprio espaço e foram
+            usadas apenas para montar esta proposta.
+          </p>
+        )
+      }
+    </div>
+  </div>
+</footer>

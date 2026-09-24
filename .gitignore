@@ -1,0 +1,33 @@
+# build output
+dist/
+# generated types
+.astro/
+
+# dependencies
+node_modules/
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+
+# environment variables
+.env
+.env.production
+
+# macOS-specific files
+.DS_Store
+
+# jetbrains setting folder
+.idea/
+
+# Local Netlify folder
+.netlify
+
+# Leads não aprovados para o repositório (dados pessoais de prospecção) —
+# só o disparo_faixaA_zap.csv/.txt foi aprovado explicitamente, 23/09/2026.
+leads_moto-eletrica_*.csv
+leads_salao-de-beleza_*.csv
+leads_prontos_para_envio.csv

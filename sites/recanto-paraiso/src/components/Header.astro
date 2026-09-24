@@ -1,0 +1,121 @@
+---
+import { site, nav, orcamento } from '../data/site';
+import { wa } from '../lib/wa';
+
+const link = wa(site.whatsapp, orcamento.mensagem);
+---
+
+<header data-header class="sticky top-0 z-40 border-b border-transparent">
+  {/* No celular vira grade de 3 colunas só para a marca cair no centro exato;
+      a partir de lg volta a ser a barra normal alinhada à esquerda. */}
+  <div
+    class="shell grid h-[72px] grid-cols-[1fr_auto_1fr] items-center gap-4 lg:flex lg:justify-between"
+  >
+    <a
+      href="#topo"
+      class="group col-start-2 flex items-baseline gap-[0.28em] py-1 justify-self-center lg:col-start-auto lg:justify-self-auto"
+      aria-label={`${site.nome} — início`}
+    >
+      <span class="font-[family-name:var(--font-display)] text-[23px] tracking-wide text-cream">
+        Recanto
+      </span>
+      <span
+        class="font-[family-name:var(--font-display)] text-[23px] italic tracking-wide text-cristal transition-colors group-hover:text-cristal-hi"
+      >
+        Paraíso
+      </span>
+    </a>
+
+    <nav aria-label="Navegação principal" class="hidden items-center gap-8 lg:flex">
+      {/* O link tem 44px de altura de verdade (era 28), e o filete do hover
+          fica preso ao TEXTO, não à caixa — daí o <span> interno. Sem ele, a
+          caixa mais alta empurraria o sublinhado para longe da palavra.
+
+          Num notebook com tela sensível ao toque este menu também é tocado
+          com o dedo, então 44px vale aqui, não só no celular. */}
+      {
+        nav.map((item) => (
+          <a
+            href={item.href}
+            class="group flex min-h-[44px] items-center text-sm text-cream-dim transition-colors hover:text-cream"
+          >
+            <span class="relative">
+              {item.label}
+              <span class="absolute -bottom-1 left-0 h-px w-0 bg-cristal transition-[width] duration-300 ease-[var(--ease-out-expo)] group-hover:w-full" />
+            </span>
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="col-start-3 flex items-center justify-end gap-3 lg:col-start-auto">
+      <a
+        href={link}
+        data-wa-cta
+        target="_blank"
+        rel="noopener noreferrer"
+        data-magnetic="0.25"
+        class="hidden min-h-[44px] items-center rounded-full border border-cristal/50 px-5 text-sm font-medium text-cristal transition-colors duration-300 hover:border-cristal hover:bg-cristal hover:text-mata lg:inline-flex"
+      >
+        Orçamento
+      </a>
+
+      {/* Um botão só: as barrinhas viram X no mesmo lugar. Com dois botões,
+          `querySelector` pegava só o primeiro e o de fechar não funcionava. */}
+      <button
+        data-menu-toggle
+        type="button"
+        aria-expanded="false"
+        aria-controls="menu-mobile"
+        class="grid h-11 w-11 place-items-center rounded-full border border-line text-cream transition-colors hover:border-cristal hover:text-cristal lg:hidden"
+      >
+        <span class="sr-only" data-menu-label>Abrir menu</span>
+        <svg
+          data-menu-icone="barras"
+          width="20" height="20" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="1.5" aria-hidden="true"
+        >
+          <path d="M4 7h16M4 12h16M4 17h16" stroke-linecap="round"></path>
+        </svg>
+        <svg
+          data-menu-icone="x"
+          hidden
+          width="20" height="20" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="1.5" aria-hidden="true"
+        >
+          <path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  {/* Leque compacto, ancorado logo abaixo do botão — não toma a tela toda. */}
+  <div
+    id="menu-mobile"
+    data-menu-panel
+    class="absolute right-5 top-[64px] w-60 rounded-2xl border border-line bg-mata-soft/95 p-2 shadow-2xl shadow-black/60 backdrop-blur-md md:right-10 lg:hidden"
+  >
+    <nav aria-label="Navegação mobile" class="flex flex-col">
+      {
+        nav.map((item) => (
+          <a
+            href={item.href}
+            class="rounded-xl px-4 py-3 text-[15px] text-cream-dim transition-colors hover:bg-surface hover:text-cristal"
+          >
+            {item.label}
+          </a>
+        ))
+      }
+
+      <a
+        href={link}
+        data-wa-cta
+        target="_blank"
+        rel="noopener noreferrer"
+        class="mt-2 rounded-xl bg-cristal px-4 py-3 text-center text-[15px] font-medium text-mata transition-colors hover:bg-cristal-hi"
+      >
+        Chamar no WhatsApp
+      </a>
+    </nav>
+  </div>
+</header>

@@ -1,0 +1,229 @@
+---
+// Prata só existe num peso; a hierarquia vem de tamanho e cor, não de weight.
+// Só o subset `latin`: ele já cobre ã, ç, õ, é e todo o português — o
+// `latin-ext` (polonês, tcheco, turco) nem existe neste pacote.
+import '@fontsource/prata/latin-400.css';
+import '@fontsource-variable/manrope';
+import { getImage } from 'astro:assets';
+import '../styles/global.css';
+import { site, og, servicos } from '../data/site';
+import { img } from '../lib/images';
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+
+// Prévia do link no WhatsApp/Instagram — o canal real de distribuição.
+// 1200x630 é o recorte que as duas plataformas usam.
+const preview = await getImage({
+  src: img(og.imagem),
+  width: 1200,
+  height: 630,
+  fit: 'cover',
+  format: 'jpg',
+});
+const previewUrl = new URL(preview.src, Astro.site ?? Astro.url).href;
+const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url).href;
+
+/**
+ * Dados estruturados. É o que faz o Google entender endereço, telefone,
+ * horário e tipo de negócio — exatamente o argumento contra "ter só
+ * Instagram e um link na bio".
+ */
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BeautySalon',
+  name: site.nome,
+  slogan: site.tagline,
+  description: site.descricao,
+  telephone: `+${site.whatsapp}`,
+  url: canonical,
+  image: previewUrl,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: site.endereco,
+    addressLocality: site.cidade,
+    addressRegion: site.estado,
+    postalCode: site.cep,
+    addressCountry: 'BR',
+  },
+  openingHoursSpecification: [
+    {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+      opens: '08:30',
+      closes: '18:00',
+    },
+  ],
+  sameAs: [site.instagram],
+  makesOffer: servicos.itens.map((s) => ({
+    '@type': 'Offer',
+    itemOffered: { '@type': 'Service', name: s.nome, description: s.texto },
+  })),
+};
+---
+
+<html lang="pt-BR" class="js-anim">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#1f0a10" />
+
+    {/*
+      Enquanto for protótipo, fora da busca. Sem isto o demo pode ranquear
+      para "studio priorize" e competir com os canais do próprio salão —
+      atrapalhar o negócio deles antes da primeira conversa.
+    */}
+    {site.demo && <meta name="robots" content="noindex, nofollow" />}
+
+    <link rel="canonical" href={canonical} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content={site.nome} />
+    <meta property="og:image" content={previewUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={site.descricao} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <script is:inline>
+      // Roda antes da pintura: sem JS ou com reduced-motion o conteúdo nunca
+      // fica preso invisível (o CSS só esconde quando .js-anim está presente).
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.documentElement.classList.remove('js-anim');
+      }
+      // Marca que há JS: os controles auxiliares só aparecem com ele.
+      document.documentElement.classList.add('js');
+    </script>
+  </head>
+
+  <body>
+    <a
+      href="#conteudo"
+      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-btn focus:px-5 focus:py-3 focus:font-medium focus:text-btn-texto"
+    >
+      Pular para o conteúdo
+    </a>
+
+    <slot />
+
+    {/* Cursor decorativo — aria-hidden e pointer-events:none por definição */}
+    <div
+      data-cursor
+      aria-hidden="true"
+      class="pointer-events-none fixed left-0 top-0 z-[90] hidden h-2.5 w-2.5 rounded-full bg-acento [@media(pointer:fine)]:block"
+    >
+    </div>
+
+    <script>
+      import '../scripts/main';
+    </script>
+
+    <style is:global>
+      /* Header muda de fundo ao sair do topo. Transição nomeando as
+         propriedades — nunca `transition: all`.
+
+         SEM `backdrop-filter` DE PROPÓSITO. Ele estava aqui e era o item
+         mais caro da página: uma barra fixa da largura toda que reprocessa o
+         desfoque a cada quadro, com o site inteiro passando por baixo. No
+         trace, Pintura + Estilo + Layerize somavam mais que todo o
+         JavaScript. Um fundo opaco a 96% dá a mesma legibilidade e custa
+         zero — a diferença visual é quase invisível sobre um fundo escuro,
+         que é o caso do site inteiro. */
+      [data-header] {
+        transition:
+          background-color var(--dur-base) var(--ease-standard),
+          border-color var(--dur-base) var(--ease-standard);
+      }
+      [data-header].is-stuck {
+        background-color: rgb(31 10 16 / 0.96);
+        border-color: var(--color-linha);
+      }
+
+      /* Leque do menu do celular: abre a partir do canto do botão.
+         `visibility` entra na transição para o painel não ficar clicável
+         enquanto está invisível — e ainda assim animar a saída. */
+      [data-menu-panel] {
+        transform-origin: top right;
+        opacity: 0;
+        transform: scale(0.96) translateY(-6px);
+        visibility: hidden;
+        pointer-events: none;
+        transition:
+          opacity var(--dur-base) var(--ease-out),
+          transform var(--dur-base) var(--ease-out),
+          visibility var(--dur-base);
+      }
+      [data-menu-panel].is-open {
+        opacity: 1;
+        transform: none;
+        visibility: visible;
+        pointer-events: auto;
+      }
+      /* Saída mais rápida que a entrada: as coisas devem ir embora antes de
+         chegar. Uma faixa abaixo na escala. */
+      [data-menu-panel]:not(.is-open) {
+        transition-duration: var(--dur-fast);
+        transition-timing-function: var(--ease-in);
+      }
+
+      .split-line {
+        display: block;
+      }
+
+      /* Marquee contínuo em CSS — mais leve que animar por JS. `linear` é
+         correto aqui: é loop contínuo, não transição de estado. */
+      @keyframes marquee-scroll {
+        from {
+          transform: translateX(0);
+        }
+        to {
+          transform: translateX(-50%);
+        }
+      }
+      .marquee-track {
+        animation: marquee-scroll 42s linear infinite;
+      }
+      /* Pausa para ler. Só no mouse: no toque o hover fica preso depois do
+         primeiro toque e a faixa nunca mais andaria. */
+      @media (pointer: fine) {
+        .marquee-track:hover {
+          animation-play-state: paused;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .marquee-track {
+          animation: none;
+        }
+      }
+
+      /* Feedback de toque em cartões e botões grandes. 0.96 é o piso: abaixo
+         disso lê como exagero. Só onde o ponteiro é grosso ou fino, nunca
+         alterando layout. */
+      [data-press] {
+        transition: transform var(--dur-fast) var(--ease-standard);
+      }
+      [data-press]:active {
+        transform: scale(0.97);
+      }
+      @media (prefers-reduced-motion: reduce) {
+        [data-press]:active {
+          transform: none;
+        }
+      }
+    </style>
+  </body>
+</html>

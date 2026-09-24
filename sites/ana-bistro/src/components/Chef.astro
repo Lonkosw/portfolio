@@ -1,0 +1,87 @@
+---
+import { site, chef } from '../data/site';
+
+/**
+ * SEM FOTO, DE PROPÓSITO.
+ *
+ * As fotos da chef são o ativo mais forte que a casa tem — e são dela.
+ * Preencher com retrato de banco de imagens seria mentira visual, e gerar
+ * um rosto por IA seria pior: inventaria uma pessoa que fingiria ser ela.
+ *
+ * O bloco é resolvido em tipografia e funciona sozinho. Quando as fotos
+ * reais chegarem, entra um retrato à esquerda e o texto passa para uma
+ * coluna — a estrutura já está preparada para isso.
+ */
+---
+
+<section
+  id="chef"
+  data-secao-adiavel
+  class="relative isolate overflow-hidden border-y border-linha bg-superficie py-24 lg:py-36"
+>
+  {/*
+    Monograma gigante ao fundo. É decoração, então `aria-hidden`, e fica
+    em opacidade muito baixa: quem lê não deve nem reparar — deve só sentir
+    que o bloco tem peso.
+  */}
+  <span
+    aria-hidden="true"
+    class="pointer-events-none absolute -right-[8%] top-1/2 -translate-y-1/2 select-none font-[family-name:var(--font-display)] text-[42vw] italic leading-none text-acento/[0.04] lg:text-[26vw]"
+  >
+    A
+  </span>
+
+  <div class="shell relative">
+    <div data-reveal data-centro-mobile class="max-w-3xl">
+      <p class="eyebrow">{chef.eyebrow}</p>
+
+      <h2 class="mt-6 text-[clamp(2.3rem,6vw,4.2rem)] text-texto">
+        {chef.titulo}
+      </h2>
+
+      {
+        chef.paragrafos.map((p) => (
+          <p class="mt-6 max-w-2xl text-[16.5px] leading-relaxed text-texto-dim">{p}</p>
+        ))
+      }
+    </div>
+
+    {/* Três marcos, em vez de uma linha do tempo com datas que eu não
+        tenho como confirmar. Diz o essencial sem arriscar errar. */}
+    <ul
+      data-reveal-grupo
+      class="mt-14 grid gap-px overflow-hidden rounded-sm border border-linha bg-linha sm:grid-cols-3"
+    >
+      {
+        chef.marcos.map((m) => (
+          <li class="bg-superficie p-7 transition-colors duration-[var(--dur-base)] hover:bg-superficie-hi">
+            <p class="text-[12px] uppercase tracking-[0.24em] text-acento">{m.rotulo}</p>
+            <p class="mt-3 font-[family-name:var(--font-display)] text-[1.35rem] leading-snug text-texto">
+              {m.texto}
+            </p>
+          </li>
+        ))
+      }
+    </ul>
+
+    {/* A assinatura. Itálico da Bodoni, não uma fonte script: script de
+        convite é o clichê que todo restaurante usa. */}
+    <div data-reveal class="mt-14 flex flex-col items-start gap-3" data-centro-mobile>
+      <p class="assinatura text-[clamp(2rem,5vw,2.8rem)]">{chef.assinatura}</p>
+      <p class="text-[12.5px] uppercase tracking-[0.24em] text-texto-dim">
+        {`${chef.nome} · ${site.cidade} — ${site.estado}`}
+      </p>
+      <a
+        href={site.instagramChef}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="mt-2 inline-flex min-h-[44px] items-center gap-2 text-[14px] text-acento underline decoration-acento/30 underline-offset-4 transition-colors duration-[var(--dur-fast)] hover:text-acento-hi hover:decoration-acento"
+      >
+        {site.instagramChefExibicao}
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M7 17 17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+      </a>
+    </div>
+  </div>
+</section>

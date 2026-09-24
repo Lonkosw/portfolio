@@ -1,0 +1,109 @@
+---
+import { site, nav, visite } from '../data/site';
+---
+
+<footer id="visite" class="border-t border-linha bg-fundo">
+  <div class="shell py-16 lg:py-20">
+    <div data-reveal data-centro-mobile class="max-w-2xl">
+      <p class="eyebrow">{visite.eyebrow}</p>
+      <h2 class="mt-5 text-[clamp(1.9rem,5vw,3rem)] text-texto">{visite.titulo}</h2>
+    </div>
+
+    <div class="mt-12 grid gap-12 lg:grid-cols-[1.2fr_1fr_1fr]">
+      <div data-centro-mobile class="max-w-sm">
+        <p class="flex items-baseline gap-[0.3em]">
+          <span class="font-[family-name:var(--font-display)] text-[26px] text-texto">Studio</span>
+          <span class="font-[family-name:var(--font-display)] text-[26px] text-acento">Priorize</span>
+        </p>
+        <p class="mt-2 text-[15px] italic text-texto-dim">{site.tagline}</p>
+        <p class="mt-4 text-[15px] leading-relaxed text-texto-dim">{site.descricao}</p>
+      </div>
+
+      <div data-centro-mobile>
+        <h3 class="text-[13px] font-semibold uppercase tracking-[0.18em] text-acento">Contato</h3>
+        <ul class="mt-5 space-y-1">
+          <li>
+            <a
+              href={`tel:+${site.whatsapp}`}
+              class="flex min-h-[44px] items-center text-[15px] text-texto-dim transition-colors duration-[var(--dur-fast)] hover:text-texto"
+            >
+              {site.whatsappExibicao}
+            </a>
+          </li>
+          <li>
+            <span class="flex min-h-[44px] items-center text-[15px] text-texto-dim">
+              {site.telefoneSecundario}
+            </span>
+          </li>
+          <li>
+            <a
+              href={site.instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="flex min-h-[44px] items-center text-[15px] text-texto-dim transition-colors duration-[var(--dur-fast)] hover:text-texto"
+            >
+              {site.instagramExibicao}
+            </a>
+          </li>
+          <li>
+            <a
+              href={site.maps}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="flex min-h-[44px] items-center text-[15px] leading-snug text-texto-dim transition-colors duration-[var(--dur-fast)] hover:text-texto"
+            >
+              {`${site.endereco} — ${site.cidade}/${site.estado}`}
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div data-centro-mobile>
+        <h3 class="text-[13px] font-semibold uppercase tracking-[0.18em] text-acento">Horários</h3>
+        <ul class="mt-5 space-y-2">
+          {
+            site.horarios.map((h) => (
+              <li class="text-[15px] leading-snug text-texto-dim">
+                <span class="block font-semibold text-texto">{h.dias}</span>
+                <span data-tabular>{h.horas}</span>
+              </li>
+            ))
+          }
+        </ul>
+
+        <nav aria-label="Navegação do rodapé" class="mt-7">
+          <ul class="flex flex-wrap gap-x-5 gap-y-1">
+            {
+              nav.map((item) => (
+                <li>
+                  <a
+                    href={item.href}
+                    class="flex min-h-[44px] items-center text-[14px] text-texto-dim transition-colors duration-[var(--dur-fast)] hover:text-texto"
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+      </div>
+    </div>
+
+    <div class="mt-14 border-t border-linha pt-8">
+      <p class="text-center text-[13px] leading-relaxed text-texto-dim">
+        {`© ${new Date().getFullYear()} ${site.nome} · ${site.cidade} — ${site.estado}`}
+      </p>
+
+      {
+        site.demo && (
+          <p class="mx-auto mt-4 max-w-2xl text-center text-[12.5px] leading-relaxed text-texto-dim">
+            Esta página é um <strong class="font-semibold">protótipo de demonstração</strong> e não é o
+            site oficial do {site.nome}. As fotos pertencem ao próprio salão e foram usadas apenas
+            para montar esta proposta.
+          </p>
+        )
+      }
+    </div>
+  </div>
+</footer>

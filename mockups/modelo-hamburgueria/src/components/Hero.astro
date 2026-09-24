@@ -1,0 +1,149 @@
+---
+/**
+ * Hero de TELA CHEIA com vídeo de fundo — pedido explícito do Théo: "a
+ * primeira coisa que você vê no site é um vídeo em 8 segundos de loop".
+ *
+ * Isto é diferente do Hero em duas colunas do modelo-b (foto ao lado do
+ * texto). Aqui o vídeo ocupa a seção inteira e o texto fica por cima, num
+ * véu — porque virou o próprio fundo da dobra, não um elemento ao lado.
+ *
+ * ⚠️ O VÍDEO NÃO PODE ATRASAR O LCP.
+ * O elemento de maior pintura aqui é o PÔSTER (a imagem), não o vídeo — um
+ * <video> nunca conta como LCP no Chrome. Por isso:
+ *   - o pôster carrega `eager` + `fetchpriority="high"`, igual a um hero de
+ *     foto normal;
+ *   - o <video> já nasce com `src` (ao contrário do vídeo de seção do
+ *     modelo-b, que segura a fonte em `data-src` até chegar perto da
+ *     tela) — aqui a seção JÁ ESTÁ na tela na primeira pintura, então não
+ *     há "perto da tela" para esperar; adiar só atrasaria o loop aparecer;
+ *   - o arquivo em si é que faz o trabalho de não pesar: 8s, ~1,8 MB,
+ *     720px de largura (ver tools/ e README para como foi cortado/comprimido).
+ *
+ * MOVIMENTO REDUZIDO: pausa o vídeo e mostra só o pôster. Um loop de fundo
+ * é o tipo mais agressivo de movimento involuntário que existe.
+ */
+import { Image } from 'astro:assets';
+import { site, heroVideo } from '../data/site';
+import { img, Q_HERO, W_GRANDE } from '../lib/images';
+import { getImage } from 'astro:assets';
+
+const poster = img(heroVideo.poster);
+const posterUrl = (await getImage({ src: poster, width: 1280, format: 'webp', quality: Q_HERO })).src;
+---
+
+<section id="topo" data-hero class="relative isolate overflow-hidden bg-fundo">
+  <div class="absolute inset-0 -z-10">
+    <video
+      data-hero-video
+      class="h-full w-full object-cover"
+      poster={posterUrl}
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="auto"
+      aria-label={heroVideo.alt}
+    >
+      <source src={heroVideo.videoWebm} type="video/webm" />
+      <source src={heroVideo.video} type="video/mp4" />
+    </video>
+    {/* Véu: sem ele o texto creme sobre pão dourado não tem contraste
+        garantido em toda a área — a foto muda de claro/escuro conforme o
+        giro da câmera. Sólido embaixo (onde o texto principal mora) e mais
+        aberto em cima, mesma lógica do `.veu-legenda`. */}
+    <div
+      class="absolute inset-0 bg-gradient-to-t from-fundo/92 via-fundo/55 to-fundo/35"
+      aria-hidden="true"
+    >
+    </div>
+  </div>
+
+  <div
+    class="shell flex min-h-[92svh] flex-col justify-end pb-16 pt-32 lg:min-h-[94svh] lg:pb-24"
+  >
+    <div data-centro-mobile class="max-w-2xl">
+      <p class="eyebrow" data-hero-fade style="--i:0">{heroVideo.eyebrow}</p>
+
+      <h1 class="mt-5 text-[clamp(3.2rem,11vw,6rem)] text-texto">
+        {
+          heroVideo.titulo.map((linha, i) => (
+            <span data-hero-linha style={`--i:${i}`}>
+              <span>{linha}</span>
+            </span>
+          ))
+        }
+      </h1>
+
+      <p
+        data-hero-fade
+        style="--i:1"
+        class="mt-6 max-w-xl text-[17px] leading-relaxed text-texto-dim lg:text-lg"
+      >
+        {heroVideo.texto}
+      </p>
+
+      <a
+        href={site.avaliacoesGoogle}
+        target="_blank"
+        rel="noopener noreferrer"
+        data-hero-fade
+        data-press
+        style="--i:2"
+        class="mt-7 inline-flex min-h-[44px] items-center gap-3 rounded-full border border-linha bg-superficie/80 px-5 py-2.5 backdrop-blur-sm transition-colors duration-[var(--dur-fast)] hover:border-acento/60 hover:bg-superficie-hi"
+      >
+        <span aria-hidden="true" class="flex gap-0.5 text-acento">
+          {
+            Array.from({ length: 5 }).map(() => (
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                <path d="m12 2 2.9 6.3 6.8.8-5 4.7 1.3 6.8L12 17.3 6 20.6l1.3-6.8-5-4.7 6.8-.8L12 2Z" />
+              </svg>
+            ))
+          }
+        </span>
+        <span class="text-[14px] leading-tight text-texto">
+          <strong class="font-semibold" data-tabular>{site.google.nota}</strong>
+          <span class="text-texto-dim">
+            {` · ${site.google.avaliacoes} avaliações no Google`}
+          </span>
+        </span>
+      </a>
+
+      <div data-hero-fade style="--i:3" class="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+        <a
+          href="#pedir"
+          data-magnetic="0.18"
+          data-press
+          class="inline-flex min-h-[54px] items-center justify-center rounded-full bg-btn px-8 text-[15px] font-semibold text-btn-texto transition-colors duration-[var(--dur-fast)] hover:bg-acento-hi"
+        >
+          {heroVideo.cta}
+        </a>
+        <a
+          href="#cardapio"
+          data-press
+          class="inline-flex min-h-[54px] items-center justify-center rounded-full border border-texto/25 bg-fundo/40 px-8 text-[15px] font-semibold text-texto backdrop-blur-sm transition-colors duration-[var(--dur-fast)] hover:border-texto hover:bg-texto/5"
+        >
+          {heroVideo.ctaSecundario}
+        </a>
+      </div>
+
+      <p data-hero-fade style="--i:4" class="mt-8 text-[13px] text-texto-dim">
+        {`${site.endereco} · ${site.bairro} · ${site.cidade} — ${site.estado}`}
+      </p>
+    </div>
+  </div>
+</section>
+
+<script>
+  /**
+   * Movimento reduzido: para o vídeo e deixa só o pôster + controles
+   * nativos, igual ao vídeo de seção do modelo-b.
+   */
+  const v = document.querySelector<HTMLVideoElement>('[data-hero-video]');
+  if (v && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    v.autoplay = false;
+    v.loop = false;
+    v.removeAttribute('autoplay');
+    v.pause();
+    v.controls = true;
+  }
+</script>

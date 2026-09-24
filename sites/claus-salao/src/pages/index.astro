@@ -1,0 +1,60 @@
+---
+import Layout from '../layouts/Layout.astro';
+import DemoBanner from '../components/DemoBanner.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import AntesDepois from '../components/AntesDepois.astro';
+import Videos from '../components/Videos.astro';
+import Portfolio from '../components/Portfolio.astro';
+import Servicos from '../components/Servicos.astro';
+import Sobre from '../components/Sobre.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../data/site';
+
+const title = `${site.nomeCompleto} — Salão de beleza em ${site.cidade}`;
+---
+
+<Layout title={title} description={site.descricao}>
+  <DemoBanner />
+  <Header />
+
+  {/*
+    SEIS SEÇÕES, e a ordem é a decisão mais importante da página.
+
+      hero         — o que o salão faz e onde, numa foto
+      antes/depois — a prova, e o mais cedo possível
+      vídeos       — a mesma prova em movimento, para quem quiser
+      trabalhos    — o acervo, mostrando que não são só dois casos
+      serviços     — os quatro, cada um virando conversa
+      o salão      — endereço e como funciona
+      contato      — a ação (é o rodapé)
+
+    O ANTES/DEPOIS VEM ANTES DE TUDO, logo depois da abertura, e é o que
+    separa este site do da fotógrafa (onde o portfólio vinha primeiro) e do
+    dos outros dois salões da pasta (onde o antes/depois fica no meio).
+
+    O motivo é o acervo: aqui existem dois pares de verdade, mesma cliente e
+    mesma roupa, coisa que nenhum dos outros teve. Quem procura salão para
+    fazer loiro está avaliando uma coisa só — "eles conseguem tirar meu
+    cabelo de onde ele está?" — e o comparador responde isso em um gesto,
+    antes de qualquer texto. Enterrá-lo depois da galeria seria esconder o
+    único argumento que os concorrentes não conseguem copiar.
+
+    Os vídeos vêm logo em seguida porque são a mesma pergunta com outras
+    duas clientes; quem já se convenceu no comparador simplesmente rola.
+
+    O ritmo alterna `bg-fundo` e `bg-superficie` de seção em seção, com
+    pouca diferença de tom: contraste forte entre faixas roubaria atenção
+    das fotos, que é o que a página existe para mostrar.
+  */}
+  <main id="conteudo">
+    <Hero />
+    <AntesDepois />
+    <Videos />
+    <Portfolio />
+    <Servicos />
+    <Sobre />
+  </main>
+
+  <Footer />
+</Layout>

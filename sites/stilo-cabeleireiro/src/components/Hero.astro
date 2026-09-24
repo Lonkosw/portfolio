@@ -1,0 +1,99 @@
+---
+import { Image } from 'astro:assets';
+import { site, hero } from '../data/site';
+import { img } from '../lib/images';
+
+const foto = img(hero.imagem);
+---
+
+<section id="topo" data-hero class="relative isolate overflow-hidden bg-fundo">
+  <div data-hero-media class="absolute inset-0 -z-10">
+    <Image
+      src={foto}
+      alt={hero.alt}
+      widths={[640, 1024, 1600, 2000]}
+      sizes="100vw"
+      loading="eager"
+      fetchpriority="high"
+      class="h-full w-full object-cover object-center"
+    />
+    {/*
+      Três camadas: um véu bordô que tinge a foto com a cor da marca, um véu
+      do próprio fundo, e o gradiente vertical que assenta o texto no pé.
+
+      OS PESOS FORAM REFEITOS quando a foto real entrou. Calibrados sobre o
+      placeholder magenta, os véus somavam tanto que a fachada virava textura
+      irreconhecível — e uma foto de fachada que ninguém identifica não vale a
+      pena carregar.
+
+      A saída foi tirar peso de CIMA e manter embaixo: o texto vive no rodapé
+      do bloco (`justify-end`), então é lá que o gradiente precisa fechar. O
+      topo, onde só há céu e o letreiro, pode respirar.
+    */}
+    <div class="absolute inset-0 bg-cobre/25"></div>
+    <div class="absolute inset-0 bg-fundo/40"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-fundo via-fundo/75 to-fundo/20"></div>
+  </div>
+
+  <div class="shell flex min-h-[86svh] flex-col justify-end pb-16 pt-24 lg:min-h-[90svh] lg:pb-24">
+    <div class="max-w-3xl" data-centro-mobile>
+      <p class="eyebrow" data-hero-fade style="--i:0">{hero.eyebrow}</p>
+
+      {/*
+        Cada linha do título vem com a PRÓPRIA MÁSCARA de overflow, montada
+        aqui no build. É o que permite a entrada linha por linha sem plugin
+        de split: o `site.ts` já entrega o título como uma lista de linhas, e
+        dividir em runtime era refazer um trabalho que o build já tinha feito.
+
+        O `--i` é o índice, e o CSS o usa para escalonar o atraso.
+      */}
+      <h1 data-hero-title class="mt-5 text-[clamp(2.9rem,10vw,6.5rem)] text-texto">
+        {
+          hero.titulo.map((linha, i) => (
+            <span data-hero-linha style={`--i:${i}`}>
+              <span>{linha}</span>
+            </span>
+          ))
+        }
+      </h1>
+
+      <p
+        data-hero-fade
+        style="--i:1"
+        class="mt-6 max-w-xl text-[17px] leading-relaxed text-texto-dim lg:text-lg"
+      >
+        {hero.texto}
+      </p>
+
+      <div
+        data-hero-fade
+        style="--i:2"
+        class="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap lg:items-center"
+      >
+        <a
+          href="#agendar"
+          data-magnetic="0.18"
+          data-press
+          class="inline-flex min-h-[52px] items-center justify-center rounded-full bg-btn px-8 text-[15px] font-semibold text-btn-texto transition-colors duration-[var(--dur-fast)] hover:bg-cobre"
+        >
+          {hero.cta}
+        </a>
+        {/* O rótulo é "Ver transformações", então o destino é o antes/depois —
+            e não a seção de mechas, como era no Priorize. Mandar para um
+            texto de serviço quem clicou esperando foto é quebrar a promessa
+            do próprio botão. */}
+        <a
+          href="#antes-depois"
+          data-press
+          class="inline-flex min-h-[52px] items-center justify-center rounded-full border border-texto/30 px-8 text-[15px] font-semibold text-texto transition-colors duration-[var(--dur-fast)] hover:border-texto hover:bg-texto/10"
+        >
+          {hero.ctaSecundario}
+        </a>
+      </div>
+
+      <p data-hero-fade style="--i:3" class="mt-8 text-[13px] text-texto-dim">
+        {`${site.endereco} · ${site.cidade} — ${site.estado}`}
+      </p>
+    </div>
+  </div>
+</section>

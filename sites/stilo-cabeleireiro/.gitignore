@@ -1,0 +1,28 @@
+# build
+dist/
+.astro/
+.vercel/
+
+# deps
+node_modules/
+
+# ambiente
+.env
+.env.production
+
+# sistema
+.DS_Store
+Thumbs.db
+
+# logs e capturas de verificação
+*.log
+qa*.png
+sec*.png
+desk*.png
+conferir*.png
+
+# originais das fotos antes do corte
+.imagens-originais/
+
+# Pool de fotos do Pexels — reproduzível com scripts/baixar-fotos.py
+.fotos-banco/

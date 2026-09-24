@@ -1,0 +1,303 @@
+---
+import { Image } from 'astro:assets';
+import { site, noivas, montagemNoiva } from '../data/site';
+import { img } from '../lib/images';
+import { wa } from '../lib/wa';
+
+const foto = img(noivas.imagem);
+const destaque = img(noivas.destaque.imagem);
+const link = wa(site.whatsapp, 'Olá, Studio Priorize! Vim pelo site e queria falar sobre dia da noiva.');
+
+// Anos calculados no build. Como o site é estático, um deploy novo já traz a
+// lista atualizada.
+const anoAtual = new Date().getFullYear();
+const anos = Array.from({ length: montagemNoiva.anosAFrente + 1 }, (_, i) => anoAtual + i);
+
+const selectBase =
+  'min-h-[52px] w-full appearance-none rounded-xl border border-linha bg-fundo pl-4 pr-11 text-[15px] text-texto transition-colors duration-[var(--dur-fast)] hover:border-acento/60 focus:border-acento';
+---
+
+<section id="noivas" data-secao-adiavel class="border-t border-linha bg-fundo py-24 lg:py-32">
+  <div class="shell">
+    <div class="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+      <div data-reveal data-centro-mobile class="max-w-xl">
+        <p class="eyebrow">{noivas.eyebrow}</p>
+        <h2 class="mt-5 text-[clamp(2.1rem,5.5vw,3.4rem)] text-texto">{noivas.titulo}</h2>
+        <p class="mt-5 text-[16.5px] leading-relaxed text-texto-dim">{noivas.texto}</p>
+
+        <ul data-reveal-grupo class="mt-9 grid gap-3 sm:grid-cols-2">
+          {
+            noivas.itens.map((item) => (
+              <li class="rounded-2xl border border-linha bg-superficie p-5">
+                <h3 class="text-[1.1rem] font-semibold text-texto">{item.nome}</h3>
+                <p class="mt-1 text-[14.5px] leading-relaxed text-texto-dim">{item.texto}</p>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div
+        data-parallax-frame
+        class="relative aspect-[4/5] overflow-hidden rounded-[2rem] border border-linha"
+      >
+        <div data-reveal-img class="h-full w-full">
+          <div class="h-full w-full">
+            <Image
+              src={foto}
+              alt={noivas.alt}
+              widths={[480, 720, 1080]}
+              sizes="(min-width: 1024px) 44vw, 92vw"
+              data-parallax="5"
+              class="parallax-folga object-cover"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {/*
+      DESTAQUE — a única foto nativamente horizontal do acervo, e a que conta
+      a seção inteira numa imagem: a noiva, a mãe e as madrinhas prontas
+      juntas. Ganha a largura toda porque é 16/10 de verdade; esticar uma
+      vertical aqui cortaria as cabeças das pontas.
+    */}
+    <figure
+      data-reveal
+      class="group relative mt-10 overflow-hidden rounded-[2rem] border border-linha lg:mt-14"
+    >
+      <div data-reveal-img class="aspect-[16/10] w-full">
+        <div class="h-full w-full">
+          <Image
+            src={destaque}
+            alt={noivas.destaque.alt}
+            widths={[640, 1024, 1600]}
+            sizes="(min-width: 1280px) 76rem, 92vw"
+            loading="lazy"
+            class="h-full w-full object-cover [@media(hover:hover)]:transition-transform [@media(hover:hover)]:duration-[var(--dur-slower)] [@media(hover:hover)]:ease-[var(--ease-out)] [@media(hover:hover)]:group-hover:scale-[1.03]"
+          />
+        </div>
+      </div>
+      <figcaption class="pointer-events-none absolute inset-x-0 bottom-0 bg-fundo/75 bg-gradient-to-t from-fundo via-fundo/75 to-transparent px-6 pb-5 pt-16 text-[14px] tracking-wide text-texto sm:text-[15px]">
+        {noivas.destaque.legenda}
+      </figcaption>
+    </figure>
+
+    {/*
+      Fotos de apoio. Cinco numa grade que vai a 5 colunas no desktop: penteado,
+      maquiagem e prova, que são os três serviços que a seção lista.
+      A legenda é OPCIONAL — num retrato de noiva sorrindo, escrever "noiva
+      sorrindo" embaixo não acrescenta nada. Onde a foto já se explica, o
+      campo simplesmente não existe no `site.ts`.
+    */}
+    <div data-reveal-grupo class="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:mt-5 lg:grid-cols-5">
+      {
+        noivas.galeria.map((g) => {
+          const f = img(g.imagem);
+          const legenda = 'legenda' in g ? g.legenda : undefined;
+          return (
+            <figure class="group relative overflow-hidden rounded-2xl border border-linha">
+              <div data-reveal-img class="aspect-[4/5] w-full">
+                <div class="h-full w-full">
+                  <Image
+                    src={f}
+                    alt={g.alt}
+                    widths={[280, 420, 640]}
+                    sizes="(min-width: 1024px) 19vw, (min-width: 640px) 31vw, 46vw"
+                    loading="lazy"
+                    class="h-full w-full object-cover [@media(hover:hover)]:transition-transform [@media(hover:hover)]:duration-[var(--dur-slower)] [@media(hover:hover)]:ease-[var(--ease-out)] [@media(hover:hover)]:group-hover:scale-[1.05]"
+                  />
+                </div>
+              </div>
+              {/* A cor sólida por baixo do gradiente é um piso de contraste:
+                  sozinho, o gradiente depende do quanto a foto é clara, e uma
+                  imagem estourada engoliria a legenda. */}
+              {legenda && (
+                <figcaption class="pointer-events-none absolute inset-x-0 bottom-0 bg-fundo/75 bg-gradient-to-t from-fundo via-fundo/70 to-transparent px-3 pb-2.5 pt-10 text-[12.5px] leading-snug text-texto">
+                  {legenda}
+                </figcaption>
+              )}
+            </figure>
+          );
+        })
+      }
+    </div>
+
+    {/* ── FERRAMENTA 2 · Monte seu dia da noiva ──────────────────────── */}
+    <div
+      data-reveal
+      data-noiva
+      data-noiva-whatsapp={site.whatsapp}
+      data-noiva-padrao="Olá, Studio Priorize! Vim pelo site e queria saber sobre o dia da noiva."
+      class="mt-16 rounded-[2rem] border border-acento/25 bg-superficie p-6 sm:p-9 lg:mt-24 lg:p-12"
+    >
+      <div data-centro-mobile class="max-w-2xl">
+        <p class="eyebrow">Monte o seu</p>
+        <h3 class="mt-4 text-[clamp(1.7rem,4.5vw,2.5rem)] text-texto">
+          Quantas pessoas vão com você?
+        </h3>
+        <p class="mt-4 text-[16px] leading-relaxed text-texto-dim">
+          Marque os serviços, diga quem vem junto e quando é o casamento. A gente
+          monta a mensagem pronta — você só toca em enviar.
+        </p>
+      </div>
+
+      <div class="mt-10 grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:gap-14">
+        <div class="grid gap-8">
+          {/* Serviços da noiva */}
+          <fieldset>
+            <legend class="text-sm font-semibold text-texto">O que você quer para o seu dia?</legend>
+            <div class="mt-4 flex flex-wrap gap-2.5">
+              {
+                montagemNoiva.servicos.map((s) => (
+                  <label class="flex min-h-[46px] cursor-pointer items-center rounded-full border border-linha bg-superficie px-5 text-[14.5px] text-texto-dim transition-colors duration-[var(--dur-fast)] hover:border-acento/60 has-[:checked]:border-acento has-[:checked]:bg-acento/15 has-[:checked]:font-semibold has-[:checked]:text-texto has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-acento">
+                    <input type="checkbox" value={s} data-noiva-servico class="sr-only" />
+                    {s}
+                  </label>
+                ))
+              }
+            </div>
+          </fieldset>
+
+          {/* Acompanhantes */}
+          <fieldset>
+            <legend class="text-sm font-semibold text-texto">Quem vai com você?</legend>
+            <div class="mt-4 grid gap-3">
+              {
+                montagemNoiva.acompanhantes.map((g) => (
+                  <div
+                    data-noiva-grupo={g.id}
+                    data-noiva-max={g.max}
+                    class="flex items-center justify-between gap-4 rounded-xl border border-linha bg-superficie px-4 py-2.5"
+                  >
+                    <span class="text-[15px] text-texto">{g.rotulo}</span>
+                    <div class="flex items-center gap-2">
+                      <button
+                        type="button"
+                        data-noiva-menos
+                        data-so-com-js
+                        aria-label={`Menos uma ${g.rotulo.toLowerCase()}`}
+                        class="grid h-11 w-11 place-items-center rounded-lg border border-linha text-texto transition-colors duration-[var(--dur-fast)] hover:border-acento hover:text-acento"
+                      >
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                          <path d="M5 12h14" stroke-linecap="round" />
+                        </svg>
+                      </button>
+                      <output
+                        data-noiva-valor
+                        data-tabular
+                        aria-live="polite"
+                        aria-label={`Quantidade de ${g.rotulo.toLowerCase()}`}
+                        class="w-8 text-center text-[17px] font-semibold text-texto"
+                      >
+                        0
+                      </output>
+                      <button
+                        type="button"
+                        data-noiva-mais
+                        data-so-com-js
+                        aria-label={`Mais uma ${g.rotulo.toLowerCase()}`}
+                        class="grid h-11 w-11 place-items-center rounded-lg border border-linha text-texto transition-colors duration-[var(--dur-fast)] hover:border-acento hover:text-acento"
+                      >
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                          <path d="M12 5v14M5 12h14" stroke-linecap="round" />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                ))
+              }
+            </div>
+          </fieldset>
+        </div>
+
+        <div class="grid content-start gap-8">
+          {/* Data */}
+          <div>
+            <span class="block text-sm font-semibold text-texto">Quando é o casamento?</span>
+            <div class="mt-4 grid grid-cols-2 gap-3">
+              <div class="relative">
+                <label for="noiva-mes" class="sr-only">Mês do casamento</label>
+                <select id="noiva-mes" data-noiva-mes class={selectBase}>
+                  <option value="">Mês</option>
+                  {
+                    montagemNoiva.meses.map((m, i) => (
+                      <option value={String(i + 1).padStart(2, '0')}>
+                        {m.charAt(0).toUpperCase() + m.slice(1)}
+                      </option>
+                    ))
+                  }
+                </select>
+                <svg class="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-texto-dim" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <path d="m6 9 6 6 6-6" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+              </div>
+
+              <div class="relative">
+                <label for="noiva-ano" class="sr-only">Ano do casamento</label>
+                <select id="noiva-ano" data-noiva-ano class={selectBase}>
+                  <option value="">Ano</option>
+                  {anos.map((a) => <option value={String(a)}>{a}</option>)}
+                </select>
+                <svg class="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-texto-dim" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <path d="m6 9 6 6 6-6" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          {/* Horário da cerimônia */}
+          <fieldset>
+            <legend class="text-sm font-semibold text-texto">A cerimônia é a que horas?</legend>
+            <div class="mt-4 grid grid-cols-2 gap-3">
+              {
+                montagemNoiva.horariosCerimonia.map((h) => (
+                  <label class="flex min-h-[52px] cursor-pointer items-center justify-center rounded-xl border border-linha bg-superficie px-3 text-center text-[14.5px] text-texto-dim transition-colors duration-[var(--dur-fast)] hover:border-acento/60 has-[:checked]:border-acento has-[:checked]:bg-acento/15 has-[:checked]:font-semibold has-[:checked]:text-texto has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-acento">
+                    <input type="radio" name="noiva-cerimonia" value={h} data-noiva-cerimonia class="sr-only" />
+                    {h}
+                  </label>
+                ))
+              }
+            </div>
+          </fieldset>
+
+          {/* Resumo + envio */}
+          <div class="rounded-2xl border border-acento/40 bg-acento/10 p-6">
+            <p class="text-[12px] font-semibold uppercase tracking-[0.18em] text-acento">
+              Seu grupo
+            </p>
+            <p class="mt-3 flex items-baseline gap-2">
+              <span data-noiva-total data-tabular class="numeral text-[2.75rem]">1</span>
+              <span class="text-[15px] text-texto-dim">pessoas no total, contando você</span>
+            </p>
+            <p data-noiva-resumo data-tabular class="mt-2 text-[14px] text-texto-dim"></p>
+
+            <a
+              href={link}
+              data-noiva-cta
+              data-press
+              target="_blank"
+              rel="noopener noreferrer"
+              class="mt-6 flex min-h-[54px] w-full items-center justify-center rounded-xl bg-btn px-6 text-[15px] font-semibold text-btn-texto transition-colors duration-[var(--dur-fast)] hover:bg-vinho-hi"
+            >
+              Enviar meu dia da noiva
+            </a>
+            <button
+              type="button"
+              data-noiva-limpar
+              data-so-com-js
+              class="mt-2 flex min-h-[44px] w-full items-center justify-center rounded-xl text-[14px] text-texto-dim transition-colors duration-[var(--dur-fast)] hover:text-texto"
+            >
+              Limpar e começar de novo
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <p class="mt-8 text-center text-[12.5px] leading-relaxed text-texto-dim">
+        Nada é enviado ao sair daqui: a mensagem é montada no seu próprio celular
+        e só vai quando você tocar no botão.
+      </p>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,53 @@
+---
+import { site, orcamento } from '../data/site';
+import { wa } from '../lib/wa';
+
+const link = wa(site.whatsapp, orcamento.mensagem);
+---
+
+{/*
+  Barra flutuante do simulador. Só aparece depois que a pessoa escolhe algo
+  (o script liga a classe `is-visivel`), e fica FORA do header de propósito:
+  `position: fixed` dentro de um elemento com `backdrop-filter` deixa de ser
+  fixo, porque o filtro cria um bloco de contenção.
+*/}
+<div
+  data-orc-pill
+  class="fixed inset-x-3 bottom-3 z-50 sm:inset-x-auto sm:right-6 sm:bottom-6 sm:w-auto"
+>
+  <div
+    class="flex items-center gap-2 rounded-2xl border border-line bg-mata-soft/95 p-2 shadow-2xl shadow-black/60 backdrop-blur-md"
+  >
+    <button
+      type="button"
+      data-orc-pill-ir
+      class="flex min-h-[48px] flex-1 items-center gap-3 rounded-xl px-3 text-left transition-colors hover:bg-surface sm:flex-none"
+    >
+      <span class="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-cristal/15 text-cristal">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+          <path d="M8 2v3M16 2v3M3.5 9h17M5 5h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+      </span>
+      <span class="min-w-0">
+        <span class="block text-[12px] uppercase tracking-[0.16em] text-cream-dim/80">
+          Seu evento
+        </span>
+        <span
+          data-orc-pill-texto
+          class="block truncate text-[14px] font-medium text-cream sm:max-w-[18rem]"
+        >
+        </span>
+      </span>
+    </button>
+
+    <a
+      href={link}
+      data-wa-cta
+      target="_blank"
+      rel="noopener noreferrer"
+      class="grid min-h-[48px] shrink-0 place-items-center rounded-xl bg-cristal px-5 text-[14px] font-medium text-mata transition-colors hover:bg-cristal-hi"
+    >
+      Enviar
+    </a>
+  </div>
+</div>
