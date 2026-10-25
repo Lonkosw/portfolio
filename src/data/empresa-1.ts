@@ -1,0 +1,112 @@
+import type { Empresa } from './empresa-types';
+import { faqBase } from './faq-base';
+
+export const empresa1: Empresa = {
+  slug: 'aurora',
+  nome: 'Aurora Engenharia Solar',
+  marca: 'Aurora',
+  slogan: 'Energia solar de engenharia, do projeto ao último kWh.',
+  cidade: 'São Paulo',
+  uf: 'SP',
+  endereco: { rua: 'Rua Funchal, 411, conj. 82', bairro: 'Vila Olímpia', cep: '04551-060' },
+  telefone: '(11) 3500-2040',
+  whatsapp: '5511999990000',
+  email: 'contato@auroraengsolar.com.br',
+  instagram: '@auroraengsolar',
+  horario: 'Seg a sex, 8h às 18h',
+  fundacao: 2011,
+  cores: {
+    fundo: '#080D1B',
+    superficie: '#111A30',
+    texto: '#EAF0FB',
+    suave: '#A3AFC8',
+    destaque: '#FFB020',
+    destaque2: '#FF6B2C',
+    sobre: '#1A1100',
+    linha: 'rgb(255 255 255 / .12)',
+  },
+  fontes: {
+    display: 'Sora',
+    corpo: 'Manrope',
+    url: 'https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700&family=Sora:wght@400;600;800&display=swap',
+  },
+  seo: {
+    titulo: 'Aurora Engenharia Solar | Energia solar em São Paulo e região',
+    descricao:
+      'Projetos de energia solar para residências e empresas em São Paulo. Simule sua economia na conta de luz e receba um orçamento com projeto, instalação e homologação.',
+    og: '/og/aurora.jpg',
+  },
+  hero: {
+    etiqueta: 'Energia solar residencial e empresarial',
+    titulo: 'A conta de luz que você paga hoje',
+    destaque: 'vira geração própria.',
+    subtitulo:
+      'Projetamos, instalamos e homologamos sistemas fotovoltaicos com engenharia própria. Descubra em 1 minuto quanto sua casa ou empresa pode economizar por mês.',
+    cta: 'Simule sua economia',
+    ctaSecundario: 'Falar com um engenheiro',
+    foto: { base: 'modelo-1/hero-por-do-sol', alt: 'Painéis solares instalados em cobertura ao pôr do sol, com o sol baixo no horizonte' },
+  },
+  numeros: [
+    { valor: 14, rotulo: 'anos de mercado' },
+    { valor: 3200, prefixo: '+', rotulo: 'sistemas instalados' },
+    { valor: 18400, sufixo: ' kWp', rotulo: 'de potência instalada' },
+    { valor: 4.9, casas: 1, sufixo: '/5', rotulo: 'nota no Google (612 avaliações)' },
+  ],
+  passos: [
+    { titulo: 'Simulação online', texto: 'Você informa a conta de luz e o tipo de imóvel e vê o tamanho do sistema, o investimento e o retorno estimado.', prazo: '1 minuto' },
+    { titulo: 'Visita técnica', texto: 'Um engenheiro mede o telhado, avalia a estrutura, o sombreamento e o padrão de entrada de energia.', prazo: 'até 5 dias' },
+    { titulo: 'Projeto e homologação', texto: 'Elaboramos o projeto com ART e fazemos toda a solicitação de acesso junto à distribuidora.', prazo: '15 a 30 dias' },
+    { titulo: 'Instalação', texto: 'Equipe própria, treinada em trabalho em altura e elétrica, instala painéis, inversor e monitoramento.', prazo: '1 a 3 dias' },
+    { titulo: 'Economia na fatura', texto: 'Após a troca do medidor, você acompanha a geração pelo aplicativo e vê o crédito abatido na conta.', prazo: 'todo mês' },
+  ],
+  simulador: {
+    titulo: 'Quanto você economiza com energia solar',
+    texto: 'Ajuste o valor da conta e veja o dimensionamento, o investimento e o retorno em tempo real. A estimativa considera a Lei 14.300 e a taxa mínima da distribuidora.',
+    ufPadrao: 'SP',
+    contaPadrao: 600,
+  },
+  beneficios: [
+    { titulo: 'Economia na conta, todo mês', texto: 'Reduza em média 85% do valor da fatura. O que sobra é a taxa mínima da distribuidora e a parcela do Fio B prevista em lei.', icone: 'moeda', destaque: 'até 85%' },
+    { titulo: 'Imóvel mais valorizado', texto: 'Casas e prédios com geração própria vendem e alugam melhor, e o custo de operação cai.', icone: 'casa', destaque: '+4 a 8%' },
+    { titulo: 'Proteção contra reajustes', texto: 'Você fixa parte do custo de energia por 25 anos. A tarifa sobe, a sua geração não.', icone: 'escudo', destaque: '25 anos' },
+    { titulo: 'Menos carbono, mais reputação', texto: 'Cada sistema evita toneladas de CO₂ ao longo da vida útil e fortalece a imagem da sua empresa.', icone: 'folha', destaque: 'ESG' },
+  ],
+  portfolio: [
+    { titulo: 'Cobertura de edifício comercial', tipo: 'comercial', local: 'Barueri, SP', kwp: 96, foto: { base: 'modelo-1/cobertura-comercial', alt: 'Edifício corporativo com painéis solares na cobertura sob um céu rosado de fim de tarde' } },
+    { titulo: 'Residência de alto padrão', tipo: 'residencial', local: 'Alphaville, SP', kwp: 12.1, foto: { base: 'modelo-1/residencia-noite', alt: 'Casa de madeira e vidro iluminada ao entardecer, cercada por jardim' } },
+    { titulo: 'Casa contemporânea', tipo: 'residencial', local: 'Granja Viana, SP', kwp: 8.8, foto: { base: 'modelo-1/residencia-moderna', alt: 'Casa de arquitetura moderna com grandes janelas e árvore ao lado' } },
+    { titulo: 'Centro de distribuição', tipo: 'comercial', local: 'Cajamar, SP', kwp: 340, foto: { base: 'modelo-1/galpao-logistico', alt: 'Vista aérea de um pátio logístico com caminhões estacionados lado a lado' } },
+  ],
+  pagamento: [
+    { titulo: 'Cartão de crédito', texto: 'Parcelamento no cartão para sistemas residenciais, com aprovação imediata.', icone: 'cartao', detalhe: 'em até 18x' },
+    { titulo: 'Financiamento solar', texto: 'Linhas com carência e prazos longos, em que a parcela fica próxima do valor que você economiza.', icone: 'grafico', detalhe: 'até 96 meses' },
+    { titulo: 'À vista com desconto', texto: 'Condição especial para pagamento por Pix ou transferência na assinatura do contrato.', icone: 'moeda', detalhe: 'desconto no fechamento' },
+    { titulo: 'Parcela que cabe na economia', texto: 'Desenhamos a condição para que a parcela e a nova conta de luz somem menos do que você paga hoje.', icone: 'carteira', detalhe: 'fluxo positivo desde o 1º mês' },
+  ],
+  depoimentos: [
+    { nome: 'Ricardo M.', cidade: 'São Paulo, SP', perfil: 'Residência', nota: 5, texto: 'Minha conta ficava perto de R$ 900. Hoje pago pouco mais da taxa mínima. A equipe explicou cada etapa e o prazo foi cumprido.' },
+    { nome: 'Fernanda S.', cidade: 'Barueri, SP', perfil: 'Escritório', nota: 5, texto: 'Fizemos a instalação na cobertura do prédio sem interromper o trabalho. O aplicativo mostra a geração todos os dias.' },
+    { nome: 'André L.', cidade: 'Campinas, SP', perfil: 'Indústria leve', nota: 5, texto: 'Pedi três orçamentos. A Aurora foi a única que mostrou o cálculo com a Lei 14.300 já considerada, sem prometer conta zerada.' },
+    { nome: 'Patrícia O.', cidade: 'Santo André, SP', perfil: 'Residência', nota: 5, texto: 'Atendimento muito educado, instalação limpa e o medidor foi trocado em três semanas. Recomendo.' },
+    { nome: 'Marcelo T.', cidade: 'Jundiaí, SP', perfil: 'Comércio', nota: 4, texto: 'A economia ficou um pouco abaixo da primeira estimativa no inverno, mas dentro do que eles avisaram. Suporte sempre responde rápido.' },
+    { nome: 'Juliana C.', cidade: 'Osasco, SP', perfil: 'Clínica', nota: 5, texto: 'O retorno veio em menos de quatro anos. Hoje já planejamos ampliar o sistema para carregar o carro elétrico.' },
+    { nome: 'Gustavo P.', cidade: 'São Bernardo do Campo, SP', perfil: 'Residência', nota: 5, texto: 'Gostei de ver o projeto antes de fechar. Tudo muito transparente, da visita técnica ao contrato.' },
+  ],
+  garantias: [
+    { valor: '25 anos', titulo: 'Desempenho dos painéis', texto: 'Garantia linear do fabricante, com geração mínima assegurada ao longo do período.' },
+    { valor: '12 anos', titulo: 'Defeitos de fabricação', texto: 'Cobertura do painel contra falhas de fabricação e de materiais.' },
+    { valor: '10 anos', titulo: 'Inversor', texto: 'Garantia do fabricante, com atendimento facilitado pela nossa equipe técnica.' },
+    { valor: '5 anos', titulo: 'Instalação', texto: 'Garantia da Aurora sobre estruturas, cabeamento e mão de obra.' },
+  ],
+  certificacoes: ['Equipamentos certificados pelo Inmetro', 'Projeto com ART junto ao CREA', 'Equipe treinada nas normas NR-10 e NR-35', 'Homologação conforme normas da distribuidora'],
+  faq: faqBase,
+  ctaFinal: {
+    titulo: 'Seu telhado já recebe a energia. Falta aproveitá-la.',
+    texto: 'Receba uma proposta com projeto, prazo e retorno estimado para o seu imóvel, sem compromisso.',
+    botao: 'Receber orçamento pelo WhatsApp',
+  },
+  imagens: {
+    detalhe: { base: 'modelo-1/instalacao-detalhe', alt: 'Mãos com luvas de um instalador fixando os cabos de um sistema solar' },
+    fim: { base: 'modelo-1/campo-eolico', alt: 'Aerogeradores em um campo ao entardecer, com o sol tocando o horizonte' },
+  },
+};

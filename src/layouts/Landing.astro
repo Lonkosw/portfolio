@@ -1,0 +1,73 @@
+---
+import '../styles/solar.css';
+import type { Empresa } from '../data/empresa-types';
+
+interface Props { empresa: Empresa; }
+const { empresa: e } = Astro.props;
+
+const vars = {
+  '--c-fundo': e.cores.fundo, '--c-superficie': e.cores.superficie, '--c-texto': e.cores.texto, '--c-suave': e.cores.suave,
+  '--c-destaque': e.cores.destaque, '--c-destaque2': e.cores.destaque2, '--c-sobre': e.cores.sobre, '--c-linha': e.cores.linha,
+  '--f-display': `"${e.fontes.display}"`, '--f-corpo': `"${e.fontes.corpo}"`, '--f-mono': `"${e.fontes.mono ?? e.fontes.corpo}"`,
+};
+const estilo = Object.entries(vars).map(([k, v]) => `${k}:${v}`).join(';');
+
+const favicon = `data:image/svg+xml,${encodeURIComponent(
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="8" fill="${e.cores.fundo}"/><circle cx="16" cy="16" r="6" fill="${e.cores.destaque}"/><g stroke="${e.cores.destaque}" stroke-width="2.4" stroke-linecap="round"><path d="M16 4v3M16 25v3M4 16h3M25 16h3M7.5 7.5l2 2M22.5 22.5l2 2M7.5 24.5l2-2M22.5 9.5l2-2"/></g></svg>`,
+)}`;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  name: e.nome,
+  description: e.seo.descricao,
+  telephone: e.telefone,
+  email: e.email,
+  image: e.seo.og,
+  address: { '@type': 'PostalAddress', streetAddress: e.endereco.rua, addressLocality: e.cidade, addressRegion: e.uf, postalCode: e.endereco.cep, addressCountry: 'BR' },
+  areaServed: e.uf,
+  openingHours: 'Mo-Fr 08:00-18:00',
+  sameAs: [`https://instagram.com/${e.instagram.replace('@', '')}`],
+};
+const msgZap = encodeURIComponent(`Olá, ${e.marca}! Vim pelo site e quero saber mais sobre energia solar.`);
+---
+
+<!doctype html>
+<html lang="pt-BR" style={estilo}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{e.seo.titulo}</title>
+    <meta name="description" content={e.seo.descricao} />
+    <meta name="theme-color" content={e.cores.fundo} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:site_name" content={e.nome} />
+    <meta property="og:title" content={e.seo.titulo} />
+    <meta property="og:description" content={e.seo.descricao} />
+    <meta property="og:image" content={e.seo.og} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href={favicon} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href={e.fontes.url} />
+    <script is:inline>document.documentElement.classList.add('js');</script>
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </head>
+  <body>
+    <a href="#conteudo" class="sr-only z-[100] rounded bg-destaque px-4 py-2 font-bold text-sobre focus:not-sr-only focus:fixed focus:left-4 focus:top-4">Ir para o conteúdo</a>
+    <slot />
+    <a
+      href={`https://wa.me/${e.whatsapp}?text=${msgZap}`}
+      target="_blank"
+      rel="noopener"
+      aria-label="Falar com a equipe pelo WhatsApp"
+      class="zap-flutuante fixed bottom-5 right-5 z-50 grid h-14 w-14 place-items-center rounded-full bg-[#25d366] text-white shadow-[0_10px_30px_-8px_rgba(0,0,0,.5)] transition-transform hover:scale-105 focus-visible:outline-white"
+    >
+      <svg aria-hidden="true" viewBox="0 0 24 24" class="h-7 w-7 fill-current"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.2 14c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.2-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.8 0-1.4.7-2 1-2.3.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.3 0 .5l-.3.5c-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.1 1 2 1.3 2.3 1.4.3.1.4.1.6-.1l.8-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.8-.1 1.4Z"/></svg>
+    </a>
+    <script>
+      import '../scripts/base';
+    </script>
+  </body>
+</html>

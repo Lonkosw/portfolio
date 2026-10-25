@@ -1,0 +1,41 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-fundo: var(--c-fundo);
+  --color-superficie: var(--c-superficie);
+  --color-texto: var(--c-texto);
+  --color-suave: var(--c-suave);
+  --color-destaque: var(--c-destaque);
+  --color-destaque2: var(--c-destaque2);
+  --color-sobre: var(--c-sobre);
+  --color-linha: var(--c-linha);
+  --font-display: var(--f-display), system-ui, sans-serif;
+  --font-corpo: var(--f-corpo), system-ui, sans-serif;
+  --font-mono: var(--f-mono), ui-monospace, monospace;
+}
+
+@layer base {
+  html { scroll-behavior: smooth; scroll-padding-top: 5.5rem; -webkit-text-size-adjust: 100%; }
+  body { background: var(--c-fundo); color: var(--c-texto); font-family: var(--f-corpo), system-ui, sans-serif; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+  :focus-visible { outline: 3px solid var(--c-destaque); outline-offset: 3px; }
+  ::selection { background: var(--c-destaque); color: var(--c-sobre); }
+  img { max-width: 100%; }
+  summary::-webkit-details-marker { display: none; }
+}
+
+/* Revelação ao rolar: só opacity e transform. Sem JS, o conteúdo fica visível. */
+.js [data-reveal] { opacity: 0; transform: translate3d(0, 28px, 0); transition: opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1); transition-delay: calc(var(--d, 0) * 90ms); }
+.js [data-reveal="esquerda"] { transform: translate3d(-36px, 0, 0); }
+.js [data-reveal="direita"] { transform: translate3d(36px, 0, 0); }
+.js [data-reveal="zoom"] { transform: scale(.94); }
+.js [data-reveal].is-in { opacity: 1; transform: none; }
+
+@keyframes zap-pulso { 0% { transform: scale(1); opacity: .5; } 100% { transform: scale(1.7); opacity: 0; } }
+.zap-flutuante::before { content: ""; position: absolute; inset: 0; border-radius: 9999px; background: #25d366; animation: zap-pulso 2.4s ease-out infinite; z-index: -1; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; transition-delay: 0ms !important; }
+  .js [data-reveal] { opacity: 1; transform: none; }
+  .zap-flutuante::before { display: none; }
+}

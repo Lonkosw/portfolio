@@ -1,0 +1,24 @@
+---
+interface Props {
+  foto: { base: string; alt: string };
+  /** Atributo sizes do navegador. */
+  sizes?: string;
+  prioridade?: boolean;
+  class?: string;
+  /** Texto alternativo vazio para imagens decorativas. */
+  decorativa?: boolean;
+}
+const { foto, sizes = '100vw', prioridade = false, class: classe = '', decorativa = false } = Astro.props;
+const caminho = `/img/${foto.base}`;
+---
+
+<img
+  src={`${caminho}-1280.webp`}
+  srcset={`${caminho}-640.webp 640w, ${caminho}-1280.webp 1280w, ${caminho}-1920.webp 1920w`}
+  sizes={sizes}
+  alt={decorativa ? '' : foto.alt}
+  loading={prioridade ? 'eager' : 'lazy'}
+  fetchpriority={prioridade ? 'high' : undefined}
+  decoding={prioridade ? 'sync' : 'async'}
+  class={classe}
+/>

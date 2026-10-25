@@ -1,39 +1,29 @@
-# Template de site para clientes (Astro + Tailwind)
+# Landing pages de energia solar (Astro + Tailwind)
 
-Template reutilizável para gerar protótipos de site para pequenos negócios locais.
-Cada cliente vive em um único arquivo de dados — trocar o cliente ativo é trocar uma
-variável de ambiente e rebuildar, sem editar HTML/CSS espalhado pelo projeto.
+Três landing pages completas, com visuais diferentes, que compartilham um simulador de economia na conta de luz.
 
-## Como funciona
+| Rota | Empresa | Direção visual | Simulador |
+|---|---|---|---|
+| `/modelo-1` | Aurora Engenharia Solar (São Paulo/SP) | escuro, tecnológico, âmbar | painel de controle |
+| `/modelo-2` | Lume Energia Solar (Belo Horizonte/MG) | claro, residencial, verde e amarelo | questionário em 3 etapas |
+| `/modelo-3` | Vale Verde Solar (Goiânia/GO) | industrial e agro, laranja e preto | ficha técnica |
 
-- `src/data/types.ts` — formato (`ClientData`) que todo cliente precisa seguir.
-- `src/data/clients/*.ts` — um arquivo por cliente (nome, telefone, whatsapp, cores, textos, fotos).
-- `src/data/clients/index.ts` — carrega todos os clientes e seleciona o ativo via `CLIENT_ID`.
-- `src/data/studio.ts` — seus próprios dados (nome/whatsapp), usados na faixa de "protótipo de demonstração".
-- `src/components/` — Hero, Sobre, Serviços, Galeria, Contato — todos lidos a partir do cliente ativo.
-- `src/layouts/Layout.astro` — aplica a paleta de cores do cliente via CSS variables.
+`/` é só um índice neutro para navegar. O site do template anterior (estúdio) foi movido para `/estudio`.
 
-## Adicionar um novo cliente
+## Como rodar
 
-1. Copie `src/data/clients/exemplo.ts` para `src/data/clients/nome-do-cliente.ts`.
-2. Preencha nome, telefone, whatsapp, cores (inspiradas no Instagram do negócio), textos e fotos
-   (banco de imagens genérico, ex: `https://picsum.photos/seed/<algo>/1600/900`).
-3. No `.env`, defina:
-   ```
-   CLIENT_ID=nome-do-cliente
-   ```
-4. Rode `npm run dev` para conferir, depois `npm run build` para gerar o site estático em `./dist`.
+```bash
+npm install
+npm run dev      # servidor local em http://localhost:4321
+npm run build    # gera o site estático em ./dist
+```
 
-## Comandos
+## Onde trocar os dados
 
-| Comando           | Ação                                          |
-| :----------------- | :--------------------------------------------- |
-| `npm install`       | Instala as dependências                        |
-| `npm run dev`       | Sobe o servidor local em `localhost:4321`      |
-| `npm run build`     | Gera o site estático de produção em `./dist/`  |
-| `npm run preview`   | Pré-visualiza o build de produção localmente   |
+- **Dados de cada empresa** (nome, telefone, WhatsApp, endereço, cores, fontes, textos, números, passos, depoimentos, garantias, FAQ, imagens): `src/data/empresa-1.ts`, `empresa-2.ts` e `empresa-3.ts`. O formato está em `src/data/empresa-types.ts`. Nenhum dado de cliente fica dentro dos componentes.
+- **Perguntas frequentes comuns**: `src/data/faq-base.ts`.
+- **Constantes do simulador** (irradiação e tarifa por UF, custo por kWp, % de economia, reajuste tarifário, degradação, fator de CO₂, troca de inversor): `src/data/solar-config.ts`. Cada valor tem a fonte aproximada comentada. **Revise antes de publicar para um cliente real.**
+- **Fórmulas**: `src/lib/simulador.ts` (comentadas passo a passo). A interface está em `src/components/shared/Simulador.astro` e `src/scripts/simulador-client.ts`.
+- **Imagens**: `public/img/modelo-X/` (WebP em 640, 1280 e 1920 px). Para refazer o download, `node tools/baixar-imagens.mjs`. Créditos em `public/img/CREDITOS.md`.
 
-## Deploy por cliente (Vercel/Netlify)
-
-Cada protótipo pode virar um projeto separado apontando para este mesmo repositório,
-com a variável de ambiente `CLIENT_ID` configurada por projeto (ex: `demo-empresa.vercel.app`).
+Veja `DECISOES.md` para as decisões tomadas e os testes do simulador.

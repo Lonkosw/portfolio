@@ -1,0 +1,267 @@
+---
+/**
+ * Simulador de economia na conta de luz. Componente único usado pelas 3 landings.
+ * A lógica vive em src/lib/simulador.ts; os parâmetros em src/data/solar-config.ts.
+ * `variante` muda só a apresentação: painel (escuro), etapas (questionário) ou ficha (relatório).
+ */
+import { AVISO_SIMULACAO } from '../../data/solar-config';
+
+interface Tema {
+  fundo: string; card: string; borda: string; texto: string; textoSuave: string;
+  destaque: string; destaqueTexto: string; linhaSem: string; linhaCom: string; raio: string; raioBotao: string;
+  fonteDisplay: string; fonteMono?: string;
+}
+interface Props {
+  variante: 'painel' | 'etapas' | 'ficha';
+  id: string;
+  empresa: string;
+  cidade: string;
+  whatsapp: string;
+  uf: string;
+  conta?: number;
+  tipo?: 'residencial' | 'comercial' | 'rural';
+  tema: Tema;
+}
+const { variante, id, empresa, cidade, whatsapp, uf, conta = 600, tipo = 'residencial', tema } = Astro.props;
+
+const estilo = [
+  `--sim-fundo:${tema.fundo}`, `--sim-card:${tema.card}`, `--sim-borda:${tema.borda}`, `--sim-texto:${tema.texto}`,
+  `--sim-texto-suave:${tema.textoSuave}`, `--sim-destaque:${tema.destaque}`, `--sim-destaque-texto:${tema.destaqueTexto}`,
+  `--sim-linha-sem:${tema.linhaSem}`, `--sim-linha-com:${tema.linhaCom}`, `--sim-raio:${tema.raio}`, `--sim-raio-botao:${tema.raioBotao}`,
+  `--sim-fonte-display:${tema.fonteDisplay}`, `--sim-fonte-mono:${tema.fonteMono ?? tema.fonteDisplay}`,
+  `--sim-grade:color-mix(in srgb, ${tema.texto} 14%, transparent)`, `--sim-fundo-ponto:${tema.fundo}`,
+].join(';');
+
+const tipos = [
+  ['residencial', 'Residencial'],
+  ['comercial', 'Comercial'],
+  ['rural', 'Rural'],
+];
+
+// Cartões de resultado: [chave, rótulo, formato, tipo]
+const metricas: [string, string, string][] = [
+  ['economiaMensal', 'Economia por mês', 'brl'],
+  ['economiaAnual', 'Economia por ano', 'brl'],
+  ['kwp', 'Potência do sistema', 'kwp'],
+  ['paineis', 'Painéis solares', 'int'],
+  ['areaM2', 'Área necessária', 'm2'],
+  ['economiaLiquida25', 'Economia líquida em 25 anos', 'compacto'],
+];
+const ehPainel = variante === 'painel';
+const ehEtapas = variante === 'etapas';
+const ehFicha = variante === 'ficha';
+---
+
+<div
+  data-simulador
+  data-empresa={empresa}
+  data-cidade={cidade}
+  data-whatsapp={whatsapp}
+  data-uf={uf}
+  data-conta={conta}
+  style={estilo}
+  class:list={[
+    'sim relative w-full text-[var(--sim-texto)]',
+    ehPainel && 'sim-painel rounded-[var(--sim-raio)] border border-[var(--sim-borda)] bg-[var(--sim-card)] p-5 backdrop-blur-xl sm:p-8',
+    ehEtapas && 'sim-etapas rounded-[var(--sim-raio)] border border-[var(--sim-borda)] bg-[var(--sim-card)] p-5 shadow-[0_20px_60px_-30px_rgba(20,60,30,.35)] sm:p-9',
+    ehFicha && 'sim-ficha border-2 border-[var(--sim-texto)] bg-[var(--sim-card)]',
+  ]}
+>
+  {/* ============ CONTROLES ============ */}
+  {ehEtapas && (
+    <ol class="mb-7 flex items-center gap-2" aria-label="Etapas da simulação">
+      {[1, 2, 3].map((n) => (
+        <li data-etapa-ponto={n} data-ativo={n === 1} class="h-2 flex-1 rounded-full bg-[var(--sim-borda)] transition-colors data-[ativo=true]:bg-[var(--sim-destaque)]" aria-current={n === 1 ? 'step' : 'false'}>
+          <span class="sr-only">Etapa {n} de 3</span>
+        </li>
+      ))}
+    </ol>
+  )}
+
+  <div class:list={[ehPainel && 'grid gap-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]', ehFicha && 'grid lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]']}>
+    <div class:list={[ehPainel && 'space-y-7 lg:sticky lg:top-24 lg:self-start', ehFicha && 'space-y-6 border-b-2 border-[var(--sim-texto)] p-5 sm:p-8 lg:border-b-0 lg:border-r-2']}>
+      {ehFicha && (
+        <p class="font-[family-name:var(--sim-fonte-mono)] text-xs font-bold uppercase tracking-[.2em] text-[var(--sim-texto-suave)]">Dados de entrada</p>
+      )}
+
+      <div data-etapa={ehEtapas ? 1 : undefined} class:list={[ehEtapas && 'space-y-5']}>
+        {ehEtapas && <h3 class="font-[family-name:var(--sim-fonte-display)] text-2xl font-bold">Quanto você paga de luz por mês?</h3>}
+        <div>
+          <label for={`${id}-conta`} class:list={['mb-2 block text-sm font-semibold', ehFicha && 'font-[family-name:var(--sim-fonte-mono)] uppercase tracking-wider']}>
+            Valor médio da conta de luz
+          </label>
+          <div class="flex items-center gap-3">
+            <span class="text-lg font-bold" aria-hidden="true">R$</span>
+            <input
+              id={`${id}-conta`} data-sim="conta" type="number" inputmode="numeric" min="100" max="100000" step="10" value={conta}
+              class:list={['h-12 w-full min-w-0 border-2 border-[var(--sim-borda)] bg-transparent px-4 text-2xl font-bold tabular-nums outline-none focus-visible:border-[var(--sim-destaque)] focus-visible:ring-2 focus-visible:ring-[var(--sim-destaque)]', ehFicha ? 'rounded-none font-[family-name:var(--sim-fonte-mono)]' : 'rounded-xl']}
+            />
+          </div>
+          <input
+            data-sim="slider" type="range" min="0" max="1000" step="1" value="500" aria-label="Ajustar valor da conta de luz"
+            class="sim-slider mt-4 h-11 w-full cursor-pointer"
+          />
+          <div class="flex justify-between text-xs text-[var(--sim-texto-suave)]"><span>R$ 100</span><span>R$ 20 mil</span></div>
+        </div>
+        {ehEtapas && <button type="button" data-etapa-proxima class="sim-btn mt-2 w-full">Continuar</button>}
+      </div>
+
+      <div data-etapa={ehEtapas ? 2 : undefined} hidden={ehEtapas} class:list={[ehEtapas && 'space-y-5', !ehEtapas && 'space-y-6']}>
+        {ehEtapas && <h3 class="font-[family-name:var(--sim-fonte-display)] text-2xl font-bold">Onde fica e que tipo de imóvel?</h3>}
+        <div>
+          <label for={`${id}-uf`} class:list={['mb-2 block text-sm font-semibold', ehFicha && 'font-[family-name:var(--sim-fonte-mono)] uppercase tracking-wider']}>Estado</label>
+          <select
+            id={`${id}-uf`} data-sim="uf"
+            class:list={['h-12 w-full border-2 border-[var(--sim-borda)] bg-[var(--sim-card)] px-4 text-base font-medium outline-none focus-visible:border-[var(--sim-destaque)] focus-visible:ring-2 focus-visible:ring-[var(--sim-destaque)]', ehFicha ? 'rounded-none' : 'rounded-xl']}
+          ></select>
+        </div>
+
+        <fieldset>
+          <legend class:list={['mb-2 text-sm font-semibold', ehFicha && 'font-[family-name:var(--sim-fonte-mono)] uppercase tracking-wider']}>Tipo de imóvel</legend>
+          <div class="grid grid-cols-3 gap-2">
+            {tipos.map(([valor, rotulo]) => (
+              <label class="relative block">
+                <input type="radio" name={`${id}-tipo`} value={valor} checked={valor === tipo} class="peer sr-only" />
+                <span
+                  class:list={['flex h-12 cursor-pointer items-center justify-center border-2 border-[var(--sim-borda)] px-2 text-sm font-bold transition-colors peer-checked:border-[var(--sim-destaque)] peer-checked:bg-[var(--sim-destaque)] peer-checked:text-[var(--sim-destaque-texto)] peer-focus-visible:ring-2 peer-focus-visible:ring-[var(--sim-destaque)] peer-focus-visible:ring-offset-2', ehFicha ? 'rounded-none' : 'rounded-xl']}
+                >{rotulo}</span>
+              </label>
+            ))}
+          </div>
+        </fieldset>
+
+        <details class="group">
+          <summary class="flex min-h-11 cursor-pointer list-none items-center gap-2 text-sm font-semibold text-[var(--sim-texto-suave)] hover:text-[var(--sim-texto)]">
+            <span aria-hidden="true" class="inline-block transition-transform group-open:rotate-90">›</span>
+            Sei a tarifa exata (opcional)
+          </summary>
+          <div class="pt-2">
+            <label for={`${id}-tarifa`} class="mb-2 block text-sm">Tarifa em R$/kWh, como aparece na sua fatura</label>
+            <input
+              id={`${id}-tarifa`} data-sim="tarifa" type="number" inputmode="decimal" min="0.2" max="3" step="0.01"
+              class:list={['h-12 w-full border-2 border-[var(--sim-borda)] bg-transparent px-4 text-base outline-none focus-visible:border-[var(--sim-destaque)] focus-visible:ring-2 focus-visible:ring-[var(--sim-destaque)]', ehFicha ? 'rounded-none' : 'rounded-xl']}
+            />
+            <p data-sim="dica-tarifa" class="mt-2 text-xs text-[var(--sim-texto-suave)]"></p>
+          </div>
+        </details>
+        {ehEtapas && (
+          <div class="flex gap-3">
+            <button type="button" data-etapa-anterior class="sim-btn sim-btn-sec">Voltar</button>
+            <button type="button" data-etapa-proxima class="sim-btn flex-1">Ver minha economia</button>
+          </div>
+        )}
+      </div>
+    </div>
+
+    {/* ============ RESULTADOS ============ */}
+    <div data-etapa={ehEtapas ? 3 : undefined} hidden={ehEtapas} class:list={[ehPainel && 'space-y-5', ehFicha && 'p-5 sm:p-8', ehEtapas && 'space-y-5']}>
+      {ehEtapas && (
+        <div class="text-center">
+          <p class="text-sm font-semibold text-[var(--sim-texto-suave)]">Com a energia solar, você economiza cerca de</p>
+          <p class="font-[family-name:var(--sim-fonte-display)] text-5xl font-extrabold tabular-nums text-[var(--sim-destaque)] sm:text-6xl" data-out="economiaMensal" data-fmt="brl" aria-live="polite">R$ 0</p>
+          <p class="text-sm text-[var(--sim-texto-suave)]">por mês na conta de luz</p>
+        </div>
+      )}
+
+      {ehFicha && (
+        <p class="mb-3 font-[family-name:var(--sim-fonte-mono)] text-xs font-bold uppercase tracking-[.2em] text-[var(--sim-texto-suave)]">Relatório de dimensionamento</p>
+      )}
+
+      {ehPainel && (
+        <div class="grid grid-cols-2 gap-3 sm:grid-cols-3" aria-live="polite">
+          {metricas.map(([chave, rotulo, fmt], i) => (
+            <div class:list={['rounded-2xl border border-[var(--sim-borda)] bg-white/[.04] p-4', i === 0 && 'border-[var(--sim-destaque)]/50 bg-[var(--sim-destaque)]/10']}>
+              <p class="text-xs font-medium uppercase tracking-wider text-[var(--sim-texto-suave)]">{rotulo}</p>
+              <p class="mt-1 font-[family-name:var(--sim-fonte-display)] text-xl font-bold tabular-nums sm:text-3xl" data-out={chave} data-fmt={fmt}>—</p>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {ehEtapas && (
+        <dl class="grid grid-cols-2 gap-3 sm:grid-cols-6">
+          {metricas.slice(1).map(([chave, rotulo, fmt], i) => (
+            <div class:list={['rounded-2xl bg-[var(--sim-fundo)] p-4', i < 3 ? 'sm:col-span-2' : 'sm:col-span-3']}>
+              <dt class="text-xs font-semibold text-[var(--sim-texto-suave)]">{rotulo}</dt>
+              <dd class="mt-1 text-xl font-extrabold tabular-nums" data-out={chave} data-fmt={fmt}>—</dd>
+            </div>
+          ))}
+        </dl>
+      )}
+
+      {ehFicha && (
+        <dl class="font-[family-name:var(--sim-fonte-mono)] text-sm">
+          {metricas.map(([chave, rotulo, fmt]) => (
+            <div class="flex items-baseline gap-2 border-b border-dashed border-[var(--sim-texto)]/40 py-2.5">
+              <dt class="uppercase tracking-wide">{rotulo}</dt>
+              <span class="flex-1" aria-hidden="true"></span>
+              <dd class="text-base font-bold tabular-nums" data-out={chave} data-fmt={fmt}>—</dd>
+            </div>
+          ))}
+        </dl>
+      )}
+
+      {/* Investimento, payback e CO2 em linhas próprias (variam entre texto e número) */}
+      <div class:list={['grid gap-3', ehPainel && 'sm:grid-cols-3', ehEtapas && 'sm:grid-cols-3', ehFicha && 'mt-4 sm:grid-cols-3']}>
+        <div class:list={['p-4', ehPainel && 'rounded-2xl border border-[var(--sim-borda)] bg-white/[.04]', ehEtapas && 'rounded-2xl bg-[var(--sim-fundo)]', ehFicha && 'border-2 border-[var(--sim-texto)]']}>
+          <p class="text-xs font-semibold uppercase tracking-wider text-[var(--sim-texto-suave)]">Investimento estimado</p>
+          <p class="mt-1 text-base font-bold leading-snug tabular-nums" data-out-texto="faixa-invest">—</p>
+        </div>
+        <div class:list={['p-4', ehPainel && 'rounded-2xl border border-[var(--sim-borda)] bg-white/[.04]', ehEtapas && 'rounded-2xl bg-[var(--sim-fundo)]', ehFicha && 'border-2 border-[var(--sim-texto)]']}>
+          <p class="text-xs font-semibold uppercase tracking-wider text-[var(--sim-texto-suave)]">Retorno do investimento</p>
+          <p class="mt-1 text-xl font-extrabold tabular-nums" data-out="paybackAnos" data-fmt="anos">—</p>
+          <p class="text-xs text-[var(--sim-texto-suave)]" data-out-texto="faixa-payback"></p>
+        </div>
+        <div class:list={['p-4', ehPainel && 'rounded-2xl border border-[var(--sim-borda)] bg-white/[.04]', ehEtapas && 'rounded-2xl bg-[var(--sim-fundo)]', ehFicha && 'border-2 border-[var(--sim-texto)]']}>
+          <p class="text-xs font-semibold uppercase tracking-wider text-[var(--sim-texto-suave)]">CO₂ evitado por ano</p>
+          <p class="mt-1 text-xl font-extrabold tabular-nums"><span data-out="co2KgAno" data-fmt="kg">—</span></p>
+          <p class="text-xs text-[var(--sim-texto-suave)]">equivale a <strong data-out="arvores" data-fmt="int">0</strong> árvores plantadas</p>
+        </div>
+      </div>
+
+      <figure class:list={[ehFicha && 'mt-5 border-2 border-[var(--sim-texto)] p-4', ehPainel && 'rounded-2xl border border-[var(--sim-borda)] bg-white/[.03] p-4', ehEtapas && 'rounded-2xl bg-[var(--sim-fundo)] p-4']}>
+        <figcaption class="mb-2 flex flex-wrap items-center justify-between gap-2 text-xs font-semibold">
+          <span>Gasto acumulado com energia (R$), em 25 anos</span>
+          <span class="flex gap-4 font-medium text-[var(--sim-texto-suave)]">
+            <span class="inline-flex items-center gap-1.5"><i class="inline-block h-1 w-5 rounded-full" style="background:var(--sim-linha-sem)"></i>Sem solar</span>
+            <span class="inline-flex items-center gap-1.5"><i class="inline-block h-1 w-5 rounded-full" style="background:var(--sim-linha-com)"></i>Com solar</span>
+          </span>
+        </figcaption>
+        <div data-sim="grafico"></div>
+      </figure>
+
+      <a data-sim="cta" href="#" target="_blank" rel="noopener" class="sim-btn w-full text-center">
+        <svg aria-hidden="true" viewBox="0 0 24 24" class="h-5 w-5 fill-current"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.2 14c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.2-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.8 0-1.4.7-2 1-2.3.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.3 0 .5l-.3.5c-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.1 1 2 1.3 2.3 1.4.3.1.4.1.6-.1l.8-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.8-.1 1.4Z"/></svg>
+        Receber orçamento pelo WhatsApp
+      </a>
+      <p class="text-center text-xs text-[var(--sim-texto-suave)]">{AVISO_SIMULACAO} Valores nominais, sem descontar a inflação.</p>
+    </div>
+  </div>
+</div>
+
+<style is:global>
+  [hidden] { display: none !important; }
+  .sim-btn {
+    display: inline-flex; min-height: 3rem; align-items: center; justify-content: center; gap: .6rem;
+    padding: .75rem 1.5rem; font-weight: 800; cursor: pointer;
+    background: var(--sim-destaque); color: var(--sim-destaque-texto);
+    border-radius: var(--sim-raio-botao); border: 2px solid var(--sim-destaque);
+    transition: transform .2s ease, opacity .2s ease;
+  }
+  .sim-ficha .sim-btn { border-radius: 0; margin: 0; }
+  .sim-btn:hover { transform: translateY(-2px); }
+  .sim-btn:active { transform: translateY(0) scale(.98); }
+  .sim-btn:focus-visible { outline: 3px solid var(--sim-texto); outline-offset: 3px; }
+  .sim-btn-sec { background: transparent; color: var(--sim-texto); border-color: var(--sim-borda); }
+  .sim-slider { -webkit-appearance: none; appearance: none; background: transparent; }
+  .sim-slider::-webkit-slider-runnable-track { height: 6px; border-radius: 99px; background: var(--sim-borda); }
+  .sim-slider::-moz-range-track { height: 6px; border-radius: 99px; background: var(--sim-borda); }
+  .sim-slider::-webkit-slider-thumb { -webkit-appearance: none; height: 28px; width: 28px; margin-top: -11px; border-radius: 50%; background: var(--sim-destaque); border: 4px solid var(--sim-fundo); box-shadow: 0 0 0 2px var(--sim-destaque); }
+  .sim-slider::-moz-range-thumb { height: 20px; width: 20px; border-radius: 50%; background: var(--sim-destaque); border: 4px solid var(--sim-fundo); box-shadow: 0 0 0 2px var(--sim-destaque); }
+  .sim-slider:focus-visible { outline: 3px solid var(--sim-destaque); outline-offset: 4px; border-radius: 8px; }
+  @media (prefers-reduced-motion: reduce) { .sim-btn, .sim-btn:hover { transition: none; transform: none; } }
+</style>
+
+<script>
+  import '../../scripts/simulador-client';
+</script>
