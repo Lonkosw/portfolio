@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 900" width="900" height="900" preserveAspectRatio="xMidYMid slice"><rect width="900" height="900" fill="#f2f0eb"/><filter id="n137" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+<feTurbulence type="fractalNoise" baseFrequency="0.0032" numOctaves="3" seed="140"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0.788  0 0 0 0 0.773  0 0 0 0 0.733  0 1.6 0 0 -0.55"/></filter>
+<rect width="900" height="900" filter="url(#n137)" opacity="0.5"/>
+<filter id="vf137" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
+<feTurbulence type="fractalNoise" baseFrequency="0.00528 0.01440" numOctaves="5" seed="148"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0.788  0 0 0 0 0.773  0 0 0 0 0.733  1 0 0 0 0"/>
+<feComponentTransfer><feFuncA type="table" tableValues="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.2 0.73 0.73 0.2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0"/></feComponentTransfer>
+</filter><g transform="rotate(-32 450 450)" opacity="0.75"><rect x="-300" y="-300" width="1500" height="1500" filter="url(#vf137)"/></g>
+<filter id="vg137" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
+<feTurbulence type="fractalNoise" baseFrequency="0.00220 0.00600" numOctaves="5" seed="137"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0.541  0 0 0 0 0.549  0 0 0 0 0.569  1 0 0 0 0"/>
+<feComponentTransfer><feFuncA type="table" tableValues="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.28 0.76 0.76 0.28 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0"/></feComponentTransfer>
+</filter><g transform="rotate(-32 450 450)" opacity="0.95"><rect x="-300" y="-300" width="1500" height="1500" filter="url(#vg137)"/></g>
+<filter id="vs137" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
+<feTurbulence type="fractalNoise" baseFrequency="0.00286 0.00780" numOctaves="5" seed="166"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0.722  0 0 0 0 0.639  0 0 0 0 0.494  1 0 0 0 0"/>
+<feComponentTransfer><feFuncA type="table" tableValues="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.57 0.57 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0"/></feComponentTransfer>
+</filter><g transform="rotate(-32 450 450)" opacity="0.8"><rect x="-300" y="-300" width="1500" height="1500" filter="url(#vs137)"/></g></svg>

@@ -1,0 +1,441 @@
+---
+import '@fontsource-variable/cormorant-garamond';
+import '@fontsource-variable/cormorant-garamond/wght-italic.css';
+import '@fontsource-variable/jost';
+import '../styles/m1.css';
+import Base from '../layouts/Base.astro';
+import Img from '../components/Img.astro';
+import Icon from '../components/Icon.astro';
+import Calculator from '../components/Calculator.astro';
+import WhatsFloat from '../components/WhatsFloat.astro';
+import { maison as n } from '../data/modelo-1.ts';
+import { CATEGORIAS, MATERIAIS } from '../data/marmoraria-config.ts';
+
+const M = 'modelo-1';
+const anos = new Date().getFullYear() - n.fundacao;
+const catNome = Object.fromEntries(CATEGORIAS.map((c) => [c.id, c.nome]));
+const ambientes = ['Todas', ...Array.from(new Set(n.galeria.map((g) => g.ambiente)))];
+const brl = (v: number) => v.toLocaleString('pt-BR');
+const pedras = MATERIAIS.map((m) => ({
+  ...m,
+  json: JSON.stringify({
+    id: m.id,
+    nome: m.nome,
+    descricao: m.descricao,
+    categoria: catNome[m.categoria].replace(/s$/, ''),
+    preco: `R$ ${brl(m.preco.min)} a R$ ${brl(m.preco.max)} por m²`,
+    usos: m.usos,
+    textura: `/tex/${m.id}.svg`,
+  }),
+}));
+const destaques = n.servicos.filter((s) => s.imagem);
+const demais = n.servicos.filter((s) => !s.imagem);
+const nav = [
+  ['Acervo', '#acervo'],
+  ['Calculadora', '#calculadora'],
+  ['Serviços', '#servicos'],
+  ['Obras', '#obras'],
+  ['Processo', '#processo'],
+  ['Contato', '#contato'],
+];
+---
+
+<Base n={n} og={{ modelo: M, nome: 'hero' }} favicon={{ fundo: '#0b0b0c', letra: '#c9a96a' }} corTema="#09090a" bodyClass="m1">
+  <a class="skip" href="#conteudo">Ir para o conteúdo</a>
+
+  <header class="hdr" data-header>
+    <div class="wrap hdr-in">
+      <a href="#topo" class="logo" aria-label={`${n.nome} — início`}>
+        <b data-biz="nome">{n.nome}</b>
+        <small>Pedras nobres</small>
+      </a>
+      <nav class="nav" aria-label="Principal">
+        {nav.map(([t, h]) => <a href={h}>{t}</a>)}
+      </nav>
+      <a class="btn hdr-cta" href="#calculadora">Orçamento</a>
+      <button class="menu-btn" type="button" data-menu-btn aria-expanded="false" aria-controls="drawer" aria-label="Abrir menu">
+        <Icon name="menu" />
+      </button>
+    </div>
+    <nav class="drawer" id="drawer" data-menu data-open="false" aria-label="Menu móvel">
+      {nav.map(([t, h]) => <a class="dl" href={h}>{t}</a>)}
+      <a class="btn btn--solid mt-6" href="#calculadora">Calcule seu orçamento</a>
+    </nav>
+  </header>
+
+  <main id="conteudo">
+    <!-- HERO -->
+    <section class="hero" id="topo" aria-labelledby="h-hero">
+      <div class="hero-media" data-parallax="0.05">
+        <Img modelo={M} nome={n.hero.imagem} alt={n.hero.alt} eager sizes="100vw" />
+      </div>
+      <div class="wrap hero-in">
+        <p class="eyebrow" data-reveal>Ateliê de pedras nobres · <span data-biz="cidade">{n.cidade}</span></p>
+        <h1 id="h-hero" data-reveal style="--d:120ms">{n.hero.titulo} <em>{n.hero.destaque}</em></h1>
+        <p class="lead" data-reveal style="--d:240ms">{n.hero.texto}</p>
+        <div class="hero-ctas" data-reveal style="--d:360ms">
+          <a class="btn btn--solid" href="#calculadora">{n.hero.cta}</a>
+          <a class="btn" href="#acervo">{n.hero.ctaSecundario}</a>
+        </div>
+        <ul class="hero-selos" data-reveal style="--d:480ms">
+          {n.hero.selos.map((s) => <li>{s}</li>)}
+        </ul>
+      </div>
+      <span class="scroll-hint" aria-hidden="true">Role</span>
+    </section>
+
+    <!-- NÚMEROS + VEIO QUE SE DESENHA -->
+    <section class="prova" aria-label="Números do ateliê">
+      <div class="veio" data-scroll-progress aria-hidden="true">
+        <svg viewBox="0 0 1600 560" preserveAspectRatio="xMidYMid slice" fill="none" stroke-linecap="round">
+          <path d="M-60 430C190 390 330 110 570 210S910 530 1150 300 1450 50 1700 150" stroke="#c9a96a" stroke-width="2" opacity=".6"></path>
+          <path d="M-60 430C190 390 330 110 570 210S910 530 1150 300 1450 50 1700 150" stroke="#c9a96a" stroke-width="9" opacity=".08"></path>
+          <path d="M-60 510C260 480 420 300 700 360S1010 570 1300 420 1500 250 1700 310" stroke="#e9dcc0" stroke-width="1" opacity=".34"></path>
+          <path d="M300-20C390 150 330 270 520 330S640 520 780 640" stroke="#c9a96a" stroke-width="1.3" opacity=".45"></path>
+          <path d="M980-10C1040 120 1180 140 1240 260S1320 470 1480 600" stroke="#e9dcc0" stroke-width=".9" opacity=".3"></path>
+          <path d="M120 120C260 150 330 40 470 70" stroke="#c9a96a" stroke-width=".8" opacity=".4"></path>
+        </svg>
+        <div class="veio-cover"></div>
+      </div>
+      <div class="wrap">
+        <div class="prova-grid">
+          <div data-reveal>
+            <p class="prova-n"><span data-count={anos}>{anos}</span></p>
+            <p class="prova-l">Anos de ateliê</p>
+          </div>
+          <div data-reveal style="--d:100ms">
+            <p class="prova-n"><span data-count={n.pecas}>{n.pecas.toLocaleString('pt-BR')}</span></p>
+            <p class="prova-l">Peças entregues</p>
+          </div>
+          <div data-reveal style="--d:200ms">
+            <p class="prova-n"><span data-count={n.m2}>{n.m2.toLocaleString('pt-BR')}</span></p>
+            <p class="prova-l">m² instalados</p>
+          </div>
+          <div data-reveal style="--d:300ms">
+            <p class="prova-n"><span data-count={n.nota} data-dec="1">{String(n.nota).replace('.', ',')}</span></p>
+            <p class="prova-l">
+              <span class="stars" aria-hidden="true">{[0, 1, 2, 3, 4].map(() => <Icon name="estrela" size={14} class="fill-current" />)}</span>
+              Nota no Google · {n.avaliacoes} avaliações
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ACERVO -->
+    <section class="cat" id="acervo" aria-labelledby="h-acervo">
+      <div class="wrap">
+        <div class="cat-top">
+          <div data-reveal>
+            <p class="eyebrow">Acervo</p>
+            <span class="rule my-5"></span>
+            <h2 id="h-acervo" class="h2">Pedras que <em>contam uma história</em></h2>
+          </div>
+          <div class="fchips" role="group" aria-label="Filtrar pedras" data-filter-group="#grade-pedras" data-reveal>
+            <button type="button" class="fchip" data-filter="todos" aria-pressed="true">Todas</button>
+            {n.catalogoFiltros.map((c) => <button type="button" class="fchip" data-filter={c} aria-pressed="false">{catNome[c]}</button>)}
+          </div>
+        </div>
+        <div class="cat-grid" id="grade-pedras">
+          {
+            pedras.map((p) => (
+              <button type="button" class="pedra" data-cat={p.categoria} data-amostra={p.json} aria-label={`Ver amostra: ${p.nome}`}>
+                <span class="pedra-clip"><span class="pedra-tex" style={`background-image:url(/tex/${p.id}.svg)`}></span></span>
+                <span class="pedra-cat">{catNome[p.categoria].replace(/s$/, '')}</span>
+                <span class="pedra-info">
+                  <b>{p.nome}</b>
+                  <span>R$ {brl(p.preco.min)} – {brl(p.preco.max)} / m²</span>
+                </span>
+              </button>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <dialog class="amostra" id="amostra-dialog" aria-label="Amostra da pedra">
+      <button class="amostra-x" type="button" data-fechar aria-label="Fechar"><Icon name="fechar" /></button>
+      <div class="amostra-grid">
+        <div class="amostra-tex" data-a="tex" role="img" aria-label="Amostra ampliada da pedra"></div>
+        <div class="amostra-txt">
+          <p class="eyebrow" data-a="cat"></p>
+          <h3 data-a="nome"></h3>
+          <p data-a="desc"></p>
+          <div>
+            <p class="eyebrow" style="color:var(--color-mist)">Usos indicados</p>
+            <ul class="amostra-usos mt-3" data-a="usos"></ul>
+          </div>
+          <p class="font-serif text-2xl" data-a="preco"></p>
+          <div class="flex flex-wrap gap-3">
+            <button type="button" class="btn btn--solid" data-a="usar">Usar na calculadora</button>
+            <a class="btn" data-a="cta" data-wa="Olá, {nome}! Quero um orçamento." href="#">WhatsApp</a>
+          </div>
+        </div>
+      </div>
+    </dialog>
+
+    <!-- CALCULADORA -->
+    <Calculator
+      variante="luxo"
+      eyebrow="Calculadora de orçamento"
+      titulo="Estime o valor do seu projeto em minutos"
+      subtitulo="Escolha a peça, as medidas e a pedra. Mostramos uma faixa de valores, o desenho em proporção e o comparativo entre materiais."
+    />
+
+    <!-- SERVIÇOS -->
+    <section class="serv" id="servicos" aria-labelledby="h-serv">
+      <div class="wrap">
+        <div class="serv-head" data-reveal>
+          <p class="eyebrow">Serviços</p>
+          <h2 id="h-serv" class="h2">Do desenho ao <em>último acabamento</em></h2>
+        </div>
+        <div class="serv-feat">
+          {
+            destaques.map((s, i) => (
+              <article class="serv-card" data-reveal style={`--d:${i * 90}ms`}>
+                <Img modelo={M} nome={s.imagem!} alt={`${s.titulo}: ${s.texto}`} sizes="(min-width:1100px) 40vw, (min-width:768px) 50vw, 100vw" />
+                <div>
+                  <Icon name={s.icone} size={30} class="ico" />
+                  <h3>{s.titulo}</h3>
+                  <p>{s.texto}</p>
+                </div>
+              </article>
+            ))
+          }
+        </div>
+        <div class="serv-list">
+          {
+            demais.map((s, i) => (
+              <article class="serv-row" data-reveal>
+                <span class="n">0{destaques.length + i + 1}</span>
+                <h3>{s.titulo}</h3>
+                <p>{s.texto}</p>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- OBRAS -->
+    <section class="gal" id="obras" aria-labelledby="h-obras">
+      <div class="wrap">
+        <div class="cat-top">
+          <div data-reveal>
+            <p class="eyebrow">Obras</p>
+            <span class="rule my-5"></span>
+            <h2 id="h-obras" class="h2">Projetos <em>entregues</em></h2>
+          </div>
+          <div class="fchips" role="group" aria-label="Filtrar obras por ambiente" data-filter-group="#grade-obras" data-reveal>
+            {ambientes.map((a, i) => <button type="button" class="fchip" data-filter={i === 0 ? 'todos' : a} aria-pressed={i === 0 ? 'true' : 'false'}>{a}</button>)}
+          </div>
+        </div>
+        <div class="gal-grid" id="grade-obras">
+          {
+            n.galeria.map((g) => (
+              <figure class="obra" data-cat={g.ambiente}>
+                <Img modelo={M} nome={g.imagem} alt={g.alt} sizes="(min-width:1024px) 33vw, (min-width:640px) 50vw, 100vw" />
+                <figcaption>
+                  <span>{g.ambiente}</span>
+                  <b>{g.titulo}</b>
+                  <i>{g.detalhe}</i>
+                </figcaption>
+              </figure>
+            ))
+          }
+        </div>
+
+        <div class="mt-20" data-reveal>
+          <p class="eyebrow">Antes e depois</p>
+          <h3 class="h2 mb-8 mt-3" style="font-size:clamp(1.9rem,4.5vw,3.2rem)">{n.antesDepois.titulo}</h3>
+          <div class="ba" data-ba>
+            <Img modelo={M} nome={n.antesDepois.depois} alt={n.antesDepois.altDepois} sizes="(min-width:1280px) 1200px, 100vw" />
+            <div class="ba-antes">
+              <Img modelo={M} nome={n.antesDepois.antes} alt={n.antesDepois.altAntes} sizes="(min-width:1280px) 1200px, 100vw" />
+            </div>
+            <span class="ba-tag" style="left:1rem">Antes</span>
+            <span class="ba-tag" style="right:1rem">Depois</span>
+            <span class="ba-linha"></span>
+            <label class="sr-only" for="ba-range">Comparar antes e depois</label>
+            <input id="ba-range" type="range" min="0" max="100" value="50" />
+            <span class="ba-alca" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l-6 6 6 6M15 6l6 6-6 6"></path></svg>
+            </span>
+          </div>
+          <p class="mt-3 text-sm" style="color:var(--color-mist)">{n.antesDepois.legenda}</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROCESSO -->
+    <section class="proc" id="processo" aria-labelledby="h-proc">
+      <div class="wrap">
+        <div data-reveal>
+          <p class="eyebrow">Como funciona</p>
+          <span class="rule my-5"></span>
+          <h2 id="h-proc" class="h2">Cinco etapas, <em>nenhuma surpresa</em></h2>
+        </div>
+        <ol class="proc-list">
+          {
+            n.passos.map((p, i) => (
+              <li data-reveal style={`--d:${i * 110}ms`}>
+                <span class="proc-n">{['I', 'II', 'III', 'IV', 'V'][i]}</span>
+                <h3>{p.titulo}</h3>
+                <p>{p.texto}</p>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </section>
+
+    <!-- DIFERENCIAIS -->
+    <section class="dif" aria-labelledby="h-dif">
+      <div class="dif-bg" aria-hidden="true" data-parallax="0.04">
+        <Img modelo={M} nome="veio-preto" alt="" sizes="100vw" />
+      </div>
+      <div class="wrap">
+        <div data-reveal>
+          <p class="eyebrow">Diferenciais</p>
+          <span class="rule my-5"></span>
+          <h2 id="h-dif" class="h2">O cuidado que <em>não aparece no preço</em></h2>
+        </div>
+        <div class="dif-grid">
+          {
+            n.diferenciais.map((d, i) => (
+              <article class="dif-item" data-reveal style={`--d:${i * 80}ms`}>
+                <Icon name={d.icone} size={34} stroke={1.3} />
+                <h3>{d.titulo}</h3>
+                <p>{d.texto}</p>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- DEPOIMENTOS -->
+    <section class="dep" aria-labelledby="h-dep">
+      <div class="wrap">
+      <div data-reveal>
+        <p class="eyebrow">Depoimentos</p>
+        <span class="rule my-5"></span>
+        <h2 id="h-dep" class="h2">Quem já <em>escolheu a sua pedra</em></h2>
+      </div>
+      <div class="dep-track" tabindex="0" role="region" aria-label="Depoimentos de clientes">
+        {
+          n.depoimentos.map((d) => (
+            <figure class="dep-card m-0">
+              <div>
+                <span class="stars" aria-label="5 de 5 estrelas">{[0, 1, 2, 3, 4].map(() => <Icon name="estrela" size={14} class="fill-current" />)}</span>
+                <blockquote class="mt-4">“{d.texto}”</blockquote>
+              </div>
+              <figcaption class="flex items-center gap-3">
+                <span class="dep-av" aria-hidden="true">{d.nome.charAt(0)}</span>
+                <span>
+                  <b class="block font-normal">{d.nome}</b>
+                  <span style="color:var(--color-mist);font-size:.78rem">{d.obra} · {d.bairro}</span>
+                </span>
+              </figcaption>
+            </figure>
+          ))
+        }
+      </div>
+      </div>
+    </section>
+
+    <!-- GUIA -->
+    <section class="guia" aria-labelledby="h-guia">
+      <div class="wrap">
+        <div data-reveal>
+          <p class="eyebrow">Guia rápido</p>
+          <span class="rule my-5"></span>
+          <h2 id="h-guia" class="h2">Qual pedra <em>escolher?</em></h2>
+        </div>
+        <div class="guia-grid">
+          {
+            n.guia.map((g, i) => (
+              <article class="guia-col" data-reveal style={`--d:${i * 100}ms`}>
+                <h3>{g.ambiente}</h3>
+                <p>{g.recomendacao}</p>
+                <p class="guia-evitar"><b>Evite</b>{g.evitar}</p>
+                <ul class="guia-pedras">{g.pedras.map((p) => <li>{p}</li>)}</ul>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq" aria-labelledby="h-faq">
+      <div class="wrap faq-grid">
+        <div data-reveal>
+          <p class="eyebrow">Perguntas frequentes</p>
+          <span class="rule my-5"></span>
+          <h2 id="h-faq" class="h2">Tudo o que costumam <em>perguntar</em></h2>
+          <a class="btn mt-8" data-wa="Olá, {nome}! Tenho uma dúvida sobre pedras e orçamento." href="#">Falar com o ateliê</a>
+        </div>
+        <div>
+          {
+            n.faq.map((f, i) => (
+              <details name="faq" open={i === 0}>
+                <summary>{f.pergunta}<Icon name="chevron" size={22} /></summary>
+                <p>{f.resposta}</p>
+              </details>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA FINAL -->
+    <section class="final" aria-labelledby="h-final">
+      <div class="final-bg" aria-hidden="true" data-parallax="0.05">
+        <Img modelo={M} nome="cozinha-bancada-veio" alt="" sizes="100vw" />
+      </div>
+      <div class="wrap">
+        <p class="eyebrow" data-reveal>Vamos conversar</p>
+        <h2 id="h-final" data-reveal style="--d:100ms">{n.ctaFinal.titulo}</h2>
+        <p data-reveal style="--d:200ms">{n.ctaFinal.texto}</p>
+        <div class="final-ctas" data-reveal style="--d:300ms">
+          <a class="btn btn--solid" href="#calculadora">Calcule seu orçamento</a>
+          <a class="btn" data-wa={n.mensagemWhats} href="#">Chamar no WhatsApp</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot" id="contato">
+    <div class="wrap">
+      <div class="foot-grid">
+        <div>
+          <p class="logo" style="margin-bottom:1rem"><b data-biz="nome">{n.nome}</b><small>Pedras nobres</small></p>
+          <p style="max-width:22rem">{n.slogan}.</p>
+        </div>
+        <div>
+          <h3>Contato</h3>
+          <ul>
+            <li><a data-biz-tel href={`tel:+${n.whats}`}><span data-biz="telefone">{n.telefone}</span></a></li>
+            <li><a href={`mailto:${n.email}`}>{n.email}</a></li>
+            <li><a href={`https://www.instagram.com/${n.instagram}`} target="_blank" rel="noopener">@{n.instagram}</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3>Endereço</h3>
+          <address class="not-italic"><span data-biz-local>{n.endereco}<br /></span><span data-biz="cidade">{n.cidade}</span><span data-biz="uf">/{n.uf}</span><span data-biz-local> · CEP {n.cep}</span></address>
+        </div>
+        <div>
+          <h3>Horário</h3>
+          <ul>{n.horario.map((h) => <li>{h}</li>)}</ul>
+        </div>
+      </div>
+      <div class="foot-bottom">
+        <span>© <span data-year>{new Date().getFullYear()}</span> <span data-biz="nome">{n.nome}</span>. Todos os direitos reservados.</span>
+        <span>Valores da calculadora são estimativas sujeitas à medição no local.</span>
+      </div>
+    </div>
+  </footer>
+
+  <WhatsFloat texto={n.mensagemWhats} />
+</Base>

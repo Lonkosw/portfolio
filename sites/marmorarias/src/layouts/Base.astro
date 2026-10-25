@@ -1,0 +1,75 @@
+---
+import type { Negocio } from '../data/types.ts';
+
+interface Props {
+  n: Negocio;
+  /** Cor de destaque e fundo do favicon. */
+  favicon: { fundo: string; letra: string };
+  /** Foto usada no Open Graph (nome do arquivo em /img/modelo-X). */
+  og: { modelo: string; nome: string };
+  corTema: string;
+  bodyClass?: string;
+}
+const { n, favicon, og, corTema, bodyClass = '' } = Astro.props;
+
+const inicial = n.nome.trim().charAt(0).toUpperCase();
+const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='${favicon.fundo}'/><text x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='38' font-weight='700' fill='${favicon.letra}'>${inicial}</text></svg>`;
+const iconeHref = `data:image/svg+xml,${encodeURIComponent(svg)}`;
+const ogImg = `/img/${og.modelo}/${og.nome}-1280.webp`;
+
+const ld = {
+  '@context': 'https://schema.org',
+  '@type': 'HomeAndConstructionBusiness',
+  name: n.nome,
+  description: n.seo.descricao,
+  image: ogImg,
+  telephone: `+${n.whats}`,
+  email: n.email,
+  foundingDate: String(n.fundacao),
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: n.endereco,
+    addressLocality: n.cidade,
+    addressRegion: n.uf,
+    postalCode: n.cep,
+    addressCountry: 'BR',
+  },
+  openingHours: ['Mo-Fr 09:00-18:00', 'Sa 09:00-13:00'],
+  sameAs: [`https://www.instagram.com/${n.instagram}`],
+  priceRange: '$$$',
+  additionalType: 'https://schema.org/LocalBusiness',
+};
+const biz = { nome: n.nome, cidade: n.cidade, uf: n.uf, whats: n.whats };
+---
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{n.seo.titulo}</title>
+    <meta name="description" content={n.seo.descricao} />
+    <meta name="theme-color" content={corTema} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:site_name" content={n.nome} />
+    <meta property="og:title" content={n.seo.titulo} />
+    <meta property="og:description" content={n.seo.descricao} />
+    <meta property="og:image" content={ogImg} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={n.seo.titulo} />
+    <link rel="icon" href={iconeHref} />
+    <link rel="preload" as="image" href={ogImg} imagesrcset={`/img/${og.modelo}/${og.nome}-640.webp 640w, /img/${og.modelo}/${og.nome}-1280.webp 1280w, /img/${og.modelo}/${og.nome}-1920.webp 1920w`} imagesizes="100vw" fetchpriority="high" />
+    <script type="application/ld+json" id="ld-json" set:html={JSON.stringify(ld)} />
+    <script type="application/json" id="biz-data" set:html={JSON.stringify(biz)} />
+    <noscript><style>[data-reveal]{opacity:1!important;transform:none!important}</style></noscript>
+  </head>
+  <body class={bodyClass}>
+    <slot />
+    <script>
+      import '../scripts/site.ts';
+      const ano = String(new Date().getFullYear());
+      document.querySelectorAll('[data-year]').forEach((e) => (e.textContent = ano));
+    </script>
+  </body>
+</html>

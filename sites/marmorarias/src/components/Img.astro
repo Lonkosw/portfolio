@@ -1,0 +1,27 @@
+---
+import { imgAttrs } from '../lib/img.ts';
+interface Props {
+  modelo: string;
+  nome: string;
+  alt: string;
+  sizes?: string;
+  eager?: boolean;
+  class?: string;
+  style?: string;
+}
+const { modelo, nome, alt, sizes = '100vw', eager = false, class: cls = '', style } = Astro.props;
+const a = imgAttrs(modelo, nome);
+---
+<img
+  src={a.src}
+  srcset={a.srcset}
+  sizes={sizes}
+  width={a.width}
+  height={a.height}
+  alt={alt}
+  loading={eager ? 'eager' : 'lazy'}
+  decoding={eager ? 'sync' : 'async'}
+  fetchpriority={eager ? 'high' : undefined}
+  class={cls}
+  style={style}
+/>

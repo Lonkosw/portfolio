@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 900" width="900" height="900" preserveAspectRatio="xMidYMid slice"><rect width="900" height="900" fill="#8b8d90"/><filter id="g127_0" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+<feTurbulence type="fractalNoise" baseFrequency="0.55" numOctaves="3" seed="127"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0.435  0 0 0 0 0.443  0 0 0 0 0.459  14 0 0 0 -7.90"/>
+</filter><rect width="900" height="900" filter="url(#g127_0)"/><filter id="g127_1" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+<feTurbulence type="fractalNoise" baseFrequency="0.77" numOctaves="3" seed="134"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0.659  0 0 0 0 0.667  0 0 0 0 0.678  14 0 0 0 -7.84"/>
+</filter><rect width="900" height="900" filter="url(#g127_1)"/><filter id="g127_2" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+<feTurbulence type="fractalNoise" baseFrequency="0.99" numOctaves="3" seed="141"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0.361  0 0 0 0 0.369  0 0 0 0 0.384  14 0 0 0 -8.29"/>
+</filter><rect width="900" height="900" filter="url(#g127_2)"/></svg>

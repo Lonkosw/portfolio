@@ -1,0 +1,33 @@
+---
+const itens = [
+  ['/modelo-1', 'Marmoraria 1', 'Alto padrão · escuro com dourado'],
+  ['/modelo-2', 'Marmoraria 2', 'Clean e acolhedora · tons de pedra natural'],
+  ['/modelo-3', 'Marmoraria 3', 'Industrial · concreto e laranja de obra'],
+];
+---
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Marmorarias — páginas</title>
+    <style>
+      body { margin: 0; font-family: system-ui, sans-serif; background: #f4f4f2; color: #1a1a1a; display: grid; min-height: 100svh; place-items: center; padding: 1.5rem; }
+      main { width: min(36rem, 100%); }
+      h1 { font-size: 1.4rem; margin: 0 0 .25rem; }
+      p { color: #666; margin: 0 0 1.5rem; }
+      a { display: block; padding: 1rem 1.1rem; margin-bottom: .6rem; background: #fff; border: 1px solid #ddd; border-radius: 10px; text-decoration: none; color: inherit; min-height: 2.75rem; }
+      a:hover, a:focus-visible { border-color: #1a1a1a; outline: none; }
+      b { display: block; } small { color: #777; }
+      code { background: #e8e8e4; padding: .1rem .35rem; border-radius: 4px; font-size: .85em; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Marmorarias</h1>
+      <p>Três direções de página com calculadora de orçamento. Para personalizar: <code>?empresa=Nome&amp;cidade=Cidade&amp;whats=5541999999999</code></p>
+      {itens.map(([h, t, d]) => <a href={h}><b>{t}</b><small>{d}</small></a>)}
+    </main>
+  </body>
+</html>
