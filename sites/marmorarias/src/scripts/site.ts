@@ -345,13 +345,35 @@ function menu() {
 /* ------------------------------------------------------------------ cartas que viram (modelo 2) */
 
 function cartas() {
-  $$('[data-flip]').forEach((c) => {
-    const alternar = () => c.classList.toggle('is-flipped');
-    c.addEventListener('dblclick', alternar);
+  $$('.carta').forEach((c) => {
+    const frente = c.querySelector<HTMLElement>('.carta-front');
+    const verso = c.querySelector<HTMLElement>('.carta-back');
+    const abrir = c.querySelector<HTMLButtonElement>('[data-flip-btn]');
+    if (!frente || !verso || !abrir) return;
+    const definir = (on: boolean) => {
+      c.classList.toggle('is-flipped', on);
+      abrir.setAttribute('aria-expanded', String(on));
+      (verso as any).inert = !on;
+      (frente as any).inert = on;
+      (on ? verso.querySelector<HTMLElement>('button, a') : abrir)?.focus({ preventScroll: true });
+    };
+    (verso as any).inert = true;
+    abrir.addEventListener('click', () => definir(true));
+    c.querySelector('[data-flip-back]')?.addEventListener('click', () => definir(false));
   });
 }
 
+function usarMaterial() {
+  $$<HTMLElement>('[data-usar]').forEach((b) =>
+    b.addEventListener('click', () => {
+      document.dispatchEvent(new CustomEvent('escolher-material', { detail: b.dataset.usar }));
+      document.getElementById('calculadora')?.scrollIntoView({ behavior: reduzir ? 'auto' : 'smooth' });
+    }),
+  );
+}
+
 aplicarBiz();
+usarMaterial();
 reveal();
 contadores();
 parallaxEProgresso();

@@ -117,7 +117,7 @@ body.m1 { margin: 0; background: var(--color-night); color: var(--color-bone); f
 .pedra-info span { display: block; margin-top: .35rem; font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: var(--color-mist); }
 .pedra-cat { position: absolute; top: .75rem; left: .75rem; font-size: .6rem; letter-spacing: .22em; text-transform: uppercase; padding: .3rem .6rem; background: rgba(9, 9, 10, .72); color: var(--color-gold); backdrop-filter: blur(6px); }
 
-dialog.amostra { width: min(960px, calc(100vw - 2rem)); max-height: calc(100svh - 2rem); padding: 0; border: 1px solid var(--color-gold-deep); background: var(--color-coal); color: var(--color-bone); overflow: auto; }
+dialog.amostra { margin: auto; width: min(960px, calc(100vw - 2rem)); max-height: calc(100svh - 2rem); padding: 0; border: 1px solid var(--color-gold-deep); background: var(--color-coal); color: var(--color-bone); overflow: auto; }
 dialog.amostra::backdrop { background: rgba(0, 0, 0, .82); backdrop-filter: blur(6px); }
 .amostra-grid { display: grid; }
 @media (min-width: 768px) { .amostra-grid { grid-template-columns: 1.1fr 1fr; } }

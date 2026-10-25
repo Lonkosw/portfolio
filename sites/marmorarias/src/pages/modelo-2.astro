@@ -1,0 +1,402 @@
+---
+import '@fontsource-variable/nunito';
+import '../styles/m2.css';
+import Base from '../layouts/Base.astro';
+import Img from '../components/Img.astro';
+import Icon from '../components/Icon.astro';
+import Calculator from '../components/Calculator.astro';
+import WhatsFloat from '../components/WhatsFloat.astro';
+import { casa as n } from '../data/modelo-2.ts';
+import { CATEGORIAS, MATERIAIS } from '../data/marmoraria-config.ts';
+
+const M = 'modelo-2';
+const anos = new Date().getFullYear() - n.fundacao;
+const catNome = Object.fromEntries(CATEGORIAS.map((c) => [c.id, c.nome]));
+const ambientes = ['Todas', ...Array.from(new Set(n.galeria.map((g) => g.ambiente)))];
+const brl = (v: number) => v.toLocaleString('pt-BR');
+const pedras = MATERIAIS.map((m) => ({
+  ...m,
+  json: JSON.stringify({
+    id: m.id,
+    nome: m.nome,
+    descricao: m.descricao,
+    categoria: catNome[m.categoria].replace(/s$/, ''),
+    preco: `R$ ${brl(m.preco.min)} a R$ ${brl(m.preco.max)} por m²`,
+    usos: m.usos,
+    textura: `/tex/${m.id}.svg`,
+  }),
+}));
+const nav = [
+  ['Serviços', '#servicos'],
+  ['Pedras', '#pedras'],
+  ['Calculadora', '#calculadora'],
+  ['Obras', '#obras'],
+  ['Como funciona', '#processo'],
+  ['Dúvidas', '#duvidas'],
+];
+const guiaIcone = ['cozinha', 'banheiro', 'gourmet'];
+---
+
+<Base n={n} og={{ modelo: M, nome: 'hero' }} favicon={{ fundo: '#a4603b', letra: '#ffffff' }} corTema="#fbf7f0" bodyClass="m2">
+  <a class="skip" href="#conteudo">Ir para o conteúdo</a>
+
+  <header class="hdr" data-header>
+    <div class="hdr-in">
+      <a href="#topo" class="logo" aria-label={`${n.nome} — início`}>
+        <span class="logo-mark" data-biz="inicial">{n.nome.charAt(0)}</span>
+        <span data-biz="nome">{n.nome}</span>
+      </a>
+      <nav class="nav" aria-label="Principal">{nav.map(([t, h]) => <a href={h}>{t}</a>)}</nav>
+      <a class="btn hdr-cta" href="#calculadora">Orçamento</a>
+      <button class="menu-btn" type="button" data-menu-btn aria-expanded="false" aria-controls="drawer" aria-label="Abrir menu"><Icon name="menu" /></button>
+    </div>
+    <nav class="drawer" id="drawer" data-menu data-open="false" aria-label="Menu móvel">
+      {nav.map(([t, h]) => <a class="dl" href={h}>{t}</a>)}
+      <a class="btn mt-2" href="#calculadora">Calcule seu orçamento</a>
+    </nav>
+  </header>
+
+  <main id="conteudo">
+    <section class="hero" id="topo" aria-labelledby="h-hero">
+      <div class="wrap hero-grid">
+        <div>
+          <span class="tag" data-reveal><Icon name="pin" size={16} /> Marmoraria em <span data-biz="cidade">{n.cidade}</span></span>
+          <h1 id="h-hero" data-reveal style="--d:80ms">{n.hero.titulo} <em>{n.hero.destaque}</em></h1>
+          <p class="lead" data-reveal style="--d:160ms">{n.hero.texto}</p>
+          <div class="hero-ctas" data-reveal style="--d:240ms">
+            <a class="btn" href="#calculadora">{n.hero.cta} <Icon name="seta" size={20} /></a>
+            <a class="btn btn--ghost" href="#pedras">{n.hero.ctaSecundario}</a>
+          </div>
+          <ul class="hero-selos" data-reveal style="--d:320ms">
+            {n.hero.selos.map((s) => <li><Icon name="check" size={22} stroke={2.4} />{s}</li>)}
+          </ul>
+        </div>
+        <div class="hero-foto" data-reveal style="--d:200ms">
+          <div class="moldura">
+            <Img modelo={M} nome={n.hero.imagem} alt={n.hero.alt} eager sizes="(min-width:1024px) 560px, 100vw" />
+          </div>
+          <div class="hero-card hero-card--a">
+            <span class="hero-ic"><Icon name="estrela" size={22} class="fill-current" /></span>
+            <span><b>{String(n.nota).replace('.', ',')}</b>{n.avaliacoes} avaliações no Google</span>
+          </div>
+          <div class="hero-card hero-card--b">
+            <span class="hero-ic"><Icon name="laser" size={22} /></span>
+            <span><b>Medição grátis</b>na sua casa</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="nums" aria-label="Números da marmoraria">
+      <div class="wrap nums-grid">
+        <div class="num-card" data-reveal><b data-count={anos}>{anos}</b><span>anos de história</span></div>
+        <div class="num-card" data-reveal style="--d:80ms"><b data-count={n.pecas}>{n.pecas.toLocaleString('pt-BR')}</b><span>peças entregues</span></div>
+        <div class="num-card" data-reveal style="--d:160ms"><b data-count={n.m2}>{n.m2.toLocaleString('pt-BR')}</b><span>m² instalados</span></div>
+        <div class="num-card" data-reveal style="--d:240ms">
+          <b data-count={n.nota} data-dec="1">{String(n.nota).replace('.', ',')}</b>
+          <span><span class="stars" aria-hidden="true">{[0, 1, 2, 3, 4].map(() => <Icon name="estrela" size={14} />)}</span> nota no Google</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section serv" id="servicos" aria-labelledby="h-serv">
+      <div class="wrap">
+        <div class="head" data-reveal>
+          <span class="tag">O que fazemos</span>
+          <h2 id="h-serv" class="h2">Pedra para cada cantinho da casa</h2>
+          <p class="lead">Da pia do lavabo à escada da sala, cuidamos do projeto até a instalação.</p>
+        </div>
+        <div class="serv-grid">
+          {
+            n.servicos.map((s, i) => (
+              <article class="serv-card" data-reveal style={`--d:${(i % 4) * 70}ms`}>
+                {s.imagem ? <Img modelo={M} nome={s.imagem} alt={`${s.titulo}: obra entregue`} sizes="(min-width:1100px) 280px, (min-width:640px) 45vw, 100vw" /> : <div class="serv-ph" aria-hidden="true"><Icon name={s.icone} size={64} stroke={1.2} /></div>}
+                <div>
+                  <span class="serv-ic"><Icon name={s.icone} size={26} /></span>
+                  <h3>{s.titulo}</h3>
+                  <p>{s.texto}</p>
+                </div>
+              </article>
+            ))
+          }
+          <article class="serv-card serv-card--cta" data-reveal>
+            <div>
+              <h3>Não achou o que procura?</h3>
+              <p>Conte o que você precisa e a gente indica a melhor pedra.</p>
+              <a class="btn" data-wa={n.mensagemWhats} href="#">Falar no WhatsApp</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="pedras" aria-labelledby="h-ped">
+      <div class="wrap">
+        <div class="cat-top">
+          <div class="head" style="margin:0" data-reveal>
+            <span class="tag">Catálogo de pedras</span>
+            <h2 id="h-ped" class="h2">Escolha a sua com calma</h2>
+            <p class="lead">Toque na carta para virar e ver onde a pedra funciona melhor.</p>
+          </div>
+          <div class="pills" role="group" aria-label="Filtrar pedras" data-filter-group="#grade-pedras" data-reveal>
+            <button type="button" class="pill" data-filter="todos" aria-pressed="true">Todas</button>
+            {n.catalogoFiltros.map((c) => <button type="button" class="pill" data-filter={c} aria-pressed="false">{catNome[c]}</button>)}
+          </div>
+        </div>
+        <div class="cartas" id="grade-pedras">
+          {
+            pedras.map((p, i) => (
+              <div class="carta" data-cat={p.categoria} data-reveal style={`--d:${(i % 4) * 90}ms`}>
+                <div class="carta-in">
+                  <div class="carta-face carta-front">
+                    <button type="button" class="flip-btn" data-flip-btn aria-expanded="false" aria-label={`Virar a carta: ${p.nome}`}>
+                      <span class="carta-tex" style={`background-image:url(/tex/${p.id}.svg)`}></span>
+                      <span class="carta-info">
+                        <b>{p.nome}</b>
+                        <span>{catNome[p.categoria].replace(/s$/, '')}</span>
+                        <i>R$ {brl(p.preco.min)}–{brl(p.preco.max)} / m²</i>
+                      </span>
+                    </button>
+                  </div>
+                  <div class="carta-face carta-back">
+                    <h3>{p.nome}</h3>
+                    <p>{p.descricao}</p>
+                    <ul>{p.usos.map((u) => <li>{u}</li>)}</ul>
+                    <div class="acts">
+                      <button type="button" class="mini" data-usar={p.id}>Usar na calculadora</button>
+                      <button type="button" class="mini mini--ghost" data-amostra={p.json}>Ampliar amostra</button>
+                      <button type="button" class="mini mini--ghost" data-flip-back>Voltar</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))
+          }
+          <aside class="cartas-extra">
+            <h3>Não viu a sua pedra?</h3>
+            <p>Trabalhamos com muitas outras cores e padrões. Conte o que procura.</p>
+            <a class="btn" data-wa="Olá, {nome}! Procuro uma pedra que não vi no catálogo." href="#">Perguntar no WhatsApp</a>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <dialog class="amostra" id="amostra-dialog" aria-label="Amostra da pedra">
+      <button class="amostra-x" type="button" data-fechar aria-label="Fechar"><Icon name="fechar" /></button>
+      <div class="amostra-grid">
+        <div class="amostra-tex" data-a="tex" role="img" aria-label="Amostra ampliada da pedra"></div>
+        <div class="amostra-txt">
+          <span class="tag" data-a="cat" style="justify-self:start"></span>
+          <h3 data-a="nome"></h3>
+          <p data-a="desc" style="margin:0"></p>
+          <ul class="amostra-usos" data-a="usos"></ul>
+          <p style="margin:0;font-weight:800" data-a="preco"></p>
+          <div class="flex flex-wrap gap-3">
+            <button type="button" class="btn" data-a="usar">Usar na calculadora</button>
+            <a class="btn btn--ghost" data-a="cta" data-wa="Olá, {nome}! Quero um orçamento." href="#">WhatsApp</a>
+          </div>
+        </div>
+      </div>
+    </dialog>
+
+    <Calculator
+      variante="acolhedor"
+      eyebrow="Calculadora de orçamento"
+      titulo="Descubra quanto custa, passo a passo"
+      subtitulo="São 5 passos rápidos. No fim você vê uma faixa de valores, o desenho da peça e uma comparação entre materiais."
+    />
+
+    <section class="section" id="obras" aria-labelledby="h-obras">
+      <div class="wrap">
+        <div class="cat-top">
+          <div class="head" style="margin:0" data-reveal>
+            <span class="tag">Obras entregues</span>
+            <h2 id="h-obras" class="h2">Casas como a sua</h2>
+          </div>
+          <div class="pills" role="group" aria-label="Filtrar obras por ambiente" data-filter-group="#grade-obras" data-reveal>
+            {ambientes.map((a, i) => <button type="button" class="pill" data-filter={i === 0 ? 'todos' : a} aria-pressed={i === 0 ? 'true' : 'false'}>{a}</button>)}
+          </div>
+        </div>
+        <div class="grade-obras" id="grade-obras">
+          {
+            n.galeria.map((g) => (
+              <figure class="obra" data-cat={g.ambiente}>
+                <div class="obra-img"><Img modelo={M} nome={g.imagem} alt={g.alt} sizes="(min-width:900px) 380px, 50vw" /></div>
+                <figcaption><b>{g.titulo}</b><span>{g.detalhe}</span></figcaption>
+              </figure>
+            ))
+          }
+        </div>
+
+        <div class="mt-16" data-reveal>
+          <div class="head">
+            <span class="tag">Antes e depois</span>
+            <h3 class="h2" style="font-size:clamp(1.6rem,3.6vw,2.4rem)">{n.antesDepois.titulo}</h3>
+          </div>
+          <div class="ba" data-ba>
+            <Img modelo={M} nome={n.antesDepois.depois} alt={n.antesDepois.altDepois} sizes="(min-width:1200px) 1136px, 100vw" />
+            <div class="ba-antes"><Img modelo={M} nome={n.antesDepois.antes} alt={n.antesDepois.altAntes} sizes="(min-width:1200px) 1136px, 100vw" /></div>
+            <span class="ba-tag" style="left:1rem">Antes</span>
+            <span class="ba-tag" style="right:1rem">Depois</span>
+            <span class="ba-linha"></span>
+            <label class="sr-only" for="ba-range">Comparar antes e depois</label>
+            <input id="ba-range" type="range" min="0" max="100" value="50" />
+            <span class="ba-alca" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l-6 6 6 6M15 6l6 6-6 6"></path></svg></span>
+          </div>
+          <p class="mt-3 text-sm" style="color:var(--color-mute)">{n.antesDepois.legenda}</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section proc" id="processo" aria-labelledby="h-proc">
+      <div class="wrap">
+        <div class="head head--center" data-reveal>
+          <span class="tag">Como funciona</span>
+          <h2 id="h-proc" class="h2">Simples do começo ao fim</h2>
+        </div>
+        <ol class="proc-list">
+          {
+            n.passos.map((p, i) => (
+              <li data-reveal style={`--d:${i * 90}ms`}>
+                <span class="proc-n">{i + 1}</span>
+                <h3>{p.titulo}</h3>
+                <p>{p.texto}</p>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="h-dif">
+      <div class="wrap dif-grid">
+        <div class="dif-foto" data-reveal><Img modelo={M} nome="cozinha-granito-cinza" alt="Cozinha com bancada de granito cinza, armários claros e ilha com banquetas" sizes="(min-width:1024px) 480px, 100vw" /></div>
+        <div>
+          <div class="head" style="margin:0" data-reveal>
+            <span class="tag">Por que a Casa de Pedra</span>
+            <h2 id="h-dif" class="h2">Cuidado de quem trata a sua casa como a própria</h2>
+          </div>
+          <div class="dif-list">
+            {
+              n.diferenciais.map((d, i) => (
+                <div class="dif-item" data-reveal style={`--d:${i * 70}ms`}>
+                  <span class="serv-ic"><Icon name={d.icone} size={26} /></span>
+                  <div><b>{d.titulo}</b><span>{d.texto}</span></div>
+                </div>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section dep" aria-labelledby="h-dep">
+      <div class="wrap">
+        <div class="head head--center" data-reveal>
+          <span class="tag">Depoimentos</span>
+          <h2 id="h-dep" class="h2">Clientes que viraram amigos</h2>
+        </div>
+        <div class="dep-grid">
+          {
+            n.depoimentos.map((d, i) => (
+              <figure class="dep-card" data-reveal style={`--d:${(i % 3) * 80}ms`}>
+                <span class="stars" aria-label="5 de 5 estrelas">{[0, 1, 2, 3, 4].map(() => <Icon name="estrela" size={17} />)}</span>
+                <blockquote>“{d.texto}”</blockquote>
+                <footer>
+                  <span class="dep-av" aria-hidden="true">{d.nome.charAt(0)}</span>
+                  <span><b>{d.nome}</b><span>{d.obra} · {d.bairro}</span></span>
+                </footer>
+              </figure>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="h-guia">
+      <div class="wrap">
+        <div class="head head--center" data-reveal>
+          <span class="tag">Guia rápido</span>
+          <h2 id="h-guia" class="h2">Qual pedra escolher?</h2>
+          <p class="lead">Um empurrãozinho para decidir sem medo de errar.</p>
+        </div>
+        <div class="guia-grid">
+          {
+            n.guia.map((g, i) => (
+              <article class="guia-col" data-reveal style={`--d:${i * 90}ms`}>
+                <header><span class="serv-ic" style="background:#fff"><Icon name={guiaIcone[i]} size={26} /></span><h3>{g.ambiente}</h3></header>
+                <div>
+                  <p>{g.recomendacao}</p>
+                  <p class="guia-evitar"><b>Evite:</b> {g.evitar}</p>
+                  <ul class="guia-pedras">{g.pedras.map((p) => <li>{p}</li>)}</ul>
+                </div>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="section faq" id="duvidas" aria-labelledby="h-faq">
+      <div class="wrap">
+        <div class="head head--center" data-reveal>
+          <span class="tag">Perguntas frequentes</span>
+          <h2 id="h-faq" class="h2">Ficou com alguma dúvida?</h2>
+        </div>
+        <div class="faq-wrap">
+          {
+            n.faq.map((f, i) => (
+              <details name="faq" open={i === 0}>
+                <summary>{f.pergunta}<span class="ico"><Icon name="mais" size={20} stroke={2.4} /></span></summary>
+                <p>{f.resposta}</p>
+              </details>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="final" aria-labelledby="h-final">
+      <div class="final-bg" aria-hidden="true" data-parallax="0.04"><Img modelo={M} nome="cozinha-janela" alt="" sizes="100vw" /></div>
+      <h2 id="h-final" data-reveal>{n.ctaFinal.titulo}</h2>
+      <p data-reveal style="--d:100ms">{n.ctaFinal.texto}</p>
+      <div class="final-ctas" data-reveal style="--d:200ms">
+        <a class="btn" href="#calculadora">Calcule seu orçamento</a>
+        <a class="btn btn--ghost" data-wa={n.mensagemWhats} href="#">Chamar no WhatsApp</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot" id="contato">
+    <div class="wrap">
+      <div class="foot-grid">
+        <div>
+          <a href="#topo" class="logo" style="margin-bottom:.8rem"><span class="logo-mark" data-biz="inicial">{n.nome.charAt(0)}</span><span data-biz="nome">{n.nome}</span></a>
+          <p style="max-width:22rem">{n.slogan}.</p>
+        </div>
+        <div>
+          <h3>Contato</h3>
+          <ul>
+            <li><a data-biz-tel href={`tel:+${n.whats}`}><span data-biz="telefone">{n.telefone}</span></a></li>
+            <li><a href={`mailto:${n.email}`}>{n.email}</a></li>
+            <li><a href={`https://www.instagram.com/${n.instagram}`} target="_blank" rel="noopener">@{n.instagram}</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3>Onde estamos</h3>
+          <address><span data-biz-local>{n.endereco}<br /></span><span data-biz="cidade">{n.cidade}</span><span data-biz="uf">/{n.uf}</span><span data-biz-local> · CEP {n.cep}</span></address>
+        </div>
+        <div>
+          <h3>Horário</h3>
+          <ul>{n.horario.map((h) => <li style="color:var(--color-mute);font-weight:700">{h}</li>)}</ul>
+        </div>
+      </div>
+      <div class="foot-bottom">
+        <span>© <span data-year>{new Date().getFullYear()}</span> <span data-biz="nome">{n.nome}</span>. Todos os direitos reservados.</span>
+        <span>Valores da calculadora são estimativas sujeitas à medição no local.</span>
+      </div>
+    </div>
+  </footer>
+
+  <WhatsFloat texto={n.mensagemWhats} />
+</Base>
