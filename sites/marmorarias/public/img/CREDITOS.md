@@ -23,11 +23,7 @@ Arquivos convertidos para WebP em 640, 1280 e 1920 px de largura (`node scripts/
 | modelo-1/escada-curva-{640,1280,1920}.webp | Sebastian Schuster | https://unsplash.com/photos/pfhVW5J2BKc |
 | modelo-1/escada-marmore-{640,1280,1920}.webp | set.sj | https://unsplash.com/photos/WpRHgG2-Itc |
 | modelo-1/veio-preto-{640,1280,1920}.webp | Kier in Sight Archives | https://unsplash.com/photos/HXPUOdHuYoU |
-| modelo-1/veio-dourado-{640,1280,1920}.webp | Kier in Sight Archives | https://unsplash.com/photos/yJ-CjL110UI |
-| modelo-1/veio-azul-{640,1280,1920}.webp | Kier in Sight Archives | https://unsplash.com/photos/gcV1pm4L9zY |
 | modelo-1/cozinha-granito-dourado-{640,1280,1920}.webp | sergio hernandez trejo | https://unsplash.com/photos/6PKDL5aaIYE |
-| modelo-1/ilha-cascata-{640,1280,1920}.webp | Franco Debartolo | https://unsplash.com/photos/6nQU9e0NL0U |
-| modelo-1/ilha-estofados-{640,1280,1920}.webp | Franco Debartolo | https://unsplash.com/photos/cr9lw1G90As |
 | modelo-1/cozinha-clara-ilha-{640,1280,1920}.webp | Brian Zajac | https://unsplash.com/photos/ynVu56fpbN8 |
 
 ## modelo-2
@@ -37,22 +33,14 @@ Arquivos convertidos para WebP em 640, 1280 e 1920 px de largura (`node scripts/
 | modelo-2/hero-{640,1280,1920}.webp | Clay Banks | https://unsplash.com/photos/7y0DGa1vlXQ |
 | modelo-2/cozinha-familia-{640,1280,1920}.webp | Clay Banks | https://unsplash.com/photos/nTqR3B3dp-Q |
 | modelo-2/cozinha-ilha-banquetas-{640,1280,1920}.webp | Clay Banks | https://unsplash.com/photos/zAvzWN6CE5w |
-| modelo-2/cozinha-espaco-{640,1280,1920}.webp | Clay Banks | https://unsplash.com/photos/haJdK-oucKg |
 | modelo-2/cozinha-verde-{640,1280,1920}.webp | Clay Banks | https://unsplash.com/photos/WRy3gg0qAW4 |
 | modelo-2/cozinha-rustica-{640,1280,1920}.webp | Sosey Interiors | https://unsplash.com/photos/YABErdnJPGc |
 | modelo-2/cozinha-em-l-{640,1280,1920}.webp | Stephen Owen | https://unsplash.com/photos/rjjAKAp0KSw |
 | modelo-2/cozinha-ilha-branca-{640,1280,1920}.webp | Zac Gudakov | https://unsplash.com/photos/o-uPDNNSsDA |
 | modelo-2/cozinha-bancada-quartzo-{640,1280,1920}.webp | Brian Zajac | https://unsplash.com/photos/T-fBXRLaCrc |
 | modelo-2/cozinha-luminosa-{640,1280,1920}.webp | Lotus Design N Print | https://unsplash.com/photos/3JdubjN5xTI |
-| modelo-2/cozinha-pia-{640,1280,1920}.webp | ksama | https://unsplash.com/photos/BFl-mH3fLkQ |
-| modelo-2/cozinha-banquetas-madeira-{640,1280,1920}.webp | Sufyan | https://unsplash.com/photos/imMNOk1nP10 |
 | modelo-2/cozinha-granito-cinza-{640,1280,1920}.webp | Lotus Design N Print | https://unsplash.com/photos/-Vfa35ueUCo |
-| modelo-2/cozinha-branca-planejada-{640,1280,1920}.webp | Point3D Commercial Imaging Ltd. | https://unsplash.com/photos/UjfhPIONgik |
-| modelo-2/cozinha-canto-{640,1280,1920}.webp | Francesca Tosolini | https://unsplash.com/photos/I5uy6tQL4VM |
-| modelo-2/cozinha-pia-ilha-{640,1280,1920}.webp | Zac Gudakov | https://unsplash.com/photos/pmex9ozYssI |
-| modelo-2/cozinha-ilha-madeira-{640,1280,1920}.webp | Puscas Adryan | https://unsplash.com/photos/ilbLEHMhxMA |
 | modelo-2/cozinha-janela-{640,1280,1920}.webp | GoodLifeConstruction | https://unsplash.com/photos/pQVP5QmskxM |
-| modelo-2/cozinha-ilha-escura-{640,1280,1920}.webp | Lotus Design N Print | https://unsplash.com/photos/I_QC1JICzA0 |
 | modelo-2/cozinha-antiga-{640,1280,1920}.webp | Taylor Friehl | https://unsplash.com/photos/nANHauFORac |
 | modelo-2/banheiro-claro-{640,1280,1920}.webp | Brian Zajac | https://unsplash.com/photos/HTnMlMudzx0 |
 | modelo-2/banheiro-estreito-{640,1280,1920}.webp | Aalo Lens | https://unsplash.com/photos/XhMzBZrpQT4 |
@@ -61,9 +49,6 @@ Arquivos convertidos para WebP em 640, 1280 e 1920 px de largura (`node scripts/
 | modelo-2/banheiro-lavabo-{640,1280,1920}.webp | Amira Aboalnaga | https://unsplash.com/photos/O7WjrXiKy_s |
 | modelo-2/pia-janela-{640,1280,1920}.webp | Taylor Friehl | https://unsplash.com/photos/kgkHwyZImdc |
 | modelo-2/travertino-piso-{640,1280,1920}.webp | Barney Goodman | https://unsplash.com/photos/oZhvfoMAD30 |
-| modelo-2/travertino-ladrilho-{640,1280,1920}.webp | Colin Watts | https://unsplash.com/photos/y8q16Yzlufc |
-| modelo-2/granito-detalhe-{640,1280,1920}.webp | Brian Wangenheim | https://unsplash.com/photos/kXZDckruYlg |
-| modelo-2/branco-liso-{640,1280,1920}.webp | Augustine Wong | https://unsplash.com/photos/li0iC0rjvvg |
 
 ## modelo-3
 
@@ -79,12 +64,6 @@ Arquivos convertidos para WebP em 640, 1280 e 1920 px de largura (`node scripts/
 | modelo-3/obra-estrutura-{640,1280,1920}.webp | Josh Olalde | https://unsplash.com/photos/X1P1_EDNnok |
 | modelo-3/obra-aerea-{640,1280,1920}.webp | Florian Haider | https://unsplash.com/photos/seHtvl29J78 |
 | modelo-3/faiscas-corte-{640,1280,1920}.webp | The Wandering Frame | https://unsplash.com/photos/Sb--KpZY9j8 |
-| modelo-3/faiscas-chao-{640,1280,1920}.webp | Darshan Sarang | https://unsplash.com/photos/cbWDRi-yIvY |
-| modelo-3/esmerilhadeira-{640,1280,1920}.webp | Игорь Антипов | https://unsplash.com/photos/W5iFoBrBonU |
-| modelo-3/faiscas-bancada-{640,1280,1920}.webp | Spencer Davis | https://unsplash.com/photos/UFByInqEQvw |
-| modelo-3/operario-ferramenta-{640,1280,1920}.webp | Jeriden Villegas | https://unsplash.com/photos/VLPUm5wP5Z0 |
-| modelo-3/carga-caminhao-{640,1280,1920}.webp | Bernd Dittrich | https://unsplash.com/photos/TCI9oUEA07Y |
-| modelo-3/doca-caminhao-{640,1280,1920}.webp | Ruben Mavarez | https://unsplash.com/photos/4io1vRG0s0w |
 | modelo-3/escada-pedra-{640,1280,1920}.webp | Kouji Tsuru | https://unsplash.com/photos/9OELh78q53Q |
 | modelo-3/escada-reta-{640,1280,1920}.webp | Declan Sun | https://unsplash.com/photos/cKiwSVkMA1E |
 | modelo-3/escada-balaustrada-{640,1280,1920}.webp | PJ Gal-Szabo | https://unsplash.com/photos/orz7-r2NoCY |
@@ -94,7 +73,6 @@ Arquivos convertidos para WebP em 640, 1280 e 1920 px de largura (`node scripts/
 | modelo-3/gourmet-patio-{640,1280,1920}.webp | Salvo Media LLC | https://unsplash.com/photos/1pL7kM4YD2E |
 | modelo-3/gourmet-bar-{640,1280,1920}.webp | Jubéo Hernandez | https://unsplash.com/photos/GimvAIWWmlI |
 | modelo-3/cozinha-aberta-{640,1280,1920}.webp | Caroline Badran | https://unsplash.com/photos/WIBUUo5G_ys |
-| modelo-3/amostras-granito-{640,1280,1920}.webp | Maria Lupan | https://unsplash.com/photos/xkOSxBJaF-s |
 | modelo-3/pedra-escura-{640,1280,1920}.webp | David Jorre | https://unsplash.com/photos/oQbLeq4nOek |
 | modelo-3/concreto-cinza-{640,1280,1920}.webp | Annie Spratt | https://unsplash.com/photos/ctXf1GVyf9A |
 | modelo-3/concreto-claro-{640,1280,1920}.webp | H&CO | https://unsplash.com/photos/-odUkx8C2gg |

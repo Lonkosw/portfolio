@@ -110,7 +110,7 @@
 .calc-btn:focus-visible { outline: 3px solid var(--calc-accent); outline-offset: 3px; }
 .calc-btn:disabled { opacity: .4; cursor: default; transform: none; }
 .calc-btn--ghost { background: transparent; color: var(--calc-ink); border-color: var(--calc-line); }
-.calc-btn--wa { width: 100%; background: #1f9d55; border-color: #1f9d55; color: #fff; min-height: 3.25rem; }
+.calc-btn--wa { width: 100%; background: #15803d; border-color: #15803d; color: #fff; min-height: 3.25rem; }
 .calc-btn--wa[aria-disabled='true'] { opacity: .85; }
 .calc-actions { margin-top: 1.25rem; }
 .calc-nav { display: flex; justify-content: space-between; gap: .75rem; }

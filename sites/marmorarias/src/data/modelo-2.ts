@@ -42,7 +42,7 @@ export const casa: Negocio = {
     { titulo: 'Pisos e revestimentos', texto: 'Travertino, mármore e porcelanato para sala, varanda e áreas molhadas.', icone: 'piso', imagem: 'travertino-piso' },
     { titulo: 'Área gourmet', texto: 'Bancada para churrasqueira e pia externa em granito resistente a sol e chuva.', icone: 'gourmet' },
     { titulo: 'Lavatórios esculpidos', texto: 'Cubas esculpidas na própria pedra, para um banheiro com cara de projeto.', icone: 'lavatorio', imagem: 'pia-janela' },
-    { titulo: 'Projetos para construtoras', texto: 'Atendemos obras com prazo e preço combinados, entregando por andar ou por unidade.', icone: 'obra' },
+    { titulo: 'Projetos para construtoras', texto: 'Fornecemos para obras com prazo e preço combinados, entregando por andar ou por unidade.', icone: 'obra' },
   ],
   galeria: [
     { titulo: 'Cozinha integrada', ambiente: 'Cozinhas', detalhe: 'Ilha com banquetas, quartzo branco', imagem: 'cozinha-ilha-banquetas', alt: 'Cozinha integrada com ilha de bancada clara e três banquetas de madeira' },
@@ -77,7 +77,7 @@ export const casa: Negocio = {
     { nome: 'Daniela S.', bairro: 'Novo Mundo', texto: 'A moça do atendimento me ajudou a escolher entre granito e quartzo sem empurrar o mais caro. Confiança total.', obra: 'Cozinha' },
   ],
   passos: [
-    { titulo: 'Orçamento', texto: 'Você faz a simulação aqui no site ou chama no WhatsApp. Respondemos no mesmo dia.' },
+    { titulo: 'Orçamento', texto: 'Você faz a simulação aqui no site ou chama no WhatsApp. Damos retorno no mesmo dia.' },
     { titulo: 'Medição na sua casa', texto: 'Um técnico vai até você, mede com laser e tira todas as dúvidas. Sem custo.' },
     { titulo: 'Escolha da chapa', texto: 'Você escolhe a pedra e a chapa com calma, olhando amostras de verdade.' },
     { titulo: 'Corte e acabamento', texto: 'Cortamos e polimos na nossa oficina, cuidando de cada borda.' },

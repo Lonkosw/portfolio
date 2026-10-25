@@ -1,5 +1,4 @@
 ---
-import '@fontsource-variable/nunito';
 import '../styles/m2.css';
 import Base from '../layouts/Base.astro';
 import Img from '../components/Img.astro';
@@ -42,7 +41,7 @@ const guiaIcone = ['cozinha', 'banheiro', 'gourmet'];
 
   <header class="hdr" data-header>
     <div class="hdr-in">
-      <a href="#topo" class="logo" aria-label={`${n.nome} — início`}>
+      <a href="#topo" class="logo">
         <span class="logo-mark" data-biz="inicial">{n.nome.charAt(0)}</span>
         <span data-biz="nome">{n.nome}</span>
       </a>
@@ -149,12 +148,12 @@ const guiaIcone = ['cozinha', 'banheiro', 'gourmet'];
               <div class="carta" data-cat={p.categoria} data-reveal style={`--d:${(i % 4) * 90}ms`}>
                 <div class="carta-in">
                   <div class="carta-face carta-front">
-                    <button type="button" class="flip-btn" data-flip-btn aria-expanded="false" aria-label={`Virar a carta: ${p.nome}`}>
+                    <button type="button" class="flip-btn" data-flip-btn aria-expanded="false">
                       <span class="carta-tex" style={`background-image:url(/tex/${p.id}.svg)`}></span>
                       <span class="carta-info">
                         <b>{p.nome}</b>
                         <span>{catNome[p.categoria].replace(/s$/, '')}</span>
-                        <i>R$ {brl(p.preco.min)}–{brl(p.preco.max)} / m²</i>
+                        <i>R$ {brl(p.preco.min)}–{brl(p.preco.max)} / m²</i><span class="sr-only">Virar a carta</span>
                       </span>
                     </button>
                   </div>
@@ -273,7 +272,7 @@ const guiaIcone = ['cozinha', 'banheiro', 'gourmet'];
         <div class="dif-foto" data-reveal><Img modelo={M} nome="cozinha-granito-cinza" alt="Cozinha com bancada de granito cinza, armários claros e ilha com banquetas" sizes="(min-width:1024px) 480px, 100vw" /></div>
         <div>
           <div class="head" style="margin:0" data-reveal>
-            <span class="tag">Por que a Casa de Pedra</span>
+            <span class="tag">Por que a <span data-biz="nome">{n.nome}</span></span>
             <h2 id="h-dif" class="h2">Cuidado de quem trata a sua casa como a própria</h2>
           </div>
           <div class="dif-list">
@@ -300,7 +299,7 @@ const guiaIcone = ['cozinha', 'banheiro', 'gourmet'];
           {
             n.depoimentos.map((d, i) => (
               <figure class="dep-card" data-reveal style={`--d:${(i % 3) * 80}ms`}>
-                <span class="stars" aria-label="5 de 5 estrelas">{[0, 1, 2, 3, 4].map(() => <Icon name="estrela" size={17} />)}</span>
+                <span class="stars" role="img" aria-label="5 de 5 estrelas">{[0, 1, 2, 3, 4].map(() => <Icon name="estrela" size={17} />)}</span>
                 <blockquote>“{d.texto}”</blockquote>
                 <footer>
                   <span class="dep-av" aria-hidden="true">{d.nome.charAt(0)}</span>

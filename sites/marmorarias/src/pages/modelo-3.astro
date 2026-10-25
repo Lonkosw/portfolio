@@ -1,0 +1,411 @@
+---
+import '@fontsource/barlow-condensed/latin-700.css';
+import '@fontsource/barlow-condensed/latin-800.css';
+import '@fontsource/barlow/latin-400.css';
+import '@fontsource/barlow/latin-500.css';
+import '@fontsource/jetbrains-mono/latin-500.css';
+import '@fontsource/jetbrains-mono/latin-700.css';
+import '../styles/m3.css';
+import Base from '../layouts/Base.astro';
+import Img from '../components/Img.astro';
+import Icon from '../components/Icon.astro';
+import Calculator from '../components/Calculator.astro';
+import WhatsFloat from '../components/WhatsFloat.astro';
+import { forte as n } from '../data/modelo-3.ts';
+import { CATEGORIAS, MATERIAIS } from '../data/marmoraria-config.ts';
+
+const M = 'modelo-3';
+const anos = new Date().getFullYear() - n.fundacao;
+const catNome = Object.fromEntries(CATEGORIAS.map((c) => [c.id, c.nome]));
+const ambientes = ['Todas', ...Array.from(new Set(n.galeria.map((g) => g.ambiente)))];
+const brl = (v: number) => v.toLocaleString('pt-BR');
+const pedras = MATERIAIS.map((m, i) => ({
+  ...m,
+  cod: `CH-${String(i + 1).padStart(2, '0')}`,
+  json: JSON.stringify({
+    id: m.id,
+    nome: m.nome,
+    descricao: m.descricao,
+    categoria: catNome[m.categoria].replace(/s$/, ''),
+    preco: `R$ ${brl(m.preco.min)} a R$ ${brl(m.preco.max)} por m²`,
+    usos: m.usos,
+    textura: `/tex/${m.id}.svg`,
+  }),
+}));
+const nav = [
+  ['Pedras', '#pedras'],
+  ['Calculadora', '#calculadora'],
+  ['Serviços', '#servicos'],
+  ['Obras', '#obras'],
+  ['Processo', '#processo'],
+  ['Contato', '#contato'],
+];
+const faixa = ['Granito', 'Mármore', 'Quartzo', 'Porcelanato', 'Corte CNC', 'Obras e construtoras', 'Entrega própria', 'Escadas', 'Área gourmet', 'Medição a laser'];
+const fotosProc = ['obra-estrutura', 'obra-laje', 'pedreira', 'faiscas-corte', 'obra-entardecer'];
+const altProc = [
+  'Profissional sobre a estrutura de madeira de uma obra, sob céu azul',
+  'Dois profissionais de colete laranja conferindo medidas sobre a laje de uma obra',
+  'Pedreira de mármore com blocos cortados em degraus',
+  'Faíscas saindo de um disco de corte durante o acabamento de uma peça',
+  'Guindastes de obra ao entardecer, com prédios ao fundo',
+];
+const guiaCod = ['01', '02', '03'];
+---
+
+<Base n={n} og={{ modelo: M, nome: 'hero' }} favicon={{ fundo: '#ff6a13', letra: '#0e0e0e' }} corTema="#0e0e0e" bodyClass="m3">
+  <a class="skip" href="#conteudo">Ir para o conteúdo</a>
+
+  <div class="topbar mono">
+    <div class="wrap">
+      <span><b>Orçamento em até 24h úteis</b> · Fornecemos para construtoras e residências</span>
+      <span><span data-biz="cidade">{n.cidade}</span> e região</span>
+    </div>
+  </div>
+
+  <header class="hdr" data-header>
+    <div class="wrap hdr-in">
+      <a href="#topo" class="logo">
+        <span class="logo-mark" data-biz="inicial">{n.nome.charAt(0)}</span>
+        <span class="logo-t" data-biz="nome">{n.nome}</span>
+      </a>
+      <nav class="nav" aria-label="Principal">{nav.map(([t, h]) => <a href={h}>{t}</a>)}<a class="hdr-cta btn" href="#calculadora" style="border:0">Orçamento</a></nav>
+      <button class="menu-btn" type="button" data-menu-btn aria-expanded="false" aria-controls="drawer" aria-label="Abrir menu"><Icon name="menu" size={26} /></button>
+    </div>
+    <nav class="drawer" id="drawer" data-menu data-open="false" aria-label="Menu móvel">
+      {nav.map(([t, h]) => <a class="dl" href={h}>{t}</a>)}
+      <a class="btn mt-6" href="#calculadora">Calcule seu orçamento</a>
+    </nav>
+  </header>
+
+  <main id="conteudo">
+    <section class="hero" id="topo" aria-labelledby="h-hero">
+      <div class="hero-bg" aria-hidden="true"></div>
+      <div class="wrap hero-grid" style="padding-right:0">
+        <div class="hero-txt">
+          <p class="label" style="color:#fff" data-reveal>Marmoraria industrial · <span data-biz="cidade">{n.cidade}</span></p>
+          <h1 id="h-hero" data-reveal style="--d:80ms">{n.hero.titulo} <em>{n.hero.destaque}</em></h1>
+          <p class="lead" data-reveal style="--d:160ms">{n.hero.texto}</p>
+          <div class="hero-ctas" data-reveal style="--d:240ms">
+            <a class="btn" href="#calculadora">{n.hero.cta} <Icon name="seta" size={22} stroke={2.4} /></a>
+            <a class="btn btn--line" href="#pedras">{n.hero.ctaSecundario}</a>
+          </div>
+          <ul class="hero-selos" data-reveal style="--d:320ms">{n.hero.selos.map((s) => <li>{s}</li>)}</ul>
+        </div>
+        <div class="hero-foto">
+          <Img modelo={M} nome={n.hero.imagem} alt={n.hero.alt} eager sizes="(min-width:1000px) 50vw, 100vw" />
+          <span class="hero-tag">Corte próprio · {n.fundacao}</span>
+        </div>
+      </div>
+    </section>
+
+    <div class="ticker" aria-hidden="true">
+      <div class="ticker-track">
+        {[0, 1].map(() => faixa.map((f) => <span>{f}</span>))}
+      </div>
+    </div>
+
+    <div class="corte" data-scroll-progress aria-hidden="true">
+      <div class="corte-linha"></div>
+      <div class="corte-serra">
+        <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"><circle cx="32" cy="32" r="8"></circle><path d="M32 4l4 8h-8zM60 32l-8 4v-8zM32 60l-4-8h8zM4 32l8-4v8zM52 12l-2 9-7-7zM52 52l-9-2 7-7zM12 52l2-9 7 7zM12 12l9 2-7 7z" fill="currentColor"></path></svg>
+      </div>
+    </div>
+
+    <section class="nums" aria-label="Números da empresa">
+      <div class="wrap">
+        <div class="nums-grid">
+          <div class="num" data-n="01" data-reveal><b data-count={anos}>{anos}</b><span>anos de operação</span></div>
+          <div class="num" data-n="02" data-reveal style="--d:80ms"><b data-count={n.pecas}>{n.pecas.toLocaleString('pt-BR')}</b><span>peças entregues</span></div>
+          <div class="num" data-n="03" data-reveal style="--d:160ms"><b data-count={n.m2}>{n.m2.toLocaleString('pt-BR')}</b><span>m² instalados</span></div>
+          <div class="num" data-n="04" data-reveal style="--d:240ms"><b data-count={n.nota} data-dec="1">{String(n.nota).replace('.', ',')}</b><span>nota no Google · {n.avaliacoes} avaliações</span></div>
+        </div>
+      </div>
+    </section>
+    <div class="hazard" aria-hidden="true"></div>
+
+    <section class="section cat" id="pedras" aria-labelledby="h-ped">
+      <div class="wrap">
+        <div class="cat-top">
+          <div data-reveal>
+            <p class="label">Tabela de chapas</p>
+            <h2 id="h-ped" class="h2 mt-4">Escolha a <em>chapa</em></h2>
+          </div>
+          <div class="chips" role="group" aria-label="Filtrar pedras" data-filter-group="#grade-pedras" data-reveal>
+            <button type="button" class="chip" data-filter="todos" aria-pressed="true">Todas</button>
+            {n.catalogoFiltros.map((c) => <button type="button" class="chip" data-filter={c} aria-pressed="false">{catNome[c]}</button>)}
+          </div>
+        </div>
+        <div class="chapas" id="grade-pedras">
+          {
+            pedras.map((p) => (
+              <button type="button" class="chapa" data-cat={p.categoria} data-amostra={p.json} >
+                <span class="chapa-wrap"><span class="chapa-tex" style={`background-image:url(/tex/${p.id}.svg)`}></span></span>
+                <span class="chapa-cod">{p.cod}</span>
+                <span class="chapa-info">
+                  <b>{p.nome}</b>
+                  <span>{catNome[p.categoria].replace(/s$/, '')} · R$ {brl(p.preco.min)}–{brl(p.preco.max)}/m²</span>
+                </span>
+              </button>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <dialog class="amostra" id="amostra-dialog" aria-label="Amostra da pedra">
+      <button class="amostra-x" type="button" data-fechar aria-label="Fechar"><Icon name="fechar" /></button>
+      <div class="amostra-grid">
+        <div class="amostra-tex" data-a="tex" role="img" aria-label="Amostra ampliada da pedra"></div>
+        <div class="amostra-txt">
+          <p class="label" data-a="cat"></p>
+          <h3 data-a="nome"></h3>
+          <p data-a="desc" style="margin:0"></p>
+          <ul class="amostra-usos" data-a="usos"></ul>
+          <p class="mono" style="margin:0" data-a="preco"></p>
+          <div class="flex flex-wrap gap-3">
+            <button type="button" class="btn" data-a="usar">Usar na calculadora</button>
+            <a class="btn btn--dark" data-a="cta" data-wa="Olá, {nome}! Quero um orçamento." href="#">WhatsApp</a>
+          </div>
+        </div>
+      </div>
+    </dialog>
+
+    <Calculator
+      variante="industrial"
+      eyebrow="Ordem de serviço digital"
+      titulo="Calcule o orçamento por m²"
+      subtitulo="Preencha as medidas, escolha a chapa e os acabamentos. A planilha devolve a faixa de valor, o desenho técnico e o comparativo entre materiais."
+    />
+
+    <div class="corte corte--dark" data-scroll-progress aria-hidden="true" style="background:var(--color-black)">
+      <div class="corte-linha" style="background:#fff"></div>
+      <div class="corte-serra" style="color:#fff">
+        <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" style="color:#fff"><circle cx="32" cy="32" r="8"></circle><path d="M32 4l4 8h-8zM60 32l-8 4v-8zM32 60l-4-8h8zM4 32l8-4v8zM52 12l-2 9-7-7zM52 52l-9-2 7-7zM12 52l2-9 7 7zM12 12l9 2-7 7z" fill="currentColor"></path></svg>
+      </div>
+    </div>
+
+    <section class="section serv" id="servicos" aria-labelledby="h-serv">
+      <div class="wrap">
+        <div class="serv-head" data-reveal>
+          <p class="label">Serviços</p>
+          <h2 id="h-serv" class="h2">Da obra grande <em>à casa bem feita</em></h2>
+        </div>
+        <div class="serv-grid">
+          {
+            n.servicos.map((s, i) => (
+              <article class:list={['tile', s.imagem ? 'tile--img' : 'tile--plain']} data-reveal style={`--d:${(i % 3) * 70}ms`}>
+                {s.imagem && <Img modelo={M} nome={s.imagem} alt={`${s.titulo}: obra executada`} sizes="(min-width:900px) 40vw, 100vw" />}
+                <span class="tile-n">{String(i + 1).padStart(2, '0')}</span>
+                <div class="tile-in">
+                  <span class="tile-ic"><Icon name={s.icone} size={28} stroke={2} /></span>
+                  <h3>{s.titulo}</h3>
+                  <p>{s.texto}</p>
+                </div>
+              </article>
+            ))
+          }
+          <article class="tile tile--cta" data-reveal>
+            <span class="tile-n" style="color:#000">08</span>
+            <div class="tile-in">
+              <h3>Tem projeto?</h3>
+              <p style="color:#000">Envie a planta ou a lista de peças e receba proposta em até 24 horas úteis.</p>
+              <a class="btn btn--dark" data-wa={n.mensagemWhats} href="#" style="justify-self:start">Enviar pelo WhatsApp</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section gal" id="obras" aria-labelledby="h-obras">
+      <div class="wrap">
+        <div class="cat-top">
+          <div data-reveal>
+            <p class="label" style="color:#fff">Galeria de obras</p>
+            <h2 id="h-obras" class="h2 mt-4">Peças em <em>campo</em></h2>
+          </div>
+          <div class="chips" role="group" aria-label="Filtrar obras por ambiente" data-filter-group="#grade-obras" data-reveal>
+            {ambientes.map((a, i) => <button type="button" class="chip" data-filter={i === 0 ? 'todos' : a} aria-pressed={i === 0 ? 'true' : 'false'}>{a}</button>)}
+          </div>
+        </div>
+        <div class="mosaico" id="grade-obras">
+          {
+            n.galeria.map((g) => (
+              <figure class="obra" data-cat={g.ambiente}>
+                <Img modelo={M} nome={g.imagem} alt={g.alt} sizes="(min-width:900px) 25vw, 50vw" />
+                <figcaption><span>{g.ambiente}</span><b>{g.titulo}</b><i>{g.detalhe}</i></figcaption>
+              </figure>
+            ))
+          }
+        </div>
+        <div class="mt-16" data-reveal>
+          <p class="label" style="color:#fff">Antes e depois</p>
+          <h3 class="h2 mb-8 mt-4" style="font-size:clamp(2.2rem,6vw,4rem)">{n.antesDepois.titulo}</h3>
+          <div class="ba" data-ba>
+            <Img modelo={M} nome={n.antesDepois.depois} alt={n.antesDepois.altDepois} sizes="(min-width:1360px) 1296px, 100vw" />
+            <div class="ba-antes"><Img modelo={M} nome={n.antesDepois.antes} alt={n.antesDepois.altAntes} sizes="(min-width:1360px) 1296px, 100vw" /></div>
+            <span class="ba-tag" style="left:0">Antes</span>
+            <span class="ba-tag" style="right:0">Depois</span>
+            <span class="ba-linha"></span>
+            <label class="sr-only" for="ba-range">Comparar antes e depois</label>
+            <input id="ba-range" type="range" min="0" max="100" value="50" />
+            <span class="ba-alca" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l-6 6 6 6M15 6l6 6-6 6"></path></svg></span>
+          </div>
+          <p class="mono mt-3" style="color:#aaa">{n.antesDepois.legenda}</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section proc" id="processo" aria-labelledby="h-proc">
+      <div class="wrap">
+        <div data-reveal>
+          <p class="label">Como funciona</p>
+          <h2 id="h-proc" class="h2 mt-4">Do orçamento <em>à instalação</em></h2>
+        </div>
+        <ol class="proc-list">
+          {
+            n.passos.map((p, i) => (
+              <li class="proc-item" data-reveal>
+                <span class="proc-n" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+                <div><h3>{p.titulo}</h3><p>{p.texto}</p></div>
+                <div class="proc-ph"><Img modelo={M} nome={fotosProc[i]} alt={altProc[i]} sizes="(min-width:900px) 22rem, 100vw" /></div>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </section>
+
+    <section class="section dif" aria-labelledby="h-dif">
+      <div class="dif-bg" aria-hidden="true" data-parallax="0.05"><Img modelo={M} nome="pedra-escura" alt="" sizes="100vw" /></div>
+      <div class="wrap">
+        <div data-reveal>
+          <p class="label" style="color:#fff">Diferenciais</p>
+          <h2 id="h-dif" class="h2 mt-4">Estrutura <em>de verdade</em></h2>
+        </div>
+        <div class="dif-grid">
+          {
+            n.diferenciais.map((d, i) => (
+              <article class="dif-item" data-reveal style={`--d:${i * 70}ms`}>
+                <Icon name={d.icone} size={40} stroke={1.6} />
+                <h3>{d.titulo}</h3>
+                <p>{d.texto}</p>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="section dep" aria-labelledby="h-dep">
+      <div class="wrap">
+        <div data-reveal>
+          <p class="label">Depoimentos</p>
+          <h2 id="h-dep" class="h2 mt-4">Quem <em>já fechou</em></h2>
+        </div>
+        <div class="dep-grid">
+          {
+            n.depoimentos.map((d, i) => (
+              <figure class="dep-card" data-reveal style={`--d:${(i % 3) * 80}ms`}>
+                <div>
+                  <span class="dep-stars" role="img" aria-label="5 de 5 estrelas">{[0, 1, 2, 3, 4].map(() => <Icon name="estrela" size={16} />)}</span>
+                  <blockquote>{d.texto}</blockquote>
+                </div>
+                <footer><b>{d.nome}</b><span>{d.obra} · {d.bairro}</span></footer>
+              </figure>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="section guia" aria-labelledby="h-guia">
+      <div class="wrap">
+        <div data-reveal>
+          <p class="label">Guia rápido</p>
+          <h2 id="h-guia" class="h2 mt-4">Qual pedra <em>escolher?</em></h2>
+        </div>
+        <div class="ficha">
+          {
+            n.guia.map((g, i) => (
+              <article class="ficha-col" data-reveal style={`--d:${i * 90}ms`}>
+                <header><h3>{g.ambiente}</h3><span>FICHA {guiaCod[i]}</span></header>
+                <div>
+                  <div class="ficha-row"><b>Indicação</b><p>{g.recomendacao}</p></div>
+                  <div class="ficha-row ficha-row--no"><b>Evitar</b><p>{g.evitar}</p></div>
+                  <div class="ficha-row"><b>Pedras sugeridas</b><ul class="ficha-pedras">{g.pedras.map((p) => <li>{p}</li>)}</ul></div>
+                </div>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="section faq" aria-labelledby="h-faq">
+      <div class="wrap faq-grid">
+        <div data-reveal>
+          <p class="label">Perguntas frequentes</p>
+          <h2 id="h-faq" class="h2 mt-4">Antes <em>de fechar</em></h2>
+          <a class="btn btn--dark mt-8" data-wa="Olá, {nome}! Tenho uma dúvida técnica sobre pedras e prazos." href="#">Falar com o técnico</a>
+        </div>
+        <div>
+          {
+            n.faq.map((f, i) => (
+              <details name="faq" open={i === 0}>
+                <summary>{f.pergunta}<span class="ico"><Icon name="mais" size={22} stroke={2.6} /></span></summary>
+                <p>{f.resposta}</p>
+              </details>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <div class="hazard" aria-hidden="true"></div>
+    <section class="final" aria-labelledby="h-final">
+      <div class="final-bg" aria-hidden="true" data-parallax="0.05"><Img modelo={M} nome="concreto-claro" alt="" sizes="100vw" /></div>
+      <div class="wrap">
+        <p class="label" style="color:#fff" data-reveal>Orçamento</p>
+        <h2 id="h-final" class="mt-4" data-reveal style="--d:80ms">Tem obra? <em>Mande a medida</em> que a gente corta</h2>
+        <p data-reveal style="--d:160ms">{n.ctaFinal.texto}</p>
+        <div class="final-ctas" data-reveal style="--d:240ms">
+          <a class="btn" href="#calculadora">Calcule seu orçamento</a>
+          <a class="btn btn--line" data-wa={n.mensagemWhats} href="#">Chamar no WhatsApp</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot" id="contato">
+    <div class="wrap">
+      <div class="foot-grid">
+        <div>
+          <a href="#topo" class="logo" style="margin-bottom:1rem"><span class="logo-mark" style="margin-left:0;width:3.2rem;height:3.2rem" data-biz="inicial">{n.nome.charAt(0)}</span><span class="logo-t" data-biz="nome">{n.nome}</span></a>
+          <p style="max-width:22rem">{n.slogan}.</p>
+        </div>
+        <div>
+          <h3>CONTATO</h3>
+          <ul>
+            <li><a data-biz-tel href={`tel:+${n.whats}`}><span data-biz="telefone">{n.telefone}</span></a></li>
+            <li><a href={`mailto:${n.email}`}>{n.email}</a></li>
+            <li><a href={`https://www.instagram.com/${n.instagram}`} target="_blank" rel="noopener">@{n.instagram}</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3>ENDEREÇO</h3>
+          <address><span data-biz-local>{n.endereco}<br /></span><span data-biz="cidade">{n.cidade}</span><span data-biz="uf">/{n.uf}</span><span data-biz-local> · CEP {n.cep}</span></address>
+        </div>
+        <div>
+          <h3>HORÁRIO</h3>
+          <ul>{n.horario.map((h) => <li>{h}</li>)}</ul>
+        </div>
+      </div>
+      <div class="foot-bottom">
+        <span>© <span data-year>{new Date().getFullYear()}</span> <span data-biz="nome">{n.nome}</span></span>
+        <span>Valores da calculadora são estimativas sujeitas à medição no local</span>
+      </div>
+    </div>
+  </footer>
+
+  <WhatsFloat texto={n.mensagemWhats} />
+</Base>

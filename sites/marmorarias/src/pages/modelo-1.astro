@@ -1,7 +1,4 @@
 ---
-import '@fontsource-variable/cormorant-garamond';
-import '@fontsource-variable/cormorant-garamond/wght-italic.css';
-import '@fontsource-variable/jost';
 import '../styles/m1.css';
 import Base from '../layouts/Base.astro';
 import Img from '../components/Img.astro';
@@ -45,7 +42,7 @@ const nav = [
 
   <header class="hdr" data-header>
     <div class="wrap hdr-in">
-      <a href="#topo" class="logo" aria-label={`${n.nome} — início`}>
+      <a href="#topo" class="logo">
         <b data-biz="nome">{n.nome}</b>
         <small>Pedras nobres</small>
       </a>
@@ -139,7 +136,7 @@ const nav = [
         <div class="cat-grid" id="grade-pedras">
           {
             pedras.map((p) => (
-              <button type="button" class="pedra" data-cat={p.categoria} data-amostra={p.json} aria-label={`Ver amostra: ${p.nome}`}>
+              <button type="button" class="pedra" data-cat={p.categoria} data-amostra={p.json}>
                 <span class="pedra-clip"><span class="pedra-tex" style={`background-image:url(/tex/${p.id}.svg)`}></span></span>
                 <span class="pedra-cat">{catNome[p.categoria].replace(/s$/, '')}</span>
                 <span class="pedra-info">
@@ -327,7 +324,7 @@ const nav = [
           n.depoimentos.map((d) => (
             <figure class="dep-card m-0">
               <div>
-                <span class="stars" aria-label="5 de 5 estrelas">{[0, 1, 2, 3, 4].map(() => <Icon name="estrela" size={14} class="fill-current" />)}</span>
+                <span class="stars" role="img" aria-label="5 de 5 estrelas">{[0, 1, 2, 3, 4].map(() => <Icon name="estrela" size={14} class="fill-current" />)}</span>
                 <blockquote class="mt-4">“{d.texto}”</blockquote>
               </div>
               <figcaption class="flex items-center gap-3">
