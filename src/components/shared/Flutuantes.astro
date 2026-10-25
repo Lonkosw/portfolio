@@ -1,0 +1,9 @@
+---
+import type { Clinica } from '../../data/odonto-types';
+import { waLink } from '../../lib/whatsapp';
+import Icon from './Icon.astro';
+interface Props { clinica: Clinica }
+const { clinica: c } = Astro.props;
+---
+<a class="bar-agendar btn btn-primary" href="#agendar"><Icon name="calendar" size={20} />Agendar avaliação</a>
+<a class="fab-wa" href={waLink(c.whatsapp, `Olá! Gostaria de falar com a ${c.nome}.`)} target="_blank" rel="noopener" aria-label="Falar pelo WhatsApp"><Icon name="whatsapp" size={28} sw={1.8} /></a>

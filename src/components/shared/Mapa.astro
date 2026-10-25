@@ -1,0 +1,18 @@
+---
+import type { Clinica } from '../../data/odonto-types';
+import Icon from './Icon.astro';
+interface Props { clinica: Clinica; tema: 'dark' | 'light'; class?: string }
+const { clinica, tema, class: cls = '' } = Astro.props;
+const q = `${clinica.geo.lat},${clinica.geo.lng}`;
+---
+<div class:list={['mapa', cls]} data-mapa data-lat={clinica.geo.lat} data-lng={clinica.geo.lng} data-tema={tema}>
+  <div class="mapa-canvas" data-canvas role="region" aria-label={`Mapa com a localização da ${clinica.nome}`}></div>
+  <div class="mapa-fallback" data-fallback>
+    <Icon name="pin" size={28} />
+    <p>{clinica.endereco.logradouro}</p>
+    <a class="btn btn-ghost" href={`https://www.google.com/maps/search/?api=1&query=${q}`} target="_blank" rel="noopener">Abrir no mapa</a>
+  </div>
+</div>
+<script>
+  import '../../scripts/mapa';
+</script>

@@ -1,0 +1,12 @@
+---
+import '@fontsource-variable/sora/wght.css';
+import '@fontsource/ibm-plex-mono/400.css';
+import '@fontsource/ibm-plex-mono/500.css';
+import '../styles/odonto.css';
+import '../styles/engine.css';
+import '../styles/m2.css';
+import font0 from '@fontsource-variable/sora/files/sora-latin-wght-normal.woff2?url';
+import OdontoBase from './OdontoBase.astro';
+const props = Astro.props;
+---
+<OdontoBase {...props} fonts={[font0]} m="2" themeColor="#06141F" accent="#3DE0D0"><slot name="head" slot="head" /><slot /></OdontoBase>

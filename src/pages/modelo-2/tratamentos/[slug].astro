@@ -1,0 +1,62 @@
+---
+import Layout2 from '../../../layouts/Layout2.astro';
+import Picture from '../../../components/shared/Picture.astro';
+import Icon from '../../../components/shared/Icon.astro';
+import WireTooth from '../../../components/m2/WireTooth.astro';
+import Agendamento from '../../../components/shared/Agendamento.astro';
+import TratamentoCorpo from '../../../components/shared/TratamentoCorpo.astro';
+import Rodape from '../../../components/shared/Rodape.astro';
+import Flutuantes from '../../../components/shared/Flutuantes.astro';
+import { clinicas } from '../../../lib/clinicas';
+import { tratamentos } from '../../../data/tratamentos';
+import { schemaDentist, schemaFaq, schemaTratamento } from '../../../lib/schema';
+
+export function getStaticPaths() {
+  return clinicas['modelo-2'].tratamentos.map((slug) => ({ params: { slug } }));
+}
+const c = clinicas['modelo-2'];
+const t = tratamentos[Astro.params.slug!];
+const img = c.imagens[t.slug];
+---
+
+<Layout2
+  clinica={c}
+  title={`${t.nome} em ${c.cidade} · ${c.nome}`}
+  description={`${t.resumo} Conheça as etapas, o tempo médio e as dúvidas frequentes. Avaliação individual no ${c.nome}.`}
+  og={img}
+  preload={{ img, sizes: '(min-width:900px) 45vw, 100vw' }}
+  schemas={[schemaDentist(c, Astro.url.href, new URL(`/img/${img}-1280.jpg`, Astro.url).href), schemaTratamento(c, t, Astro.url.href), schemaFaq(t.faq)]}
+>
+  <header class="m2-nav is-solid" data-header>
+    <div class="wrap m2-nav-in">
+      <a class="m2-logo" href="/modelo-2/" aria-label={`${c.nome}, página inicial`}>
+        <svg class="m2-logo-m" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M16 3 4 9v9c0 6 5 9.500 12 11 7-1.500 12-5 12-11V9L16 3Z"/><path d="m10 14 6 8 6-8" /></svg>
+        <span>{c.nome}</span>
+      </a>
+      <div class="m2-nav-cta">
+        <a class="btn btn-ghost m2-hide-sm" href="/modelo-2/#tratamentos"><Icon name="back" size={16} />Tratamentos</a>
+        <a class="btn btn-primary" href="#agendar" data-magnetic>Agendar<span class="m2-hide-sm">&nbsp;avaliação</span></a>
+      </div>
+    </div>
+  </header>
+  <main>
+    <section class="m2-thero">
+      <div class="wrap">
+        <p class="m2-crumb"><a href="/modelo-2/#tratamentos">Tratamentos</a><span>/</span><span>{t.slug}</span></p>
+        <div class="m2-thero-g">
+          <div>
+            <h1 data-hero>{t.nome}</h1>
+            <p class="m2-lead" data-hero style="--d:.12s">{c.chamadas[t.slug] ?? t.resumo}</p>
+            <div class="m2-spec" data-hero style="--d:.2s"><span><b>TEMPO</b>{t.tempoMedio}</span><span><b>SESSÕES</b>{t.sessoes}</span></div>
+            <div class="m2-hero-cta" data-hero style="--d:.3s"><a class="btn btn-primary" href="#agendar" data-magnetic>Agendar avaliação</a></div>
+          </div>
+          <div class="hud m2-frame" data-hero="zoom"><Picture img={img} eager sizes="(min-width:900px) 45vw, 100vw" /><div class="m2-scan" aria-hidden="true"></div><div class="wt-box" aria-hidden="true"><WireTooth /></div></div>
+        </div>
+      </div>
+    </section>
+    <TratamentoCorpo clinica={c} t={t} />
+    <Agendamento clinica={c} motivoInicial={t.motivo} titulo={`Agende uma avaliação para ${t.nome.toLowerCase()}`} />
+  </main>
+  <Rodape clinica={c} />
+  <Flutuantes clinica={c} />
+</Layout2>

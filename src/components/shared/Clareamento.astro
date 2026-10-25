@@ -1,0 +1,67 @@
+---
+// Simulador ilustrativo de clareamento (escala de cores em SVG/CSS; nunca foto de paciente).
+import { clareamento, escalaDentes } from '../../data/odonto-config';
+import { jsonLd } from '../../lib/schema';
+interface Props { id?: string; titulo?: string; intro?: string }
+const { id = 'clareamento', titulo = 'Simulador de clareamento', intro = 'Escolha o tom atual dos seus dentes e veja uma estimativa visual do que as técnicas costumam alcançar.' } = Astro.props;
+const data = { escala: escalaDentes, c: clareamento };
+const dente = 'M28 10C14 10 6 20 6 36c0 12 4 20 7 33 3 14 4 36 15 36 8 0 8-26 22-26s14 26 22 26c11 0 12-22 15-36 3-13 7-21 7-33C94 20 86 10 72 10c-9 0-14 4-22 4s-13-4-22-4Z';
+const cards = [
+  { k: 'atual', t: 'Tom atual' },
+  { k: 'consultorio', t: 'Clareamento de consultório' },
+  { k: 'caseiro', t: 'Clareamento caseiro' },
+];
+---
+
+<section id={id} class="cl sec" data-cl aria-labelledby={`${id}-t`}>
+  <div class="wrap">
+    <header class="qz-head" data-reveal>
+      <p class="eyebrow">Simulador</p>
+      <h2 id={`${id}-t`} class="qz-title">{titulo}</h2>
+      <p class="qz-lead">{intro}</p>
+    </header>
+    <div class="cl-box" data-reveal>
+      <fieldset class="cl-pick">
+        <legend class="cl-label">Qual é o tom mais próximo dos seus dentes hoje?</legend>
+        <div class="cl-swatches">
+          {escalaDentes.map((e, i) => (
+            <label class="cl-sw" style={`--c:${e.cor}`}>
+              <input class="ag-input" type="radio" name={`${id}-tom`} value={i} checked={e.id === 'A3'} />
+              <span class="cl-sw-b"><span class="cl-chip" /><span class="cl-sw-t">{e.id}</span></span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+
+      <div class="cl-teeth" aria-live="polite">
+        {cards.map((c) => (
+          <figure class="cl-fig" data-fig={c.k}>
+            <svg viewBox="0 0 100 112" role="img" aria-label={`Ilustração de dente: ${c.t}`}>
+              <path d={dente} class="cl-tooth" data-tooth />
+              <path d="M22 22c-6 4-9 10-9 18" class="cl-gloss" />
+              <path d="M30 14c6-2 12 0 16 1" class="cl-gloss" />
+            </svg>
+            <figcaption>
+              <strong>{c.t}</strong>
+              <span data-shade></span>
+              <small data-time></small>
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+
+      <div class="cl-scale" aria-hidden="true">
+        <div class="cl-track" style={`background:linear-gradient(90deg,${escalaDentes.map((e) => e.cor).join(',')})`}></div>
+        <i class="cl-mark cl-mark-atual" data-m-atual><b>hoje</b></i>
+        <i class="cl-mark cl-mark-cons" data-m-cons><b>consultório</b></i>
+        <i class="cl-mark cl-mark-case" data-m-case><b>caseiro</b></i>
+      </div>
+      <p class="qz-fine">{clareamento.aviso}</p>
+    </div>
+  </div>
+  <script type="application/json" data-cl-data set:html={jsonLd(data)} />
+</section>
+
+<script>
+  import '../../scripts/clareamento';
+</script>

@@ -1,0 +1,23 @@
+---
+// Só aparece com flags.mostrarValores = true (mantido desligado por padrão — regras do CFO).
+import { flags, parcelamento } from '../../data/odonto-config';
+interface Props { id?: string }
+const { id = 'parcelamento' } = Astro.props;
+---
+{flags.mostrarValores && (
+  <section id={id} class="pc sec" data-pc data-cfg={JSON.stringify(parcelamento)} aria-labelledby={`${id}-t`}>
+    <div class="wrap-narrow">
+      <h2 id={`${id}-t`} class="qz-title">Simulador de parcelamento</h2>
+      <form class="pc-form" novalidate>
+        <div class="ag-field"><label for={`${id}-v`}>Valor estimado (R$)</label><input class="ag-in" id={`${id}-v`} name="v" inputmode="decimal" placeholder="0,00" /></div>
+        <div class="ag-field"><label for={`${id}-n`}>Parcelas</label><select class="ag-in" id={`${id}-n`} name="n">{Array.from({ length: parcelamento.parcelasMax }, (_, i) => <option value={i + 1}>{i + 1}x</option>)}</select></div>
+        <p class="pc-out" aria-live="polite" data-out></p>
+      </form>
+      <p class="qz-fine">{parcelamento.aviso}</p>
+    </div>
+  </section>
+)}
+<script>
+  // O cálculo só é baixado quando a seção existe (flags.mostrarValores = true).
+  if (document.querySelector('[data-pc]')) import('../../scripts/parcelamento');
+</script>

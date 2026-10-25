@@ -1,23 +1,26 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import DemoBanner from '../components/DemoBanner.astro';
-import Hero from '../components/Hero.astro';
-import About from '../components/About.astro';
-import Services from '../components/Services.astro';
-import Gallery from '../components/Gallery.astro';
-import Contact from '../components/Contact.astro';
-import { client } from '../data/clients';
+import '../styles/odonto.css';
+import { listaClinicas } from '../lib/clinicas';
 ---
-
-<Layout
-  title={`${client.businessName} - ${client.niche}`}
-  description={client.tagline}
-  colors={client.colors}
->
-  <DemoBanner businessName={client.businessName} />
-  <Hero client={client} />
-  <About client={client} />
-  <Services client={client} />
-  <Gallery client={client} />
-  <Contact client={client} />
-</Layout>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Clínicas odontológicas</title>
+    <meta name="description" content="Escolha uma clínica para navegar." />
+    <meta name="robots" content="noindex, nofollow" />
+  </head>
+  <body style="background:#f4f2ee;color:#1d1d1b;font-family:system-ui,sans-serif">
+    <main style="min-height:100svh;display:grid;place-items:center;padding:2rem">
+      <div style="max-width:60rem;width:100%">
+        <h1 style="font-size:clamp(1.8rem,4vw,2.6rem);margin-bottom:.5rem">Clínicas odontológicas</h1>
+        <p style="color:#555;margin-bottom:2rem">Escolha uma clínica para navegar.</p>
+        <ul style="list-style:none;padding:0;margin:0;display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr))">
+          {listaClinicas.map((c) => (
+            <li><a href={`/${c.id}/`} style="display:block;padding:1.5rem;background:#fff;border:1px solid #dcd8d0;border-radius:12px;text-decoration:none;color:inherit;min-height:48px"><strong style="font-size:1.2rem">{c.nome}</strong><span style="display:block;color:#666;margin-top:.35rem;font-size:.92rem">{c.endereco.bairro}, {c.cidade}</span><span style="display:block;color:#666;margin-top:.5rem;font-size:.9rem">{c.slogan}</span></a></li>
+          ))}
+        </ul>
+      </div>
+    </main>
+  </body>
+</html>

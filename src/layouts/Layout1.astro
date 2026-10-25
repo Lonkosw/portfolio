@@ -1,0 +1,13 @@
+---
+import '@fontsource-variable/cormorant-garamond/wght.css';
+import '@fontsource-variable/cormorant-garamond/wght-italic.css';
+import '@fontsource-variable/inter/wght.css';
+import '../styles/odonto.css';
+import '../styles/engine.css';
+import '../styles/m1.css';
+import font0 from '@fontsource-variable/cormorant-garamond/files/cormorant-garamond-latin-wght-normal.woff2?url';
+import font1 from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
+import OdontoBase from './OdontoBase.astro';
+const props = Astro.props;
+---
+<OdontoBase {...props} fonts={[font0,font1]} m="1" cursor themeColor="#0E0D0C" accent="#C9A96E"><slot name="head" slot="head" /><slot /></OdontoBase>

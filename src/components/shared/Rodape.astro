@@ -1,0 +1,38 @@
+---
+import type { Clinica } from '../../data/odonto-types';
+import { resumoHorarios, enderecoCompleto, whatsFormatado } from '../../lib/clinicas';
+import { waLink } from '../../lib/whatsapp';
+import Icon from './Icon.astro';
+interface Props { clinica: Clinica; class?: string }
+const { clinica: c, class: cls = '' } = Astro.props;
+const rt = c.responsavelTecnico;
+---
+<footer class:list={['rodape', cls]}>
+  <div class="wrap rodape-grid">
+    <div>
+      <p class="rodape-nome">{c.nome}</p>
+      <p class="rodape-sub">{c.slogan}</p>
+      <ul class="rodape-redes">
+        <li><a href={`https://www.instagram.com/${c.instagram}`} target="_blank" rel="noopener" aria-label={`@${c.instagram} no Instagram`}><Icon name="instagram" size={20} /><span>@{c.instagram}</span></a></li>
+        <li><a href={waLink(c.whatsapp, `Olá! Gostaria de falar com a ${c.nome}.`)} target="_blank" rel="noopener"><Icon name="whatsapp" size={20} /><span>{whatsFormatado(c)}</span></a></li>
+        <li><a href={`mailto:${c.email}`}><Icon name="mail" size={20} /><span>{c.email}</span></a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="rodape-h">Onde estamos</p>
+      <address class="rodape-end">{enderecoCompleto(c)}</address>
+      <p class="rodape-h rodape-h2">Horários</p>
+      <ul class="rodape-hor">{resumoHorarios(c).map((h) => <li><span>{h.dias}</span><span>{h.horas}</span></li>)}</ul>
+    </div>
+    <div>
+      <p class="rodape-h">Responsabilidade técnica</p>
+      <p class="rodape-rt">{rt.titulo} {rt.nome}</p>
+      <p class="rodape-cro">{rt.titulo === 'Dra.' ? 'Cirurgiã-dentista' : 'Cirurgião-dentista'} · {rt.cro}</p>
+      <p class="rodape-cro">Inscrição da clínica no CRO: {c.croClinica}</p>
+    </div>
+  </div>
+  <div class="wrap rodape-fim">
+    <p>© <span data-ano>{new Date().getFullYear()}</span> {c.nomeCompleto}. Todos os direitos reservados.</p>
+    <p class="rodape-aviso">Este site tem caráter informativo e não substitui uma consulta. A indicação de qualquer tratamento depende de avaliação clínica individual, e os resultados variam de acordo com cada caso. Publicidade conforme o Código de Ética Odontológica.</p>
+  </div>
+</footer>

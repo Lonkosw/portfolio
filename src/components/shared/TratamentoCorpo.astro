@@ -1,0 +1,64 @@
+---
+import type { Clinica, Tratamento } from '../../data/odonto-types';
+import { tratamentos } from '../../data/tratamentos';
+import { aviso } from '../../data/odonto-config';
+import Icon from './Icon.astro';
+import Faq from './Faq.astro';
+import Picture from './Picture.astro';
+interface Props { clinica: Clinica; t: Tratamento }
+const { clinica: c, t } = Astro.props;
+const outros = c.tratamentos.filter((s) => s !== t.slug).slice(0, 3).map((s) => tratamentos[s]);
+---
+<section class="tr sec" aria-label={`Sobre ${t.nome}`}>
+  <div class="wrap tr-grid">
+    <div class="tr-main">
+      <h2 class="tr-h" data-reveal>O que é</h2>
+      {t.oQueE.map((p) => <p class="tr-p" data-reveal>{p}</p>)}
+
+      <h2 class="tr-h" data-reveal>Para quem costuma ser indicado</h2>
+      <ul class="tr-list" data-stagger>
+        {t.indicadoPara.map((i) => <li data-reveal><Icon name="check" size={20} class="tr-ck" /><span>{i}</span></li>)}
+      </ul>
+
+      <h2 class="tr-h" data-reveal>Etapas do tratamento</h2>
+      <ol class="tl" data-stagger>
+        {t.etapas.map((e, i) => (
+          <li data-reveal><span class="tl-n">{i + 1}</span><div class="tl-b"><h3>{e.titulo}</h3><p>{e.texto}</p><span class="tl-t">{e.tempo}</span></div></li>
+        ))}
+      </ol>
+
+      <h2 class="tr-h" data-reveal>Cuidados</h2>
+      <ul class="tr-list" data-stagger>
+        {t.cuidados.map((i) => <li data-reveal><Icon name="shield" size={20} class="tr-ck" /><span>{i}</span></li>)}
+      </ul>
+    </div>
+    <aside class="tr-aside" data-reveal>
+      <div class="tr-facts">
+        <p class="tr-fl">Tempo médio</p><p class="tr-fv">{t.tempoMedio}</p>
+        <p class="tr-fl">Sessões</p><p class="tr-fv">{t.sessoes}</p>
+        <p class="tr-fl">Responsável técnico</p><p class="tr-fv">{c.responsavelTecnico.titulo} {c.responsavelTecnico.nome} · {c.responsavelTecnico.cro}</p>
+        <a class="btn btn-primary" href="#agendar">Agendar avaliação</a>
+        <p class="tr-fine">{aviso.clinico}</p>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<section class="sec tr-faq" aria-labelledby="tr-faq-t">
+  <div class="wrap-narrow">
+    <p class="eyebrow">Dúvidas</p>
+    <h2 id="tr-faq-t" class="qz-title" style="margin-bottom:2rem">Perguntas sobre {t.nome.toLowerCase()}</h2>
+    <Faq itens={t.faq} nome="faq-trat" />
+  </div>
+</section>
+
+<section class="sec tr-more" aria-labelledby="tr-more-t">
+  <div class="wrap">
+    <h2 id="tr-more-t" class="qz-title" style="font-size:clamp(1.6rem,3vw,2.2rem);margin-bottom:1.5rem">Outros tratamentos</h2>
+    <ul class="tr-more-g">
+      {outros.map((o) => (
+        <li><a href={`/${c.id}/tratamentos/${o.slug}`} class="tr-more-c"><span class="tr-more-i"><Picture img={c.imagens[o.slug]} sizes="(min-width:700px) 30vw, 90vw" decorativa /></span><strong>{o.nome}</strong><span>{o.resumo}</span></a></li>
+      ))}
+    </ul>
+  </div>
+</section>

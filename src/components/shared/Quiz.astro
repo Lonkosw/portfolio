@@ -1,0 +1,65 @@
+---
+// Quiz "Qual tratamento é ideal para você?" — regras e textos em src/data/odonto-config.ts
+import type { Clinica } from '../../data/odonto-types';
+import { aviso, quizExplicacao, quizPerguntas } from '../../data/odonto-config';
+import { tratamentos } from '../../data/tratamentos';
+import { jsonLd } from '../../lib/schema';
+import Icon from './Icon.astro';
+
+interface Props { clinica: Clinica; id?: string; titulo?: string; intro?: string }
+const { clinica, id = 'quiz', titulo = 'Qual tratamento pode fazer sentido para você?', intro = 'Responda a 7 perguntas rápidas e veja caminhos que costumam ser avaliados em casos parecidos com o seu.' } = Astro.props;
+const base = `/${clinica.id}/tratamentos`;
+const data = {
+  total: quizPerguntas.length,
+  oferecidos: clinica.tratamentos,
+  base,
+  trat: Object.fromEntries(
+    clinica.tratamentos.map((s) => [s, { nome: tratamentos[s].nome, tempo: tratamentos[s].tempoMedio, sessoes: tratamentos[s].sessoes, motivo: tratamentos[s].motivo, exp: quizExplicacao[s] ?? tratamentos[s].resumo }]),
+  ),
+};
+---
+
+<section id={id} class="qz sec" data-quiz aria-labelledby={`${id}-t`}>
+  <div class="wrap">
+    <header class="qz-head" data-reveal>
+      <p class="eyebrow">Quiz</p>
+      <h2 id={`${id}-t`} class="qz-title">{titulo}</h2>
+      <p class="qz-lead">{intro}</p>
+    </header>
+    <div class="qz-box" data-reveal>
+      <div class="qz-top">
+        <p class="qz-count" data-count-txt aria-live="polite">Pergunta 1 de {quizPerguntas.length}</p>
+        <div class="ag-bar" aria-hidden="true"><i data-qbar></i></div>
+      </div>
+      <form data-qform novalidate>
+        {quizPerguntas.map((p, i) => (
+          <fieldset class="qz-q" data-q={i} hidden={i > 0}>
+            <legend class="qz-qt" tabindex="-1">{p.titulo}</legend>
+            <div class="qz-opts">
+              {p.opcoes.map((o, j) => (
+                <label class="ag-card qz-opt">
+                  <input class="ag-input" type="radio" name={`q${i}`} value={j} />
+                  <span class="ag-card-body">
+                    <Icon name={o.icone} size={24} class="ag-ico" />
+                    <span class="ag-card-t">{o.label}</span>
+                    {o.hint && <span class="ag-card-d">{o.hint}</span>}
+                  </span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+        ))}
+        <div class="qz-nav">
+          <button type="button" class="btn btn-ghost" data-qback hidden><Icon name="back" size={18} />Voltar</button>
+        </div>
+      </form>
+      <div class="qz-res" data-qres hidden aria-live="polite" tabindex="-1"></div>
+    </div>
+    <p class="qz-aviso">{aviso.clinico}</p>
+  </div>
+  <script type="application/json" data-quiz-data set:html={jsonLd(data)} />
+</section>
+
+<script>
+  import '../../scripts/quiz';
+</script>

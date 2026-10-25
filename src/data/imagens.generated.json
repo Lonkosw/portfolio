@@ -1,0 +1,932 @@
+{
+ "modelo-1/avaliacao": {
+  "w": 1280,
+  "h": 1920,
+  "widths": [
+   640,
+   960,
+   1280,
+   1920
+  ],
+  "fallback": 1280,
+  "alt": "Dentista examinando os dentes anteriores de um paciente com sonda, em close",
+  "pos": "50% 50%",
+  "cor": "#86696b",
+  "origem": "1664529845836-433c172142ca"
+ },
+ "modelo-1/clareamento": {
+  "w": 1280,
+  "h": 1920,
+  "widths": [
+   640,
+   960,
+   1280,
+   1920
+  ],
+  "fallback": 1280,
+  "alt": "Close do sorriso de uma mulher com lábios rosados e dentes claros",
+  "pos": "50% 45%",
+  "cor": "#be9685",
+  "origem": "1654373535457-383a0a4d00f9"
+ },
+ "modelo-1/equipe-1": {
+  "w": 960,
+  "h": 1440,
+  "widths": [
+   480,
+   960
+  ],
+  "fallback": 960,
+  "alt": "Retrato de dentista mulher sorrindo, de camisa branca, sobre fundo claro",
+  "pos": "50% 22%",
+  "cor": "#e0dcde",
+  "origem": "1765005204058-10418f5123c5"
+ },
+ "modelo-1/equipe-2": {
+  "w": 960,
+  "h": 640,
+  "widths": [
+   480,
+   960
+  ],
+  "fallback": 960,
+  "alt": "Retrato de dentista de óculos e jaleco branco, de braços cruzados",
+  "pos": "50% 35%",
+  "cor": "#bcc0c3",
+  "origem": "1612349317150-e413f6a5b16d"
+ },
+ "modelo-1/equipe-3": {
+  "w": 960,
+  "h": 1440,
+  "widths": [
+   480,
+   960
+  ],
+  "fallback": 960,
+  "alt": "Retrato de dentista mulher de óculos e blazer escuro, de braços cruzados",
+  "pos": "50% 25%",
+  "cor": "#709386",
+  "origem": "1784652952101-5a10c5202270"
+ },
+ "modelo-1/exame": {
+  "w": 1280,
+  "h": 960,
+  "widths": [
+   640,
+   960,
+   1280,
+   1920
+  ],
+  "fallback": 1280,
+  "alt": "Exame odontológico com espelho clínico e sonda em close",
+  "pos": "50% 50%",
+  "cor": "#a4866f",
+  "origem": "1606811971618-4486d14f3f99"
+ },
+ "modelo-1/harmonizacao": {
+  "w": 1280,
+  "h": 854,
+  "widths": [
+   640,
+   960,
+   1280,
+   1920
+  ],
+  "fallback": 1280,
+  "alt": "Paciente deitada recebendo procedimento estético facial com luvas pretas",
+  "pos": "50% 50%",
+  "cor": "#72695d",
+  "origem": "1785861084191-3600dfc2a6d6"
+ },
+ "modelo-1/hero": {
+  "w": 1280,
+  "h": 854,
+  "widths": [
+   640,
+   960,
+   1280,
+   1920,
+   2560
+  ],
+  "fallback": 1280,
+  "alt": "Mulher sorrindo em close, com cabelos ondulados e luz natural quente",
+  "pos": "50% 62%",
+  "cor": "#6a5649",
+  "origem": "1489278353717-f64c6ee8a4d2"
+ },
+ "modelo-1/instrumentos": {
+  "w": 960,
+  "h": 1280,
+  "widths": [
+   480,
+   960
+  ],
+  "fallback": 960,
+  "alt": "Espelho clínico e sonda sobre superfície clara",
+  "pos": "50% 45%",
+  "cor": "#abaaa6",
+  "origem": "1606811856475-5e6fcdc6e509"
+ },
+ "modelo-1/lentes": {
+  "w": 1280,
+  "h": 1024,
+  "widths": [
+   640,
+   960,
+   1280,
+   1920
+  ],
+  "fallback": 1280,
+  "alt": "Close da arcada dentária com afastador, mostrando dentes anteriores alinhados",
+  "pos": "50% 50%",
+  "cor": "#4b3936",
+  "origem": "1670250492416-570b5b7343b1"
+ },
+ "modelo-1/retrato-cacheada": {
+  "w": 1280,
+  "h": 1920,
+  "widths": [
+   640,
+   960,
+   1280,
+   1920
+  ],
+  "fallback": 1280,
+  "alt": "Mulher de cabelos castanhos sorrindo de olhos fechados ao ar livre",
+  "pos": "50% 35%",
+  "cor": "#907c72",
+  "origem": "1617812191081-2a24e3f30e45"
+ },
+ "modelo-1/retrato-pb": {
+  "w": 1280,
+  "h": 1920,
+  "widths": [
+   640,
+   960,
+   1280,
+   1920
+  ],
+  "fallback": 1280,
+  "alt": "Retrato em preto e branco de uma mulher sorrindo com o rosto em close",
+  "pos": "50% 40%",
+  "cor": "#626262",
+  "origem": "1562337404-3044c84ac061"
+ },
+ "modelo-1/sobre": {
+  "w": 1280,
+  "h": 1600,
+  "widths": [
+   640,
+   960,
+   1280,
+   1920
+  ],
+  "fallback": 1280,
+  "alt": "Mulher rindo ao ar livre, com blusa branca de renda e luz natural",
+  "pos": "50% 30%",
+  "cor": "#a3967f",
+  "origem": "1548382131-e0ebb1f0cdea"
+ },
+ "modelo-1/sorriso-batom": {
+  "w": 1280,
+  "h": 1024,
+  "widths": [
+   640,
+   960,
+   1280,
+   1920
+  ],
+  "fallback": 1280,
+  "alt": "Close do sorriso de uma mulher com dentes naturais e batom vermelho",
+  "pos": "50% 55%",
+  "cor": "#ca7d69",
+  "origem": "1769559893692-c6d0623bf8e4"
+ },
+ "modelo-1/sorriso-lateral": {
+  "w": 1280,
+  "h": 854,
+  "widths": [
+   640,
+   960,
+   1280,
+   1920
+  ],
+  "fallback": 1280,
+  "alt": "Perfil de um sorriso feminino em close, com dentes claros e naturais",
+  "pos": "50% 60%",
+  "cor": "#c3a9a1",
+  "origem": "1677026010083-78ec7f1b84ed"
+ },
+ "modelo-1/tour-consultorio": {
+  "w": 1280,
+  "h": 854,
+  "widths": [
+   640,
+   960,
+   1280,
+   1920
+  ],
+  "fallback": 1280,
+  "alt": "Consultório com cadeira odontológica azul e painel artístico na parede",
+  "pos": "50% 50%",
+  "cor": "#9da7a6",
+  "origem": "1643660526741-094639fbe53a"
+ },
+ "modelo-1/tour-janelas": {
+  "w": 1280,
+  "h": 949,
+  "widths": [
+   640,
+   960,
+   1280,
+   1920
+  ],
+  "fallback": 1280,
+  "alt": "Consultório amplo com janelas, cadeira odontológica vinho e bancada branca",
+  "pos": "50% 50%",
+  "cor": "#847e72",
+  "origem": "1616391182219-e080b4d1043a"
+ },
+ "modelo-1/tour-recepcao": {
+  "w": 1280,
+  "h": 1498,
+  "widths": [
+   640,
+   960,
+   1280,
+   1920
+  ],
+  "fallback": 1280,
+  "alt": "Sala de espera clara e minimalista com poltronas pretas e vaso de oliveira",
+  "pos": "50% 55%",
+  "cor": "#b7b6b2",
+  "origem": "1762625570087-6d98fca29531"
+ },
+ "modelo-1/tour-sala": {
+  "w": 1280,
+  "h": 854,
+  "widths": [
+   640,
+   960,
+   1280,
+   1920
+  ],
+  "fallback": 1280,
+  "alt": "Sala de atendimento clara com mesa e cadeiras ao lado do consultório",
+  "pos": "50% 50%",
+  "cor": "#c5c0b7",
+  "origem": "1704455306251-b4634215d98f"
+ },
+ "modelo-2/alinhador-azul": {
+  "w": 1280,
+  "h": 1280,
+  "widths": [
+   640,
+   960,
+   1280,
+   1920
+  ],
+  "fallback": 1280,
+  "alt": "Mão com luva azul segurando um alinhador transparente",
+  "pos": "50% 50%",
+  "cor": "#abcad9",
+  "origem": "1695275857301-19e5a9995108"
+ },
+ "modelo-2/alinhador-estojo": {
+  "w": 1280,
+  "h": 1280,
+  "widths": [
+   640,
+   960,
+   1280,
+   1920
+  ],
+  "fallback": 1280,
+  "alt": "Mão com luva azul segurando estojo com alinhadores transparentes",
+  "pos": "50% 50%",
+  "cor": "#a1c5d5",
+  "origem": "1694675236489-d73651370688"
+ },
+ "modelo-2/alinhadora": {
+  "w": 1280,
+  "h": 960,
+  "widths": [
+   640,
+   960,
+   1280,
+   1920
+  ],
+  "fallback": 1280,
+  "alt": "Mulher ajustando alinhadores transparentes sobre os dentes",
+  "pos": "50% 55%",
+  "cor": "#cf9f8c",
+  "origem": "1777793636393-a0fec488f3fb"
+ },
+ "modelo-2/canetas": {
+  "w": 1280,
+  "h": 854,
+  "widths": [
+   640,
+   960,
+   1280,
+   1920
+  ],
+  "fallback": 1280,
+  "alt": "Conjunto de canetas de alta rotação no equipo odontológico",
+  "pos": "50% 50%",
+  "cor": "#423f35",
+  "origem": "1642844744022-d76a9af3711a"
+ },
+ "modelo-2/consulta": {
+  "w": 1280,
+  "h": 960,
+  "widths": [
+   640,
+   960,
+   1280,
+   1920
+  ],
+  "fallback": 1280,
+  "alt": "Dentista conversando com paciente em consultório moderno",
+  "pos": "50% 50%",
+  "cor": "#a0968c",
+  "origem": "1777331903190-341a3dd0441b"
+ },
+ "modelo-2/dentista-exames": {
+  "w": 1280,
+  "h": 854,
+  "widths": [
+   640,
+   960,
+   1280,
+   1920
+  ],
+  "fallback": 1280,
+  "alt": "Dentista examinando radiografias em um negatoscópio",
+  "pos": "50% 50%",
+  "cor": "#888379",
+  "origem": "1588776814546-1ffcf47267a5"
+ },
+ "modelo-2/equipe-1": {
+  "w": 1280,
+  "h": 720,
+  "widths": [
+   640,
+   960,
+   1280,
+   1920
+  ],
+  "fallback": 1280,
+  "alt": "Dentista de óculos e estetoscópio, de braços cruzados, sorrindo",
+  "pos": "50% 30%",
+  "cor": "#5f6f6e",
+  "origem": "1758691463582-11aea602cd4a"
+ },
+ "modelo-2/equipe-2": {
+  "w": 960,
+  "h": 1440,
+  "widths": [
+   480,
+   960
+  ],
+  "fallback": 960,
+  "alt": "Dentista de cabelos cacheados com uniforme verde-água, de braços cruzados",
+  "pos": "50% 25%",
+  "cor": "#92abae",
+  "origem": "1594824476967-48c8b964273f"
+ },
+ "modelo-2/equipe-3": {
+  "w": 960,
+  "h": 1200,
+  "widths": [
+   480,
+   960
+  ],
+  "fallback": 960,
+  "alt": "Dentista sorrindo com uniforme azul e estetoscópio no pescoço",
+  "pos": "50% 25%",
+  "cor": "#8c8aa4",
+  "origem": "1622253692010-333f2da6031d"
+ },
+ "modelo-2/hero": {
+  "w": 1280,
+  "h": 854,
+  "widths": [
+   640,
+   960,
+   1280,
+   1920,
+   2560
+  ],
+  "fallback": 1280,
+  "alt": "Mão enluvada apontando para uma tomografia odontológica em um tablet",
+  "pos": "55% 50%",
+  "cor": "#858d92",
+  "origem": "1600170311833-c2cf5280ce49"
+ },
+ "modelo-2/implante-coroa": {
+  "w": 1280,
+  "h": 1920,
+  "widths": [
+   640,
+   960,
+   1280,
+   1920
+  ],
+  "fallback": 1280,
+  "alt": "Mão enluvada segurando um implante com coroa dentária",
+  "pos": "50% 40%",
+  "cor": "#a8a5a8",
+  "origem": "1771442873035-474765b40ac6"
+ },
+ "modelo-2/implante-demo": {
+  "w": 1280,
+  "h": 960,
+  "widths": [
+   640,
+   960,
+   1280,
+   1920
+  ],
+  "fallback": 1280,
+  "alt": "Dentista explicando um implante em uma réplica de arcada",
+  "pos": "50% 50%",
+  "cor": "#d0beb7",
+  "origem": "1777445826358-f95518f49b44"
+ },
+ "modelo-2/implante-modelo": {
+  "w": 1280,
+  "h": 854,
+  "widths": [
+   640,
+   960,
+   1280,
+   1920
+  ],
+  "fallback": 1280,
+  "alt": "Réplica didática de implante dentário ao lado de réplicas de arcadas",
+  "pos": "50% 50%",
+  "cor": "#64422f",
+  "origem": "1593022356769-11f762e25ed9"
+ },
+ "modelo-2/instrumentos": {
+  "w": 960,
+  "h": 1440,
+  "widths": [
+   480,
+   960
+  ],
+  "fallback": 960,
+  "alt": "Mão enluvada segurando instrumentos de exame odontológico",
+  "pos": "50% 35%",
+  "cor": "#aba9a8",
+  "origem": "1771442873038-dda05b6ca447"
+ },
+ "modelo-2/monitor-raio-x": {
+  "w": 1280,
+  "h": 854,
+  "widths": [
+   640,
+   960,
+   1280,
+   1920
+  ],
+  "fallback": 1280,
+  "alt": "Radiografia panorâmica exibida em monitor no consultório",
+  "pos": "50% 50%",
+  "cor": "#3f3c35",
+  "origem": "1755526739866-c73f65b82f8e"
+ },
+ "modelo-2/paciente": {
+  "w": 1280,
+  "h": 854,
+  "widths": [
+   640,
+   960,
+   1280,
+   1920
+  ],
+  "fallback": 1280,
+  "alt": "Homem jovem sorrindo com camiseta azul-marinho sobre fundo claro",
+  "pos": "50% 30%",
+  "cor": "#9697a3",
+  "origem": "1757744705465-ea08b0ddc38a"
+ },
+ "modelo-2/panoramica": {
+  "w": 1280,
+  "h": 960,
+  "widths": [
+   640,
+   960,
+   1280,
+   1920
+  ],
+  "fallback": 1280,
+  "alt": "Radiografia panorâmica mostrando dentes e arcada",
+  "pos": "50% 50%",
+  "cor": "#666666",
+  "origem": "1777445374290-eedda5be8e5b"
+ },
+ "modelo-2/procedimento": {
+  "w": 1280,
+  "h": 1920,
+  "widths": [
+   640,
+   960,
+   1280,
+   1920
+  ],
+  "fallback": 1280,
+  "alt": "Dois dentistas com paramentação completa realizando procedimento",
+  "pos": "50% 40%",
+  "cor": "#c4bfb7",
+  "origem": "1588776814546-daab30f310ce"
+ },
+ "modelo-2/quadro-exames": {
+  "w": 1280,
+  "h": 960,
+  "widths": [
+   640,
+   960,
+   1280,
+   1920
+  ],
+  "fallback": 1280,
+  "alt": "Dentista analisando exames de imagem em um negatoscópio iluminado",
+  "pos": "50% 50%",
+  "cor": "#85807e",
+  "origem": "1777444969135-caf869407707"
+ },
+ "modelo-2/scanner": {
+  "w": 1280,
+  "h": 1601,
+  "widths": [
+   640,
+   960,
+   1280,
+   1920
+  ],
+  "fallback": 1280,
+  "alt": "Dois profissionais usando uma tela de planejamento digital em uma clínica",
+  "pos": "50% 40%",
+  "cor": "#656561",
+  "origem": "1667133295311-e6911e6e22db"
+ },
+ "modelo-2/tablet-exame": {
+  "w": 1280,
+  "h": 720,
+  "widths": [
+   640,
+   960,
+   1280,
+   1920
+  ],
+  "fallback": 1280,
+  "alt": "Profissional apontando para exame de imagem em um tablet",
+  "pos": "50% 50%",
+  "cor": "#8c9a93",
+  "origem": "1758691461957-13aff0c37c6f"
+ },
+ "modelo-2/tour-clinica": {
+  "w": 1280,
+  "h": 856,
+  "widths": [
+   640,
+   960,
+   1280,
+   1920
+  ],
+  "fallback": 1280,
+  "alt": "Consultório moderno com cadeira, equipo e bancada branca",
+  "pos": "50% 50%",
+  "cor": "#a8abb0",
+  "origem": "1629909613654-28e377c37b09"
+ },
+ "modelo-2/tour-sala": {
+  "w": 1280,
+  "h": 854,
+  "widths": [
+   640,
+   960,
+   1280,
+   1920
+  ],
+  "fallback": 1280,
+  "alt": "Consultório com cadeira odontológica, monitor e iluminação clara",
+  "pos": "50% 50%",
+  "cor": "#a4a7a4",
+  "origem": "1643660527098-559f89e45a92"
+ },
+ "modelo-3/cadeira-laranja": {
+  "w": 1280,
+  "h": 854,
+  "widths": [
+   640,
+   960,
+   1280,
+   1920
+  ],
+  "fallback": 1280,
+  "alt": "Consultório claro com cadeira odontológica laranja e janela ao fundo",
+  "pos": "50% 50%",
+  "cor": "#9e958a",
+  "origem": "1598256989800-fe5f95da9787"
+ },
+ "modelo-3/cozinha": {
+  "w": 1280,
+  "h": 854,
+  "widths": [
+   640,
+   960,
+   1280,
+   1920
+  ],
+  "fallback": 1280,
+  "alt": "Família cozinhando junta em uma cozinha clara e acolhedora",
+  "pos": "50% 45%",
+  "cor": "#bda694",
+  "origem": "1761839258568-fd466a93f68b"
+ },
+ "modelo-3/crianca-rindo": {
+  "w": 1280,
+  "h": 1921,
+  "widths": [
+   640,
+   960,
+   1280,
+   1920
+  ],
+  "fallback": 1280,
+  "alt": "Menino de camisa xadrez dando uma gargalhada ao ar livre",
+  "pos": "50% 35%",
+  "cor": "#918074",
+  "origem": "1593183230686-69876b0cb240"
+ },
+ "modelo-3/dentista-crianca": {
+  "w": 1280,
+  "h": 1920,
+  "widths": [
+   640,
+   960,
+   1280,
+   1920
+  ],
+  "fallback": 1280,
+  "alt": "Dentista sentado ao lado de um menino em um consultório claro",
+  "pos": "50% 45%",
+  "cor": "#bcb7b1",
+  "origem": "1708687045000-9dbb586ad1e2"
+ },
+ "modelo-3/dentista-menino": {
+  "w": 1280,
+  "h": 1920,
+  "widths": [
+   640,
+   960,
+   1280,
+   1920
+  ],
+  "fallback": 1280,
+  "alt": "Dentista examinando a boca de um menino durante a consulta",
+  "pos": "50% 40%",
+  "cor": "#736e6f",
+  "origem": "1565090568947-7293970ba471"
+ },
+ "modelo-3/equipe-1": {
+  "w": 1280,
+  "h": 854,
+  "widths": [
+   640,
+   960,
+   1280,
+   1920
+  ],
+  "fallback": 1280,
+  "alt": "Dentista de jaleco branco apontando para o lado, sobre fundo claro",
+  "pos": "50% 35%",
+  "cor": "#e5e4e1",
+  "origem": "1673865641073-4479f93a7776"
+ },
+ "modelo-3/equipe-2": {
+  "w": 960,
+  "h": 1440,
+  "widths": [
+   480,
+   960
+  ],
+  "fallback": 960,
+  "alt": "Dentista de jaleco branco com as mãos nos bolsos em corredor iluminado",
+  "pos": "50% 30%",
+  "cor": "#c1b2be",
+  "origem": "1712215544003-af10130f8eb3"
+ },
+ "modelo-3/equipe-3": {
+  "w": 960,
+  "h": 1358,
+  "widths": [
+   480,
+   960
+  ],
+  "fallback": 960,
+  "alt": "Dentista de óculos e uniforme azul sorrindo",
+  "pos": "50% 28%",
+  "cor": "#6f6260",
+  "origem": "1770134223774-13b735e29201"
+ },
+ "modelo-3/familia-correndo": {
+  "w": 1280,
+  "h": 1920,
+  "widths": [
+   640,
+   960,
+   1280,
+   1920
+  ],
+  "fallback": 1280,
+  "alt": "Pais e filhas correndo juntos em um jardim ensolarado",
+  "pos": "50% 40%",
+  "cor": "#aea994",
+  "origem": "1770871821382-60ea99b0a941"
+ },
+ "modelo-3/hero": {
+  "w": 1280,
+  "h": 854,
+  "widths": [
+   640,
+   960,
+   1280,
+   1920,
+   2560
+  ],
+  "fallback": 1280,
+  "alt": "Família com crianças posando em um jardim ao fim da tarde",
+  "pos": "50% 45%",
+  "cor": "#5f694e",
+  "origem": "1761839258657-457dda39b5cc"
+ },
+ "modelo-3/mae-filha": {
+  "w": 1280,
+  "h": 854,
+  "widths": [
+   640,
+   960,
+   1280,
+   1920
+  ],
+  "fallback": 1280,
+  "alt": "Mãe sentada ao lado da filha na cadeira de um consultório infantil colorido",
+  "pos": "50% 50%",
+  "cor": "#c29c6f",
+  "origem": "1619236200199-2c138e4a5fae"
+ },
+ "modelo-3/menina-alinhador": {
+  "w": 1280,
+  "h": 854,
+  "widths": [
+   640,
+   960,
+   1280,
+   1920
+  ],
+  "fallback": 1280,
+  "alt": "Adolescente sorrindo colocando um alinhador transparente, fundo amarelo",
+  "pos": "50% 35%",
+  "cor": "#e5aa40",
+  "origem": "1609840113929-b130355987e1"
+ },
+ "modelo-3/mulher-espelho": {
+  "w": 1280,
+  "h": 1707,
+  "widths": [
+   640,
+   960,
+   1280,
+   1920
+  ],
+  "fallback": 1280,
+  "alt": "Jovem sorrindo e segurando um espelho no consultório",
+  "pos": "50% 40%",
+  "cor": "#b9aa9f",
+  "origem": "1785860817740-c95735ba03b1"
+ },
+ "modelo-3/paciente": {
+  "w": 1280,
+  "h": 720,
+  "widths": [
+   640,
+   960,
+   1280,
+   1920
+  ],
+  "fallback": 1280,
+  "alt": "Homem sendo atendido por dentista em consulta de rotina",
+  "pos": "50% 45%",
+  "cor": "#5d6363",
+  "origem": "1684607633251-8a4a8d94ddd2"
+ },
+ "modelo-3/pai-carrega": {
+  "w": 1280,
+  "h": 1920,
+  "widths": [
+   640,
+   960,
+   1280,
+   1920
+  ],
+  "fallback": 1280,
+  "alt": "Pai carregando a filha de vestido rosa ao ar livre",
+  "pos": "50% 40%",
+  "cor": "#8b8475",
+  "origem": "1603367563698-67012943fd67"
+ },
+ "modelo-3/pai-filha": {
+  "w": 1280,
+  "h": 1920,
+  "widths": [
+   640,
+   960,
+   1280,
+   1920
+  ],
+  "fallback": 1280,
+  "alt": "Pai abraçando a filha que ri, em um momento de carinho",
+  "pos": "50% 35%",
+  "cor": "#927d6e",
+  "origem": "1624272864537-8ecc72b67958"
+ },
+ "modelo-3/rindo-azul": {
+  "w": 1280,
+  "h": 1707,
+  "widths": [
+   640,
+   960,
+   1280,
+   1920
+  ],
+  "fallback": 1280,
+  "alt": "Pessoa de cabelos castanhos rindo com camisa azul texturizada",
+  "pos": "50% 35%",
+  "cor": "#a29c98",
+  "origem": "1611695434369-a8f5d76ceb7b"
+ },
+ "modelo-3/sala-rosa-1": {
+  "w": 1280,
+  "h": 854,
+  "widths": [
+   640,
+   960,
+   1280,
+   1920
+  ],
+  "fallback": 1280,
+  "alt": "Auxiliar de jaleco azul-claro atendendo paciente em consultório de paredes rosadas",
+  "pos": "50% 50%",
+  "cor": "#8f979f",
+  "origem": "1681939278218-a755fb2bf2d3"
+ },
+ "modelo-3/sala-rosa-2": {
+  "w": 1280,
+  "h": 854,
+  "widths": [
+   640,
+   960,
+   1280,
+   1920
+  ],
+  "fallback": 1280,
+  "alt": "Profissional mostrando uma réplica de dente à paciente no consultório",
+  "pos": "50% 50%",
+  "cor": "#8f959e",
+  "origem": "1681939282741-9ace0a227977"
+ },
+ "modelo-3/sala-rosa-3": {
+  "w": 1280,
+  "h": 854,
+  "widths": [
+   640,
+   960,
+   1280,
+   1920
+  ],
+  "fallback": 1280,
+  "alt": "Profissional ajustando a luz do consultório sobre a paciente",
+  "pos": "50% 50%",
+  "cor": "#99a0a8",
+  "origem": "1681939282781-341ac4f61996"
+ },
+ "modelo-3/sorriso-menina": {
+  "w": 1280,
+  "h": 937,
+  "widths": [
+   640,
+   960,
+   1280,
+   1920
+  ],
+  "fallback": 1280,
+  "alt": "Sorriso largo de uma criança em close",
+  "pos": "50% 55%",
+  "cor": "#886a60",
+  "origem": "1663182234283-28941e7612da"
+ }
+}
