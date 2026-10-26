@@ -1,0 +1,20 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import NicheSection from '../components/NicheSection.astro';
+import { niches, profile } from '../data/portfolio.mjs';
+export function getStaticPaths() {
+  return niches.map((n) => ({ params: { slug: n.slug }, props: { niche: n } }));
+}
+const { niche } = Astro.props;
+---
+<Base title={`${niche.name} · ${profile.name}`} description={niche.blurb}>
+  <main>
+    <Hero compact />
+    <NicheSection niche={niche} solo />
+    <footer class="foot">{profile.name} · {profile.role}</footer>
+  </main>
+  <script>
+    import '../scripts/common';
+  </script>
+</Base>

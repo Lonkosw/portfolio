@@ -1,0 +1,33 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import NicheSection from '../components/NicheSection.astro';
+import { niches, profile } from '../data/portfolio.mjs';
+---
+<Base title={`${profile.name} · Portfólio`}>
+  <main>
+    <Hero />
+    <nav class="constellation" aria-label="Escolher grupos">
+      <div class="win bar">
+        <div class="titlebar"><span class="tt"><i class="ico"></i>grupos.exe</span><span class="wbtns" aria-hidden="true"><b>_</b><b>□</b><b>×</b></span></div>
+        <div class="bar-body">
+          <ul class="nodes" role="group" aria-label="Grupos disponíveis">
+            {niches.map((n) => (
+              <li><button type="button" class="node" data-node={n.slug} aria-pressed="false" style={`--accent:${n.accent}`}><i aria-hidden="true"></i>{n.name}</button></li>
+            ))}
+          </ul>
+          <div class="bar-actions">
+            <span class="hint" id="hint">Mostrando todos os grupos</span>
+            <button type="button" class="btn primary" id="copy-sel"><span aria-hidden="true">⧉</span> Copiar link desta seleção</button>
+          </div>
+        </div>
+      </div>
+    </nav>
+    {niches.map((n) => <NicheSection niche={n} />)}
+    <footer class="foot">© {new Date().getFullYear()} {profile.name} · feito à mão, sem peso extra</footer>
+  </main>
+  <script>
+    import '../scripts/common';
+    import '../scripts/filter';
+  </script>
+</Base>
