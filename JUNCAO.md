@@ -63,10 +63,16 @@ Local, `npm run build` servido com brotli (como a hospedagem), Lighthouse 13, em
 
 O solar nunca tinha sido medido (o DECISOES dele diz que o Lighthouse não rodou). O `solar/modelo-3` é o ponto fraco (LCP 4,2 s); não alterei nada porque a regra é não mexer no visual. Primeiro candidato de correção: hero do modelo 3 (tamanho do `srcset`/`preload`). Aguardo sua confirmação.
 
-## 5. Publicação no Cloudflare Pages — NÃO publicado
+## 5. Publicação no Cloudflare Pages — publicado em 2026-10-26
 
-O ambiente não tem credenciais do Cloudflare (`wrangler whoami`: não autenticado; sem `CLOUDFLARE_API_TOKEN`/`CLOUDFLARE_ACCOUNT_ID`). Não há como publicar daqui, e não contornei isso. Portanto **não há links**.
+Três projetos Pages (um por nicho), branch de produção `main`, todos com `PUBLIC_NOINDEX=true` no build e `X-Robots-Tag: noindex, nofollow` via `_headers`. Nenhum dos nomes `portfolio-<nicho>` existia na conta (só havia `leo-lanches`), então não precisou do sufixo `-demo`.
 
-Está tudo pronto: `sites/deploy-cloudflare.sh` faz build de cada nicho (com `PUBLIC_NOINDEX=true`, que o odontológico já suporta), remove `/estudio` do solar (site antigo do estúdio que o DECISOES do solar manda não publicar junto) e publica 3 projetos Pages (`portfolio-marmorarias`, `portfolio-odontologia`, `portfolio-solar`). Cada um traz `_headers` com `X-Robots-Tag: noindex, nofollow`. Para rodar, exporte as duas variáveis e execute o script. Os links ficarão `https://portfolio-<nicho>.pages.dev/modelo-1`, `/modelo-2`, `/modelo-3` (se o nome do projeto estiver livre).
+| Nicho | modelo-1 | modelo-2 | modelo-3 |
+|---|---|---|---|
+| marmorarias | https://portfolio-marmorarias.pages.dev/modelo-1/ | https://portfolio-marmorarias.pages.dev/modelo-2/ | https://portfolio-marmorarias.pages.dev/modelo-3/ |\n| odontologia | https://portfolio-odontologia.pages.dev/modelo-1/ | https://portfolio-odontologia.pages.dev/modelo-2/ | https://portfolio-odontologia.pages.dev/modelo-3/ |\n| solar | https://portfolio-solar.pages.dev/modelo-1/ | https://portfolio-solar.pages.dev/modelo-2/ | https://portfolio-solar.pages.dev/modelo-3/ |\n
+Verificação (curl, seguindo o redirect 308 de `/modelo-N` para `/modelo-N/`): as 9 URLs dão 200 com `x-robots-tag: noindex, nofollow`. `/estudio` do solar dá 404 (removido do deploy).
 
-Observação: o `/` de marmorarias e solar já tinha `noindex`; os modelos de marmorarias e solar não tinham meta noindex, por isso o cabeçalho.
+Decisões:
+- O `wrangler pages deploy` não criava os projetos (delegava para Workers e falhava), então criei cada um uma vez com `wrangler pages project create ... --production-branch main --force`; os deploys seguintes rodaram direto no Pages.
+- Sem `404.html` o Pages responde 200 com o `index.html` em qualquer caminho, o que fazia `/estudio` dar 200 mesmo removido. O script agora grava um `404.html` mínimo (noindex) na pasta de deploy de cada nicho, fora do código dos sites; nenhum conteúdo ou visual mudou.
+- Para publicar de novo: exportar `CLOUDFLARE_API_TOKEN` e `CLOUDFLARE_ACCOUNT_ID` e rodar `sites/deploy-cloudflare.sh` (os projetos já existem).

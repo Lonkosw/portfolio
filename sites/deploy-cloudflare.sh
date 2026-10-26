@@ -8,6 +8,8 @@ for p in marmorarias odontologia solar; do
   rm -rf "/tmp/deploy-$p" && cp -r "$p/dist" "/tmp/deploy-$p"
 done
 rm -rf /tmp/deploy-solar/estudio   # site antigo do estúdio, não deve ir junto (ver sites/solar/DECISOES.md)
+# Sem 404.html o Pages responde 200 com o index em qualquer caminho (fallback SPA); com ele, caminho inexistente dá 404.
 for p in marmorarias odontologia solar; do
+  printf '<!doctype html><html lang="pt-BR"><meta charset="utf-8"><meta name="robots" content="noindex"><title>404</title><h1>404</h1>' > "/tmp/deploy-$p/404.html"
   npx wrangler pages deploy "/tmp/deploy-$p" --project-name "portfolio-$p" --branch main
 done
