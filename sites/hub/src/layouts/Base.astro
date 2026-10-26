@@ -1,12 +1,8 @@
 ---
-import '@fontsource/newsreader/latin-400.css';
-import '@fontsource/newsreader/latin-500.css';
-import '@fontsource/newsreader/latin-400-italic.css';
-import '@fontsource/ibm-plex-mono/latin-400.css';
-import '@fontsource/ibm-plex-mono/latin-500.css';
+import '@fontsource/space-mono/latin-400.css';
+import '@fontsource/space-mono/latin-700.css';
 import '@fontsource/vt323/latin-400.css';
 import Boot from '../components/Boot.astro';
-import Mascot from '../components/Mascot.astro';
 import '../styles/global.css';
 import { profile } from '../data/portfolio.mjs';
 interface Props { title: string; description?: string }
@@ -18,7 +14,7 @@ const { title, description = profile.tagline } = Astro.props;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex, nofollow" />
-    <meta name="theme-color" content="#070b1c" />
+    <meta name="theme-color" content="#050408" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
@@ -27,7 +23,6 @@ const { title, description = profile.tagline } = Astro.props;
     <div class="sky" aria-hidden="true"><i class="stars s1"></i><i class="stars s2"></i><i class="stars s3"></i><i class="nebula"></i></div>
     <Boot />
     <slot />
-    <Mascot />
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
   </body>
 </html>

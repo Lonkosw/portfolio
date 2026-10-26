@@ -43,24 +43,8 @@ if ('IntersectionObserver' in window) {
   items.forEach((el) => io.observe(el));
 } else items.forEach((el) => el.classList.add('in', 'live'));
 
-// Mascote: deriva com a rolagem e inclina com a velocidade; o avatar do hero segue o ponteiro.
+// O avatar do hero segue o ponteiro de leve.
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-const mascot = document.getElementById('mascot');
-if (mascot && !reduce) {
-  let last = scrollY, vel = 0, f = 0;
-  const loop = () => {
-    f = 0;
-    vel += (scrollY - last - vel) * 0.18;
-    last = scrollY;
-    const max = Math.max(1, document.documentElement.scrollHeight - innerHeight);
-    const p = scrollY / max;
-    const x = Math.sin(p * Math.PI * 3) * 26;
-    mascot.style.transform = `translate3d(${x.toFixed(1)}px, ${(p * 40).toFixed(1)}px, 0) rotate(${Math.max(-25, Math.min(25, vel * 0.6)).toFixed(1)}deg)`;
-    if (Math.abs(vel) > 0.05) f = requestAnimationFrame(loop);
-  };
-  addEventListener('scroll', () => { if (!f) f = requestAnimationFrame(loop); }, { passive: true });
-  loop();
-}
 const av = document.querySelector<HTMLElement>('.avatar img');
 if (av && !reduce && matchMedia('(hover: hover) and (pointer: fine)').matches) {
   let f = 0, nx = 0, ny = 0;

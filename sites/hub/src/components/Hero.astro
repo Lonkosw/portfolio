@@ -6,7 +6,7 @@ const { compact = false } = Astro.props;
 <header class:list={['hero', { compact }]}>
   <div class="avatar">
     <span class="orbit" aria-hidden="true"><i></i></span>
-    <img src={profile.avatar} alt={`Foto de ${profile.name}`} width="132" height="132" decoding="async" />
+    <img src={profile.avatar} alt="" width="132" height="132" decoding="async" />
   </div>
   <h1>{profile.name}</h1>
   <p class="role"><span class="prompt">C:\&gt;</span> {profile.role}<span class="cursor" aria-hidden="true"></span></p>

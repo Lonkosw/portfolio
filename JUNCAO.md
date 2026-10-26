@@ -89,3 +89,7 @@ Decisões:
 Decisões do dono: nome pessoal (Theo Lonkoski) e descrição atual mantida; objetivo da página do nicho é mostrar modelos; avatar provisório de cobra astronauta (foto depois); retrô Win98 equilibrado com fonte bitmap (VT323) nas janelas; favorito em destaque (maior, primeiro); cards com "Abrir site" e "Pedir este modelo" (WhatsApp 44 99833-8089, mensagem citando nicho e modelo); portfólio completo só por link e noindex; domínio segue em pages.dev; impacto antes de velocidade; animações mais fundas nos 3 favoritos; entrega com publicação.
 
 Feito: tela de boot pulável (uma vez por sessão, off em reduced-motion), cobra mascote que deriva com a rolagem e avatar que segue o mouse, constelação que liga os grupos escolhidos, cards em destaque. Nos favoritos: tilt 3D nos cards (`rotate`), cortina nas imagens do Odontologia 2, órbitas/quadrados no hero do Odontologia 2 e Marmorarias 3. Medido contra a versão anterior: sem piora de CLS, fps e long tasks. Cortina nas obras do M3 e orbes do Solar 1 foram testados e removidos por custo de fps ou risco de ficar oculto.
+
+## 8. Hub mais sóbrio — 2026-10-26
+
+Feedback: poluído e infantil. Ajustes no hub: paleta roxo profundo sobre preto (um único roxo `#a78bfa` em todos os nichos), fonte mono quadrada (Space Mono) em tudo, títulos em caixa alta, ornamentos removidos (estrelinhas, ícones, ★), mascote removido, avatar anônimo padrão (silhueta). Boot mantido (VT323 verde sobre preto). Estrelas, flutuação dos cards e constelação foram mantidas por escolha do dono.
