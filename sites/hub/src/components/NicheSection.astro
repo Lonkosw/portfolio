@@ -25,8 +25,9 @@ const pad = (n: number) => String(n).padStart(2, '0');
               <span class="wbtns" aria-hidden="true"><b>_</b><b>□</b><b>×</b></span>
             </div>
             <div class="body">
-              <div class="shot">
+              <div class:list={['shot', { light: p.light }]}>
                 <img src={`/thumbs/${thumbFile(niche, p)}.webp`} alt="" width="1000" height="563" loading={i === 0 ? 'eager' : 'lazy'} decoding="async" />
+                <span class="dim" aria-hidden="true"></span>
               </div>
               <div class="info">
                 <p class="label">{p.featured ? `${pad(i + 1)} · destaque` : pad(i + 1)}</p>

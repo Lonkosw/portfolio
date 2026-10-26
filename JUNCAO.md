@@ -101,3 +101,7 @@ Feedback: confuso, fontes sem homogeneidade. Reescrita do CSS do hub com sistema
 ## 10. Hub: roxo nebulosa, cards em evidência, clique só no botão — 2026-10-26
 
 Roxo mais escuro e fumacento (acento `#9a85d4`, botões `#4b3787`, fundo com três manchas de nebulosa estáticas). Cards com borda e halo roxos mais fortes (favorito mais ainda), miniatura com vinheta, botão "Abrir site" maior. A miniatura deixou de ser link: só os botões "Abrir site" e "Pedir este modelo" levam adiante, para evitar clique sem querer.
+
+## 11. Hub: miniaturas combinando com o roxo — 2026-10-26
+
+Decisão da entrevista: miniaturas escurecidas e dessaturadas (sem tingir de roxo), cor real só no hover, acesso ao site só pelos botões, e sites claros (Odontologia 3, Marmorarias 2, Solar 2, marcados com `light: true` em `portfolio.mjs`) escurecidos com mais força. Implementado com duas camadas sobre a imagem (`mix-blend-mode: saturation` e um véu escuro) que só mudam `opacity`. No celular, sem hover, as miniaturas ficam sempre escurecidas.

@@ -18,7 +18,7 @@ export const niches = [
     projects: [
       { id: 'modelo-2', title: 'Modelo 2', featured: true },
       { id: 'modelo-1', title: 'Modelo 1' },
-      { id: 'modelo-3', title: 'Modelo 3' },
+      { id: 'modelo-3', title: 'Modelo 3', light: true },
     ],
   },
   {
@@ -30,7 +30,7 @@ export const niches = [
     projects: [
       { id: 'modelo-3', title: 'Modelo 3', featured: true },
       { id: 'modelo-1', title: 'Modelo 1' },
-      { id: 'modelo-2', title: 'Modelo 2' },
+      { id: 'modelo-2', title: 'Modelo 2', light: true },
     ],
   },
   {
@@ -41,7 +41,7 @@ export const niches = [
     base: 'https://portfolio-solar.pages.dev',
     projects: [
       { id: 'modelo-1', title: 'Modelo 1', featured: true },
-      { id: 'modelo-2', title: 'Modelo 2' },
+      { id: 'modelo-2', title: 'Modelo 2', light: true },
       { id: 'modelo-3', title: 'Modelo 3' },
     ],
   },
