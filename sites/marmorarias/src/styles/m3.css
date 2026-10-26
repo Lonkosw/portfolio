@@ -373,3 +373,11 @@ dialog.amostra::backdrop { background: rgba(14, 14, 14, .85); }
 .chapa-wrap { transition: transform .5s cubic-bezier(.2, .8, .2, 1); }
 .chapa:hover .chapa-wrap { transform: translate3d(0, -4px, 0); }
 @media (prefers-reduced-motion: reduce) { .rf-progress, .rf-glow { display: none; } .label::before { animation: none; } .num::before { transition: none; } }
+
+/* ── Refino 2 (impacto): tilt, cortina de obra, quadrados industriais no hero ── */
+.tile, .dep-card { transition: rotate .7s cubic-bezier(.2, .8, .2, 1); }
+.tile.rf-tilt, .dep-card.rf-tilt { transition: rotate .12s linear; }
+.hero::after { content: ''; position: absolute; z-index: -1; right: 6%; top: 12%; width: 9rem; height: 9rem; border: 6px solid var(--color-orange); opacity: .35; animation: rf-spin 40s linear infinite; pointer-events: none; }
+.hero::before { content: ''; position: absolute; z-index: -1; left: 4%; bottom: 8%; width: 5rem; height: 5rem; border: 4px dashed #fff; opacity: .18; animation: rf-spin 60s linear infinite reverse; pointer-events: none; }
+@keyframes rf-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .hero::after, .hero::before { animation: none; } }

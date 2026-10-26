@@ -4,6 +4,9 @@ import '@fontsource/newsreader/latin-500.css';
 import '@fontsource/newsreader/latin-400-italic.css';
 import '@fontsource/ibm-plex-mono/latin-400.css';
 import '@fontsource/ibm-plex-mono/latin-500.css';
+import '@fontsource/vt323/latin-400.css';
+import Boot from '../components/Boot.astro';
+import Mascot from '../components/Mascot.astro';
 import '../styles/global.css';
 import { profile } from '../data/portfolio.mjs';
 interface Props { title: string; description?: string }
@@ -22,7 +25,9 @@ const { title, description = profile.tagline } = Astro.props;
   </head>
   <body>
     <div class="sky" aria-hidden="true"><i class="stars s1"></i><i class="stars s2"></i><i class="stars s3"></i><i class="nebula"></i></div>
+    <Boot />
     <slot />
+    <Mascot />
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
   </body>
 </html>

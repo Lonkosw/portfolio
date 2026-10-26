@@ -1,5 +1,5 @@
 ---
-import { projectUrl, thumbFile } from '../data/portfolio.mjs';
+import { projectUrl, requestUrl, thumbFile } from '../data/portfolio.mjs';
 interface Props { niche: any; solo?: boolean }
 const { niche, solo = false } = Astro.props;
 ---
@@ -16,7 +16,7 @@ const { niche, solo = false } = Astro.props;
   </div>
   <ul class="cards">
     {niche.projects.map((p: any, i: number) => (
-      <li class="card" style={`--d:${(i * 1.7 + 0.4).toFixed(1)}s;--t:${(7 + i * 1.3).toFixed(1)}s;--r:${i % 2 ? -0.35 : 0.35}deg`}>
+      <li class:list={['card', { featured: p.featured }]} style={`--d:${(i * 1.7 + 0.4).toFixed(1)}s;--t:${(7 + i * 1.3).toFixed(1)}s;--r:${i % 2 ? -0.35 : 0.35}deg`}>
         <div class="float">
           <article class="win">
             <div class="titlebar">
@@ -33,7 +33,7 @@ const { niche, solo = false } = Astro.props;
                 <p class="url">{projectUrl(niche, p).replace('https://', '')}</p>
                 <div class="actions">
                   <a class="btn primary" href={projectUrl(niche, p)} target="_blank" rel="noopener">Abrir site <span aria-hidden="true">↗</span></a>
-                  <button type="button" class="btn" data-copy-abs={projectUrl(niche, p)}><span aria-hidden="true">⧉</span> Copiar</button>
+                  <a class="btn" href={requestUrl(niche, p)} target="_blank" rel="noopener">Pedir este modelo <span aria-hidden="true">✦</span></a>
                 </div>
               </div>
             </div>

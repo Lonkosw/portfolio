@@ -1,0 +1,38 @@
+---
+import { profile } from '../data/portfolio.mjs';
+---
+<div class="boot" id="boot" aria-hidden="true">
+  <pre class="boot-log" id="boot-log"></pre>
+  <div class="boot-bar"><i></i></div>
+  <p class="boot-skip">clique ou tecle para pular</p>
+</div>
+<noscript><style>.boot{display:none}</style></noscript>
+<script is:inline define:vars={{ name: profile.name }}>
+  (function () {
+    var b = document.getElementById('boot');
+    var seen = false;
+    try { seen = sessionStorage.getItem('booted') === '1'; } catch (e) {}
+    var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (seen || reduce) { b.remove(); return; }
+    document.documentElement.classList.add('booting');
+    var lines = [
+      'ASTRO-BIOS v9.8  (c) 1998-' + new Date().getFullYear(),
+      'Memory test ........ 640K OK',
+      'Detectando constelações ...... OK',
+      'Carregando portfólio de ' + name + ' ...',
+      'C:\\> start portfolio.exe'
+    ];
+    var log = document.getElementById('boot-log'), i = 0, done = false;
+    function end() {
+      if (done) return; done = true;
+      try { sessionStorage.setItem('booted', '1'); } catch (e) {}
+      b.classList.add('off');
+      document.documentElement.classList.remove('booting');
+      setTimeout(function () { b.remove(); }, 700);
+    }
+    function next() { if (done) return; if (i < lines.length) { log.textContent += lines[i++] + '\n'; setTimeout(next, 260); } else setTimeout(end, 380); }
+    next();
+    b.addEventListener('click', end);
+    addEventListener('keydown', end, { once: true });
+  })();
+</script>

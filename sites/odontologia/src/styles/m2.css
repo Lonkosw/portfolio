@@ -217,3 +217,12 @@ html[data-m="2"] .ag-day, html[data-m="2"] .ag-slot { font-family: var(--f-mono)
 .m2-bc .m2-bc-go svg { transition: transform .4s var(--ease); }
 .m2-bc:hover .m2-bc-go svg { transform: translate3d(5px, 0, 0); }
 @media (prefers-reduced-motion: reduce) { .rf-progress, .rf-glow { display: none; } .m2-hero .wt-box .wt, .m2-hero .m2-tag-c { animation: none; } .m2-stat::before { transition: none; } .js .hud[data-reveal]::before, .js .hud[data-reveal]::after { transform: none; opacity: .85; transition: none; } }
+
+/* ── Refino 2 (impacto): tilt, cortina nas imagens, órbitas no hero ── */
+.m2-bc, .m2-member { transition: rotate .7s var(--ease), border-color .4s, transform .5s var(--ease); }
+.m2-bc.rf-tilt, .m2-member.rf-tilt { transition: rotate .12s linear, border-color .4s, transform .5s var(--ease); }
+.js .m2-tour figure[data-reveal], .js .m2-tec-img[data-reveal] { clip-path: inset(0 0 100% 0); transition: clip-path 1.2s var(--ease), opacity .8s, transform .9s var(--ease); }
+.js .m2-tour figure.is-in, .js .m2-tec-img.is-in { clip-path: inset(0); }
+.m2-hero::after { content: ''; position: absolute; width: 22rem; height: 22rem; left: -8rem; bottom: -9rem; z-index: -1; border-radius: 50%; border: 1px solid rgba(61, 224, 208, .28); box-shadow: 0 0 0 3rem rgba(61, 224, 208, .04), 0 0 0 6rem rgba(61, 224, 208, .025); animation: rf-orbit 26s ease-in-out infinite alternate; }
+@keyframes rf-orbit { from { transform: translate3d(0, 0, 0) scale(1); } to { transform: translate3d(5rem, -4rem, 0) scale(1.18); } }
+@media (prefers-reduced-motion: reduce) { .m2-hero::after { animation: none; } .js .m2-tour figure[data-reveal], .js .m2-tec-img[data-reveal] { clip-path: none; } }

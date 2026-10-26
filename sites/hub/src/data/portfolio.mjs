@@ -5,7 +5,7 @@ export const profile = {
   role: 'Desenvolvedor web',
   tagline: 'Sites rápidos, bonitos e sob medida para negócios locais.',
   avatar: '/avatar.svg', // troque por /avatar.jpg (quadrado) quando tiver a foto
-  contact: 'https://github.com/Lonkosw',
+  whatsapp: '5544998338089',
 };
 
 export const niches = [
@@ -47,5 +47,7 @@ export const niches = [
   },
 ];
 
+export const requestUrl = (n, p) =>
+  `https://wa.me/${profile.whatsapp}?text=${encodeURIComponent(`Olá, Theo! Vi o modelo "${n.name} · ${p.title}" no seu portfólio e quero um site assim.`)}`;
 export const projectUrl = (n, p) => `${n.base}/${p.id}/`;
 export const thumbFile = (n, p) => `${n.slug}-${p.id}`;

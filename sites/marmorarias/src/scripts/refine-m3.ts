@@ -50,3 +50,19 @@ if (!reduce && fino) {
     hero.addEventListener('pointerleave', () => { nx = ny = 0; f = requestAnimationFrame(ir); });
   }
 }
+
+// Inclinação 3D nos cards (propriedade `rotate`, compõe com os transforms existentes; perspectiva no pai)
+if (!reduce && fino) {
+  document.querySelectorAll<HTMLElement>('.tile, .dep-card').forEach((el) => {
+    if (el.parentElement) el.parentElement.style.perspective = '1100px';
+    let f = 0, ax = 0, ay = 0, ang = 0;
+    el.addEventListener('pointermove', (e) => {
+      const r = el.getBoundingClientRect();
+      const nx = (e.clientX - r.left) / r.width - 0.5, ny = (e.clientY - r.top) / r.height - 0.5;
+      ax = -ny; ay = nx; ang = Math.hypot(nx, ny) * 7;
+      el.classList.add('rf-tilt');
+      if (!f) f = requestAnimationFrame(() => { f = 0; el.style.rotate = `${ax.toFixed(3)} ${ay.toFixed(3)} 0 ${ang.toFixed(2)}deg`; });
+    });
+    el.addEventListener('pointerleave', () => { el.classList.remove('rf-tilt'); el.style.rotate = ''; });
+  });
+}

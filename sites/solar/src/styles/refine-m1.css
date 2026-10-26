@@ -4,3 +4,7 @@
 .rf-glow.on { opacity: 1; }
 #topo .sol-nasce { transition: translate .7s cubic-bezier(.2, .7, .2, 1); }
 @media (prefers-reduced-motion: reduce) { .rf-progress, .rf-glow { display: none; } }
+
+/* Refino 2 (impacto): tilt e orbes solares no hero */
+article.group, #depoimentos article { transition: rotate .7s cubic-bezier(.2, .7, .2, 1), border-color .3s; }
+article.group.rf-tilt, #depoimentos article.rf-tilt { transition: rotate .12s linear, border-color .3s; }

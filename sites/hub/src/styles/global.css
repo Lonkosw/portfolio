@@ -9,6 +9,7 @@
   --blue-b: #3b6fd1;
   --accent: #8fb4ff;
   --serif: 'Newsreader', Georgia, 'Times New Roman', serif;
+  --pixel: 'VT323', 'IBM Plex Mono', ui-monospace, monospace;
   --mono: 'IBM Plex Mono', ui-monospace, 'Courier New', monospace;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -73,7 +74,7 @@ h1 { font-size: clamp(2.4rem, 7vw, 4rem); line-height: 1.05; }
   box-shadow: inset 1px 1px 0 #ffffff1f, inset -1px -1px 0 #00000066, 0 24px 50px -18px #000c, 0 6px 18px #0008;
 }
 .titlebar {
-  display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 7px 10px; font-size: 0.78rem; font-weight: 500;
+  display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 5px 10px; font: 400 1.18rem/1.1 var(--pixel);
   background: linear-gradient(90deg, var(--blue-a), var(--blue-b)); color: #fff; letter-spacing: 0.02em;
 }
 .tt { display: flex; align-items: center; gap: 8px; min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
@@ -115,7 +116,8 @@ h1 { font-size: clamp(2.4rem, 7vw, 4rem); line-height: 1.05; }
 .niche h2 { font-size: clamp(2rem, 5vw, 3rem); line-height: 1.05; }
 .blurb { margin: 8px 0 0; color: var(--mute); max-width: 52ch; }
 
-.cards { list-style: none; margin: 0; padding: 0; display: grid; gap: 34px; }
+.cards { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 34px; }
+.card.featured { grid-column: 1 / -1; }
 .card { opacity: 0; transform: translate3d(0, 34px, 0) scale(0.985); transition: opacity 0.8s var(--ease), transform 0.8s var(--ease); }
 .card.in { opacity: 1; transform: none; }
 .float { animation: drift var(--t) ease-in-out var(--d) infinite alternate; animation-play-state: paused; will-change: transform; }
@@ -126,14 +128,18 @@ h1 { font-size: clamp(2.4rem, 7vw, 4rem); line-height: 1.05; }
 }
 .card .win { transition: transform 0.35s var(--ease), border-color 0.35s; border-color: color-mix(in srgb, var(--accent) 38%, #3a4a8a); }
 .card:hover .win { transform: translate3d(0, -5px, 0) scale(1.008); border-color: var(--accent); }
-.body { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); }
+.body { display: grid; grid-template-columns: 1fr; }
+.card.featured .body { grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); }
 .shot { position: relative; display: block; overflow: hidden; background: #060a1a; }
 .shot img { width: 100%; height: 100%; aspect-ratio: 16 / 9; object-fit: cover; transition: transform 0.9s var(--ease); }
 .card:hover .shot img { transform: scale(1.04); }
-.shot::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, transparent 70%, var(--panel)); pointer-events: none; }
+.shot::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 70%, var(--panel)); pointer-events: none; }
+.card.featured .shot::after { background: linear-gradient(90deg, transparent 70%, var(--panel)); }
 .info { display: flex; flex-direction: column; justify-content: center; gap: 12px; padding: 26px 28px; background: linear-gradient(160deg, var(--panel-2), var(--panel)); }
 .badge { align-self: flex-start; padding: 3px 10px; border-radius: 999px; font-size: 0.72rem; color: #1a1300; background: #ffd84d; box-shadow: 0 0 18px #ffd84d55; }
 .info h3 { font-size: clamp(1.4rem, 3vw, 1.9rem); line-height: 1.1; }
+.card.featured .info h3 { font-size: clamp(1.8rem, 3.6vw, 2.5rem); }
+.card.featured .info { padding: 32px 34px; }
 .url { margin: 0; color: var(--mute); font-size: 0.78rem; overflow-wrap: anywhere; }
 .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
 
@@ -142,13 +148,32 @@ h1 { font-size: clamp(2.4rem, 7vw, 4rem); line-height: 1.05; }
 .toast.on { opacity: 1; transform: translate3d(-50%, 0, 0); }
 
 @media (max-width: 760px) {
-  .body { grid-template-columns: 1fr; }
-  .shot::after { background: linear-gradient(180deg, transparent 70%, var(--panel)); }
+  .cards { grid-template-columns: 1fr; }
+  .card.featured .body { grid-template-columns: 1fr; }
+  .card.featured .shot::after { background: linear-gradient(180deg, transparent 70%, var(--panel)); }
   .info { padding: 20px; }
   .btn { padding: 11px 14px; }
   .nodes::before { display: none; }
 }
+/* ── Boot, mascote, ligações da constelação ── */
+.boot { position: fixed; inset: 0; z-index: 100; display: grid; align-content: center; justify-items: start; gap: 18px; padding: 8vw; background: #000; color: #b8ffcf; font: 400 clamp(1.1rem, 2.6vw, 1.6rem)/1.35 var(--pixel); transition: opacity 0.6s, transform 0.6s var(--ease); }
+.boot.off { opacity: 0; transform: scale(1.04); pointer-events: none; }
+.boot-log { margin: 0; font: inherit; white-space: pre-wrap; text-shadow: 0 0 8px #3dff8a88; }
+.boot-bar { width: min(420px, 80vw); height: 14px; border: 2px solid #b8ffcf; padding: 2px; }
+.boot-bar i { display: block; height: 100%; width: 100%; background: repeating-linear-gradient(90deg, #b8ffcf 0 10px, transparent 10px 14px); transform: scaleX(0); transform-origin: 0 50%; animation: bootbar 1.7s steps(14, end) forwards; }
+.boot-skip { margin: 0; color: #5f9c75; font-size: 0.9em; }
+@keyframes bootbar { to { transform: scaleX(1); } }
+.booting body { overflow: hidden; }
+.mascot { position: fixed; z-index: 5; right: 14px; bottom: 90px; width: 84px; height: 84px; pointer-events: none; will-change: transform; }
+.mascot img { width: 100%; height: 100%; border-radius: 50%; border: 2px solid #5d7dd8; box-shadow: 0 8px 28px #3b6fd155; animation: bob 5.5s ease-in-out infinite; }
+.nodes .links { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+.links line { stroke: #8fb4ffcc; stroke-width: 1.5; stroke-dasharray: 600; stroke-dashoffset: 600; animation: draw 0.9s var(--ease) forwards; filter: drop-shadow(0 0 4px #8fb4ff); }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+.nodes li { position: relative; z-index: 1; }
+@media (max-width: 760px) { .mascot { width: 56px; height: 56px; bottom: 70px; right: 8px; } }
 @media (prefers-reduced-motion: reduce) {
+  .boot { display: none; }
+  .mascot img, .links line { animation: none; stroke-dashoffset: 0; }
   .sky i, .float, .avatar img, .orbit, .star, .cursor { animation: none !important; }
   .card, .niche-head { opacity: 1; transform: none; transition: none; }
   .card .win, .shot img, .btn, .node { transition: none; }
