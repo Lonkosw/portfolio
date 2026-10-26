@@ -27,6 +27,14 @@ h1, h2, h3 { font-family: var(--display); font-weight: 700; text-transform: uppe
 .label { font: 400 0.72rem/1.4 var(--mono); text-transform: uppercase; letter-spacing: 0.14em; color: var(--mute); }
 
 .sky { position: fixed; inset: 0; z-index: -1; background: radial-gradient(70% 45% at 18% 0%, #231247cc 0%, transparent 70%), radial-gradient(60% 40% at 88% 22%, #170d33cc 0%, transparent 70%), radial-gradient(80% 50% at 50% 100%, #120a26aa 0%, transparent 75%), var(--bg); }
+/* Ondas de névoa: 3 camadas largas, só transform; pausam com a aba oculta e em reduced-motion */
+.wave { position: absolute; left: -30vw; width: 160vw; border-radius: 50%; will-change: transform; pointer-events: none; }
+.w1 { top: 6vh; height: 46vh; background: radial-gradient(closest-side, #2a1658a6, transparent); animation: wave-a 52s ease-in-out infinite alternate; }
+.w2 { top: 38vh; height: 52vh; background: radial-gradient(closest-side, #1c0f40a0, transparent); animation: wave-b 74s ease-in-out -20s infinite alternate; }
+.w3 { top: 66vh; height: 44vh; background: radial-gradient(closest-side, #2e1a5c80, transparent); animation: wave-a 90s ease-in-out -45s infinite alternate-reverse; }
+@keyframes wave-a { from { transform: translate3d(-9vw, 0, 0) scaleY(0.9); } to { transform: translate3d(9vw, -4vh, 0) scaleY(1.12); } }
+@keyframes wave-b { from { transform: translate3d(8vw, 3vh, 0) scaleY(1.1); } to { transform: translate3d(-10vw, -3vh, 0) scaleY(0.88); } }
+.paused .wave { animation-play-state: paused; }
 main { width: min(1120px, 100% - 40px); margin: 0 auto; padding: 56px 0 32px; }
 
 /* ── Hero ── */
@@ -136,6 +144,7 @@ main { width: min(1120px, 100% - 40px); margin: 0 auto; padding: 56px 0 32px; }
   .nodes::before { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
+  .wave { animation: none; }
   .boot { display: none; }
   .links line { animation: none; stroke-dashoffset: 0; }
   .float { animation: none !important; }

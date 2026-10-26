@@ -105,3 +105,7 @@ Roxo mais escuro e fumacento (acento `#9a85d4`, botões `#4b3787`, fundo com tr�
 ## 11. Hub: miniaturas combinando com o roxo — 2026-10-26
 
 Decisão da entrevista: miniaturas escurecidas e dessaturadas (sem tingir de roxo), cor real só no hover, acesso ao site só pelos botões, e sites claros (Odontologia 3, Marmorarias 2, Solar 2, marcados com `light: true` em `portfolio.mjs`) escurecidos com mais força. Implementado com duas camadas sobre a imagem (`mix-blend-mode: saturation` e um véu escuro) que só mudam `opacity`. No celular, sem hover, as miniaturas ficam sempre escurecidas.
+
+## 12. Hub: ondas de névoa no fundo — 2026-10-26
+
+Três camadas largas de gradiente roxo (`.wave`, em `Base.astro`/`global.css`) deslizando em ciclos de 52 a 90 s, só `transform`. Pausam com a aba oculta (`visibilitychange`) e ficam paradas em `prefers-reduced-motion`. Medido no hub (rolagem completa): 60 fps antes, 57–60 depois, sem tarefas longas. Ficaram de fora, por ora, o grão de filme, o pulso do halo do favorito e o brilho que segue o mouse (sugestões 2 e 3).

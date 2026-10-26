@@ -53,3 +53,5 @@ if (av && !reduce && matchMedia('(hover: hover) and (pointer: fine)').matches) {
     if (!f) f = requestAnimationFrame(() => { f = 0; av.style.translate = `${(nx * 14).toFixed(1)}px ${(ny * 10).toFixed(1)}px`; av.style.rotate = `${(nx * 6).toFixed(1)}deg`; });
   });
 }
+
+document.addEventListener('visibilitychange', () => document.documentElement.classList.toggle('paused', document.hidden));
