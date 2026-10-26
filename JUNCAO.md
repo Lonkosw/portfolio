@@ -93,3 +93,7 @@ Feito: tela de boot pulável (uma vez por sessão, off em reduced-motion), cobra
 ## 8. Hub mais sóbrio — 2026-10-26
 
 Feedback: poluído e infantil. Ajustes no hub: paleta roxo profundo sobre preto (um único roxo `#a78bfa` em todos os nichos), fonte mono quadrada (Space Mono) em tudo, títulos em caixa alta, ornamentos removidos (estrelinhas, ícones, ★), mascote removido, avatar anônimo padrão (silhueta). Boot mantido (VT323 verde sobre preto). Estrelas, flutuação dos cards e constelação foram mantidas por escolha do dono.
+
+## 9. Hub: sistema tipográfico e hierarquia — 2026-10-26
+
+Feedback: confuso, fontes sem homogeneidade. Reescrita do CSS do hub com sistema fixo: Space Mono em três níveis (texto .875rem, rótulo .72rem caixa alta, botão .8rem) e Chakra Petch 700 só no nome e nos títulos (grupo e modelo). Estrelas e órbita removidas (fundo preto com um halo roxo no topo), tagline numa linha só (some no celular), seções numeradas "01 / 03 — nicho" com filete fino, janelas com barra roxa sóbria, hover com borda e brilho roxos, flutuação dos cards bem sutil (±5px, sem rotação), favorito grande e os outros dois discretos. Boot mantido.

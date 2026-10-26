@@ -1,6 +1,7 @@
 ---
 import '@fontsource/space-mono/latin-400.css';
 import '@fontsource/space-mono/latin-700.css';
+import '@fontsource/chakra-petch/latin-700.css';
 import '@fontsource/vt323/latin-400.css';
 import Boot from '../components/Boot.astro';
 import '../styles/global.css';
@@ -20,7 +21,7 @@ const { title, description = profile.tagline } = Astro.props;
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   </head>
   <body>
-    <div class="sky" aria-hidden="true"><i class="stars s1"></i><i class="stars s2"></i><i class="stars s3"></i><i class="nebula"></i></div>
+    <div class="sky" aria-hidden="true"></div>
     <Boot />
     <slot />
     <div class="toast" id="toast" role="status" aria-live="polite"></div>

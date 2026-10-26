@@ -23,7 +23,7 @@ import { niches, profile } from '../data/portfolio.mjs';
         </div>
       </div>
     </nav>
-    {niches.map((n) => <NicheSection niche={n} />)}
+    {niches.map((n, i) => <NicheSection niche={n} index={i} total={niches.length} />)}
     <footer class="foot">© {new Date().getFullYear()} {profile.name} · feito à mão, sem peso extra</footer>
   </main>
   <script>

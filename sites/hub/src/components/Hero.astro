@@ -5,10 +5,9 @@ const { compact = false } = Astro.props;
 ---
 <header class:list={['hero', { compact }]}>
   <div class="avatar">
-    <span class="orbit" aria-hidden="true"><i></i></span>
     <img src={profile.avatar} alt="" width="132" height="132" decoding="async" />
   </div>
   <h1>{profile.name}</h1>
-  <p class="role"><span class="prompt">C:\&gt;</span> {profile.role}<span class="cursor" aria-hidden="true"></span></p>
+  <p class="label role"><span class="prompt">C:\&gt;</span> {profile.role}</p>
   <p class="tagline">{profile.tagline}</p>
 </header>

@@ -1,12 +1,13 @@
 ---
 import { projectUrl, requestUrl, thumbFile } from '../data/portfolio.mjs';
-interface Props { niche: any; solo?: boolean }
-const { niche, solo = false } = Astro.props;
+interface Props { niche: any; solo?: boolean; index?: number; total?: number }
+const { niche, solo = false, index = 0, total = 1 } = Astro.props;
+const pad = (n: number) => String(n).padStart(2, '0');
 ---
 <section class="niche" id={niche.slug} data-niche={niche.slug} style={`--accent:${niche.accent}`} aria-labelledby={`h-${niche.slug}`}>
   <div class="niche-head">
     <div>
-      <p class="eyebrow">grupo / {niche.slug}</p>
+      <p class="label eyebrow">{solo ? 'Grupo' : `${pad(index + 1)} / ${pad(total)}`} — {niche.slug}</p>
       <h2 id={`h-${niche.slug}`}>{niche.name}</h2>
       <p class="blurb">{niche.blurb}</p>
     </div>
@@ -28,9 +29,9 @@ const { niche, solo = false } = Astro.props;
                 <img src={`/thumbs/${thumbFile(niche, p)}.webp`} alt="" width="1000" height="563" loading={i === 0 ? 'eager' : 'lazy'} decoding="async" />
               </a>
               <div class="info">
-                {p.featured && <span class="badge">destaque</span>}
-                <h3>{niche.name} · {p.title}</h3>
-                <p class="url">{projectUrl(niche, p).replace('https://', '')}</p>
+                <p class="label">{p.featured ? `${pad(i + 1)} · destaque` : pad(i + 1)}</p>
+                <h3>{p.title}</h3>
+                <p class="label url">{projectUrl(niche, p).replace('https://', '')}</p>
                 <div class="actions">
                   <a class="btn primary" href={projectUrl(niche, p)} target="_blank" rel="noopener">Abrir site →</a>
                   <a class="btn" href={requestUrl(niche, p)} target="_blank" rel="noopener">Pedir este modelo</a>
