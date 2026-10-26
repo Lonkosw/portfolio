@@ -195,3 +195,25 @@ html[data-m="2"] .ag-day, html[data-m="2"] .ag-slot { font-family: var(--f-mono)
 .m2-logo { min-height: 44px; display: inline-flex; align-items: center; }
 .m2-links a { min-width: 44px; justify-content: center; }
 @media (max-width: 640px) { .m2-tag-c { display: none; } .m2-tag { font-size: .75rem; } }
+
+/* ── Refinos de animação (refine-m2.ts): só transform/opacity ── */
+.rf-progress { position: fixed; z-index: 60; left: 0; top: 0; height: 2px; width: 100%; background: linear-gradient(90deg, var(--accent), #fff); transform: scaleX(0); transform-origin: 0 50%; will-change: transform; pointer-events: none; box-shadow: 0 0 10px rgba(61, 224, 208, .6); }
+.rf-glow { position: absolute; left: 0; top: 0; width: 320px; height: 320px; z-index: 1; border-radius: 50%; pointer-events: none; opacity: 0; transition: opacity .35s; background: radial-gradient(closest-side, rgba(61, 224, 208, .2), transparent); will-change: transform; }
+.rf-glow.on { opacity: 1; }
+.m2-member, .m2-proto .hud { overflow: clip; overflow-clip-margin: 2px; }
+.m2-hero .m2-tag, .m2-hero .wt-box { transition: translate .6s var(--ease); }
+/* colchetes do HUD "encaixam" ao revelar */
+.js .hud[data-reveal]::before { transform: translate3d(9px, 9px, 0); opacity: 0; transition: transform .8s var(--ease) .25s, opacity .8s .25s; }
+.js .hud[data-reveal]::after { transform: translate3d(-9px, -9px, 0); opacity: 0; transition: transform .8s var(--ease) .25s, opacity .8s .25s; }
+.js .hud[data-reveal].is-in::before, .js .hud[data-reveal].is-in::after { transform: none; opacity: .85; }
+/* números: linha de leitura que se desenha */
+.m2-stat::before { content: ''; position: absolute; left: 1.2rem; right: 1.2rem; top: 0; height: 2px; background: var(--accent); transform: scaleX(0); transform-origin: 0 50%; transition: transform 1.1s var(--ease) .3s; }
+.js .m2-stat.is-in::before { transform: scaleX(.38); }
+.m2-stat:hover::before { transform: scaleX(1); }
+/* flutuação suave (gravidade zero) no dente em malha e nas etiquetas */
+.m2-hero .wt-box .wt { animation: rf-bob 7s ease-in-out infinite alternate; }
+.m2-hero .m2-tag-c { animation: rf-bob 6s ease-in-out -2s infinite alternate; }
+@keyframes rf-bob { from { transform: translate3d(0, 5px, 0); } to { transform: translate3d(0, -7px, 0); } }
+.m2-bc .m2-bc-go svg { transition: transform .4s var(--ease); }
+.m2-bc:hover .m2-bc-go svg { transform: translate3d(5px, 0, 0); }
+@media (prefers-reduced-motion: reduce) { .rf-progress, .rf-glow { display: none; } .m2-hero .wt-box .wt, .m2-hero .m2-tag-c { animation: none; } .m2-stat::before { transition: none; } .js .hud[data-reveal]::before, .js .hud[data-reveal]::after { transform: none; opacity: .85; transition: none; } }

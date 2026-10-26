@@ -4,6 +4,7 @@ import Foto from '../components/shared/Foto.astro';
 import Icone from '../components/shared/Icone.astro';
 import Simulador from '../components/shared/Simulador.astro';
 import { empresa1 as e } from '../data/empresa-1';
+import '../styles/refine-m1.css';
 
 const links = [
   ['Como funciona', '#como-funciona'],
@@ -353,6 +354,9 @@ const km = (v: number) => (v >= 1000 ? `${(v / 1000).toLocaleString('pt-BR')} MW
     </div>
     <p class="border-t border-linha px-5 py-6 text-center text-xs text-suave">© <span data-ano>{new Date().getFullYear()}</span> {e.nome}. Todos os direitos reservados.</p>
   </footer>
+  <script>
+    import "../scripts/refine-m1";
+  </script>
 </Landing>
 
 <style is:global>

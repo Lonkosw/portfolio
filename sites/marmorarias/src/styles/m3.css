@@ -353,3 +353,23 @@ dialog.amostra::backdrop { background: rgba(14, 14, 14, .85); }
 
 .calc[data-variant='industrial'] .calc-legend-n { display: inline-flex; align-items: center; white-space: nowrap; }
 .calc[data-variant='industrial'] .calc-legend-n::before { margin-right: 0; }
+
+/* ── Refinos de animação (refine-m3.ts): só transform/opacity ── */
+.rf-progress { position: fixed; z-index: 70; left: 0; top: 0; height: 4px; width: 100%; background: repeating-linear-gradient(-45deg, var(--color-orange) 0 8px, var(--color-black) 8px 16px); transform: scaleX(0); transform-origin: 0 50%; will-change: transform; pointer-events: none; }
+.rf-glow { position: absolute; left: 0; top: 0; width: 300px; height: 300px; z-index: 1; border-radius: 50%; pointer-events: none; opacity: 0; transition: opacity .3s; background: radial-gradient(closest-side, rgba(255, 106, 19, .22), transparent); will-change: transform; }
+.rf-glow.on { opacity: 1; }
+.num, .dep-card { overflow: hidden; }
+/* painel de números: preenchimento laranja sobe no hover, como chapa quente */
+.num::before { content: ''; position: absolute; inset: 0; background: var(--color-orange); transform: scaleY(0); transform-origin: 50% 100%; transition: transform .45s cubic-bezier(.2, .8, .2, 1); z-index: 0; }
+.num > * { position: relative; z-index: 1; }
+.num:hover::before { transform: scaleY(1); }
+.num:hover b, .num:hover span { color: #000; }
+.num:hover::after { color: #000; }
+/* etiqueta: a barra laranja se desenha ao revelar */
+.label::before { transform-origin: 0 50%; animation: rf-bar .9s cubic-bezier(.2, .8, .2, 1) both; animation-timeline: view(); animation-range: entry 0% entry 60%; }
+@keyframes rf-bar { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+/* foto do hero: respiro lento (Ken Burns) */
+.hero-foto img { transition: translate .6s cubic-bezier(.2, .8, .2, 1); }
+.chapa-wrap { transition: transform .5s cubic-bezier(.2, .8, .2, 1); }
+.chapa:hover .chapa-wrap { transform: translate3d(0, -4px, 0); }
+@media (prefers-reduced-motion: reduce) { .rf-progress, .rf-glow { display: none; } .label::before { animation: none; } .num::before { transition: none; } }
