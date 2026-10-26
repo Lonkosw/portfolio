@@ -1,0 +1,56 @@
+---
+import Layout1 from '../../../layouts/Layout1.astro';
+import Picture from '../../../components/shared/Picture.astro';
+import Icon from '../../../components/shared/Icon.astro';
+import Agendamento from '../../../components/shared/Agendamento.astro';
+import TratamentoCorpo from '../../../components/shared/TratamentoCorpo.astro';
+import Rodape from '../../../components/shared/Rodape.astro';
+import Flutuantes from '../../../components/shared/Flutuantes.astro';
+import { clinicas } from '../../../lib/clinicas';
+import { tratamentos } from '../../../data/tratamentos';
+import { schemaDentist, schemaFaq, schemaTratamento } from '../../../lib/schema';
+
+export function getStaticPaths() {
+  return clinicas['modelo-1'].tratamentos.map((slug) => ({ params: { slug } }));
+}
+const c = clinicas['modelo-1'];
+const t = tratamentos[Astro.params.slug!];
+const img = c.imagens[t.slug];
+---
+
+<Layout1
+  clinica={c}
+  title={`${t.nome} em ${c.cidade} · ${c.nome}`}
+  description={`${t.resumo} Conheça as etapas, o tempo médio e as dúvidas frequentes. Avaliação individual na ${c.nome}.`}
+  og={img}
+  preload={{ img, sizes: '(min-width:900px) 45vw, 100vw' }}
+  schemas={[schemaDentist(c, Astro.url.href, new URL(`/img/${img}-1280.jpg`, Astro.url).href), schemaTratamento(c, t, Astro.url.href), schemaFaq(t.faq)]}
+>
+  <header class="m1-nav is-solid" data-header>
+    <div class="wrap m1-nav-in">
+      <a class="m1-logo" href="/modelo-1/" aria-label={`${c.nome}, página inicial`}>{c.nome}</a>
+      <div class="m1-nav-cta">
+        <a class="btn btn-ghost m1-hide-sm" href="/modelo-1/#tratamentos"><Icon name="back" size={16} />Tratamentos</a>
+        <a class="btn btn-primary" href="#agendar" data-magnetic>Agendar<span class="m1-hide-sm">&nbsp;avaliação</span></a>
+      </div>
+    </div>
+  </header>
+  <main>
+    <section class="m1-thero">
+      <div class="wrap m1-thero-g">
+        <div>
+          <p class="eyebrow" data-hero="fade">Tratamento</p>
+          <h1 data-hero>{t.nome}</h1>
+          <p class="m1-hero-lead" data-hero style="--d:.12s">{c.chamadas[t.slug] ?? t.resumo}</p>
+          <ul class="m1-chips" data-hero style="--d:.25s"><li><Icon name="clock" size={18} />{t.tempoMedio}</li><li><Icon name="calendar" size={18} />{t.sessoes}</li></ul>
+          <div class="m1-hero-cta" data-hero style="--d:.35s"><a class="btn btn-primary" href="#agendar" data-magnetic>Agendar avaliação</a></div>
+        </div>
+        <div class="m1-thero-img" data-hero="zoom"><Picture img={img} eager sizes="(min-width:900px) 45vw, 100vw" /><div class="m1-sweep" aria-hidden="true"></div></div>
+      </div>
+    </section>
+    <TratamentoCorpo clinica={c} t={t} />
+    <Agendamento clinica={c} motivoInicial={t.motivo} titulo={`Agende uma avaliação para ${t.nome.toLowerCase()}`} />
+  </main>
+  <Rodape clinica={c} />
+  <Flutuantes clinica={c} />
+</Layout1>

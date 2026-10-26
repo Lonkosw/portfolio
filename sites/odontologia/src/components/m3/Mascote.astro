@@ -1,0 +1,21 @@
+---
+// Ilustração que "se monta" no carregamento (animação de assinatura da Clínica 3): peças entram com transform + opacity.
+interface Props { class?: string }
+const { class: cls = '' } = Astro.props;
+const dente = 'M44 22C26 22 16 34 16 54c0 15 5 26 9 42 4 18 5 46 19 46 10 0 10-32 28-32s18 32 28 32c14 0 15-28 19-46 4-16 9-27 9-42 0-20-10-32-28-32-11 0-17 5-28 5s-17-5-28-5Z';
+---
+<svg viewBox="0 0 176 190" class:list={['mas', cls]} role="img" aria-label="Ilustração de um dente sorridente com escova e estrelinhas">
+  <ellipse class="pc" style="--i:0;--x:0px;--y:24px" cx="88" cy="176" rx="46" ry="7" fill="rgba(38,51,45,.1)" />
+  <path class="pc" style="--i:1;--x:0px;--y:40px" d={dente} fill="#ffffff" stroke="#8fae9b" stroke-width="4" stroke-linejoin="round" transform="translate(0 -6)" />
+  <path class="pc" style="--i:2;--x:-18px;--y:0px" d="M34 56c4-10 12-15 22-15" fill="none" stroke="#e1ece4" stroke-width="6" stroke-linecap="round" />
+  <circle class="pc" style="--i:3;--x:0px;--y:-14px" cx="68" cy="78" r="5" fill="#26332d" />
+  <circle class="pc" style="--i:3;--x:0px;--y:-14px" cx="108" cy="78" r="5" fill="#26332d" />
+  <circle class="pc" style="--i:3;--x:0px;--y:-14px" cx="70" cy="76" r="1.6" fill="#fff" />
+  <circle class="pc" style="--i:3;--x:0px;--y:-14px" cx="110" cy="76" r="1.6" fill="#fff" />
+  <path class="pc" style="--i:4;--x:0px;--y:10px" d="M74 94c5 8 23 8 28 0" fill="none" stroke="#26332d" stroke-width="4" stroke-linecap="round" />
+  <circle class="pc" style="--i:5;--x:0px;--y:0px" cx="54" cy="92" r="7" fill="#f6d5c3" />
+  <circle class="pc" style="--i:5;--x:0px;--y:0px" cx="122" cy="92" r="7" fill="#f6d5c3" />
+  <g class="pc" style="--i:6;--x:40px;--y:10px" transform="rotate(24 150 120)"><rect x="143" y="86" width="14" height="70" rx="7" fill="#3f6b57" /><rect x="139" y="62" width="22" height="28" rx="6" fill="#f6d5c3" /></g>
+  <path class="pc tw" style="--i:7;--x:0px;--y:-20px" d="M28 30l3 8 8 3-8 3-3 8-3-8-8-3 8-3 3-8Z" fill="#e9a88a" />
+  <path class="pc tw" style="--i:8;--x:0px;--y:-20px" d="M138 20l2.500 6 6 2.500-6 2.500-2.500 6-2.500-6-6-2.500 6-2.500 2.500-6Z" fill="#8fae9b" />
+</svg>

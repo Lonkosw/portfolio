@@ -1,0 +1,6 @@
+---
+import { icon } from '../../lib/icons';
+interface Props { name: string; class?: string; size?: number; sw?: number }
+const { name, class: cls = '', size = 24, sw = 1.6 } = Astro.props;
+---
+<svg viewBox="0 0 24 24" width={size} height={size} fill="none" stroke="currentColor" stroke-width={sw} stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class={cls} set:html={icon(name)} />

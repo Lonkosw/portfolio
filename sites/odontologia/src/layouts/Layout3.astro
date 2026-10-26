@@ -1,0 +1,12 @@
+---
+import '@fontsource-variable/nunito/wght.css';
+import '@fontsource-variable/dm-sans/wght.css';
+import '../styles/odonto.css';
+import '../styles/engine.css';
+import '../styles/m3.css';
+import font0 from '@fontsource-variable/nunito/files/nunito-latin-wght-normal.woff2?url';
+import font1 from '@fontsource-variable/dm-sans/files/dm-sans-latin-wght-normal.woff2?url';
+import OdontoBase from './OdontoBase.astro';
+const props = Astro.props;
+---
+<OdontoBase {...props} fonts={[font0,font1]} m="3" themeColor="#FBF8F3" accent="#3F6B57"><slot name="head" slot="head" /><slot /></OdontoBase>

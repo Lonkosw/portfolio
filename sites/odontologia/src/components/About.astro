@@ -1,0 +1,14 @@
+---
+import type { ClientData } from '../data/types';
+
+interface Props {
+  client: ClientData;
+}
+
+const { client } = Astro.props;
+---
+
+<section class="mx-auto max-w-3xl px-4 py-16 text-center">
+  <h2 class="text-2xl font-bold text-[var(--color-secondary)] sm:text-3xl">Sobre nós</h2>
+  <p class="mt-4 text-lg leading-relaxed">{client.about}</p>
+</section>

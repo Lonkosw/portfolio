@@ -1,0 +1,35 @@
+---
+import { buildWhatsAppLink } from '../lib/whatsapp';
+import type { ClientData } from '../data/types';
+
+interface Props {
+  client: ClientData;
+}
+
+const { client } = Astro.props;
+const link = buildWhatsAppLink(client.whatsapp, `Olá! Vi o site da ${client.businessName} e gostaria de mais informações.`);
+---
+
+<section class="bg-[var(--color-secondary)] px-4 py-16 text-center text-white">
+  <h2 class="text-2xl font-bold sm:text-3xl">Entre em contato</h2>
+  <p class="mt-2 text-white/80">{client.phone}</p>
+  {client.address && <p class="mt-1 text-white/80">{client.address}</p>}
+  {client.hours && <p class="mt-1 text-white/80">{client.hours}</p>}
+  <a
+    href={link}
+    target="_blank"
+    rel="noopener noreferrer"
+    class="mt-6 inline-block rounded-full bg-[var(--color-primary)] px-6 py-3 font-semibold text-white shadow-lg transition hover:opacity-90"
+  >
+    Falar no WhatsApp
+  </a>
+  {
+    client.instagram && (
+      <p class="mt-4">
+        <a href={client.instagram} target="_blank" rel="noopener noreferrer" class="underline text-white/80">
+          Siga no Instagram
+        </a>
+      </p>
+    )
+  }
+</section>

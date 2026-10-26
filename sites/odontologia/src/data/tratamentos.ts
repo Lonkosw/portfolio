@@ -1,0 +1,463 @@
+// Biblioteca de tratamentos compartilhada pelas clínicas.
+// REVISÃO CLÍNICA: todos os tempos, nº de sessões e textos abaixo são médias gerais e devem ser
+// validados pelo responsável técnico de cada clínica. Linguagem propositalmente conservadora
+// (sem promessa de resultado, sem preço, sem "garantia").
+import type { Tratamento } from './odonto-types';
+
+export const tratamentos: Record<string, Tratamento> = {
+  'implantes-dentarios': {
+    slug: 'implantes-dentarios',
+    nome: 'Implantes dentários',
+    resumo: 'Reposição de dentes ausentes com raízes artificiais de titânio, após planejamento individual.',
+    motivo: 'implante',
+    oQueE: [
+      'O implante dentário é um pino, geralmente de titânio, colocado no osso da mandíbula ou da maxila para funcionar como uma raiz artificial. Sobre ele, em outra etapa, é instalada uma coroa, uma ponte ou uma prótese.',
+      'Cada caso é diferente: a indicação depende da saúde da gengiva, da quantidade e da qualidade do osso e de exames de imagem. Em alguns pacientes, pode ser necessário um preparo prévio antes da cirurgia.',
+    ],
+    indicadoPara: [
+      'Pessoas que perderam um ou mais dentes e desejam avaliar uma solução fixa.',
+      'Quem usa prótese removível e quer conversar sobre alternativas.',
+      'Pacientes com boa saúde geral e gengival, ou que possam se preparar para isso.',
+      'Quem consegue manter uma rotina regular de higiene e retornos.',
+    ],
+    etapas: [
+      { titulo: 'Avaliação clínica', texto: 'Conversa sobre histórico, exame da boca e definição dos exames necessários.', tempo: '1 consulta' },
+      { titulo: 'Exames de imagem', texto: 'Tomografia e/ou radiografias para avaliar o osso e planejar a posição do implante.', tempo: 'em média 1 semana' },
+      { titulo: 'Planejamento', texto: 'Desenho do tratamento, explicação das etapas e alinhamento de expectativas.', tempo: 'em média 1 a 2 semanas' },
+      { titulo: 'Cirurgia do implante', texto: 'Procedimento com anestesia local; sedação consciente pode ser avaliada quando indicada.', tempo: 'em média 1 a 2 horas' },
+      { titulo: 'Cicatrização e prótese', texto: 'Período de integração ao osso e, depois, instalação da coroa ou prótese.', tempo: 'em média 3 a 6 meses' },
+    ],
+    tempoMedio: 'Em média, de 4 a 8 meses até a prótese definitiva, variando conforme o caso',
+    sessoes: 'Em média, de 4 a 8 consultas',
+    cuidados: [
+      'Seguir as orientações de repouso e alimentação do período pós-cirúrgico.',
+      'Higienizar a região com a técnica e os acessórios indicados pela equipe.',
+      'Comparecer aos retornos de acompanhamento, que costumam ser periódicos.',
+      'Informar à equipe sobre medicamentos, tabagismo e condições de saúde.',
+    ],
+    faq: [
+      { p: 'O procedimento incomoda?', r: 'A cirurgia é feita com anestesia local, e a sensação varia de pessoa para pessoa. Nos dias seguintes pode haver algum desconforto, que a equipe orienta como controlar.' },
+      { p: 'Quanto tempo dura um implante?', r: 'Não há prazo fixo. Com acompanhamento regular e boa higiene, muitos implantes permanecem em função por muitos anos, mas isso depende de cada paciente.' },
+      { p: 'Todo mundo pode fazer implante?', r: 'Depende de avaliação individual. Em alguns casos é preciso tratar a gengiva ou recuperar osso antes; em outros, o implante pode não ser a melhor opção.' },
+      { p: 'Posso sair da consulta com o dente fixo?', r: 'Em alguns casos selecionados é possível instalar uma prótese provisória no mesmo período (carga imediata), mas isso só é indicado após avaliação clínica e de imagem.' },
+    ],
+  },
+
+  'protocolo-all-on-4': {
+    slug: 'protocolo-all-on-4',
+    nome: 'Protocolo All-on-4',
+    resumo: 'Reabilitação de arcada completa sobre implantes inclinados e retos, com planejamento digital.',
+    motivo: 'implante',
+    oQueE: [
+      'O protocolo All-on-4 é uma técnica de reabilitação em que uma arcada inteira é reposta com uma prótese fixa apoiada em quatro implantes estrategicamente posicionados.',
+      'Pode ser uma alternativa para pessoas que perderam muitos ou todos os dentes de uma arcada. A indicação depende de avaliação clínica e tomográfica, e nem todos os casos são elegíveis.',
+    ],
+    indicadoPara: [
+      'Pacientes sem dentes em uma arcada ou com dentes muito comprometidos.',
+      'Quem usa dentadura e busca conversar sobre uma opção fixa.',
+      'Quem prefere reduzir o número de etapas cirúrgicas, quando a anatomia permitir.',
+      'Pessoas dispostas a manter retornos e higiene criteriosa.',
+    ],
+    etapas: [
+      { titulo: 'Avaliação e tomografia', texto: 'Análise do osso disponível, da saúde da gengiva e do plano de tratamento.', tempo: 'em média 1 a 2 semanas' },
+      { titulo: 'Planejamento digital', texto: 'Simulação da posição dos implantes e do desenho da prótese.', tempo: 'em média 1 a 2 semanas' },
+      { titulo: 'Cirurgia', texto: 'Instalação dos implantes; sedação consciente pode ser avaliada quando indicada.', tempo: 'em média 1 dia' },
+      { titulo: 'Prótese provisória', texto: 'Em casos selecionados, instalação de uma prótese provisória (carga imediata).', tempo: 'em média 1 a 3 dias após a cirurgia' },
+      { titulo: 'Prótese definitiva', texto: 'Após a cicatrização, confecção e instalação da prótese final, com ajustes de mordida.', tempo: 'em média 3 a 6 meses' },
+    ],
+    tempoMedio: 'Em média, de 4 a 8 meses até a prótese definitiva, variando conforme o caso',
+    sessoes: 'Em média, de 6 a 10 consultas',
+    cuidados: [
+      'Alimentação mais macia nas primeiras semanas, conforme orientação.',
+      'Higienização diária com escovas, fio e irrigador indicados pela equipe.',
+      'Retornos periódicos para revisão e limpeza profissional.',
+      'Comunicar qualquer alteração na mordida ou incômodo.',
+    ],
+    faq: [
+      { p: 'All-on-4 serve para todos os casos?', r: 'Não. É preciso avaliar osso, gengiva e saúde geral. Em alguns casos outra técnica é mais adequada.' },
+      { p: 'O que é carga imediata?', r: 'É a instalação de uma prótese provisória logo após a cirurgia, quando as condições clínicas permitem. Não é indicada para todos os casos.' },
+      { p: 'Preciso extrair os dentes que restam?', r: 'Depende da condição de cada dente. A equipe explica, após os exames, o que é possível preservar.' },
+      { p: 'A prótese pode ser removida?', r: 'A prótese fixa é removida apenas pelo profissional, em manutenções. Em casa, a limpeza é feita com acessórios próprios.' },
+    ],
+  },
+
+  'alinhadores-transparentes': {
+    slug: 'alinhadores-transparentes',
+    nome: 'Alinhadores transparentes',
+    resumo: 'Placas removíveis e discretas que movimentam os dentes de forma gradual, com planejamento digital.',
+    motivo: 'ortodontia',
+    oQueE: [
+      'Os alinhadores transparentes são placas removíveis, feitas sob medida a partir de um escaneamento ou molde da boca. A cada etapa o paciente troca de placa, e os dentes se movimentam aos poucos.',
+      'Podem ser uma opção para diferentes tipos de desalinhamento. Casos mais complexos podem exigir outras técnicas ou combinação delas, o que é definido na avaliação.',
+    ],
+    indicadoPara: [
+      'Adolescentes e adultos que preferem um aparelho discreto e removível.',
+      'Quem busca corrigir apinhamento, espaços ou pequenas rotações, conforme avaliação.',
+      'Pacientes com boa higiene e disciplina para usar as placas por muitas horas ao dia.',
+      'Pessoas que desejam visualizar o planejamento digital antes de começar.',
+    ],
+    etapas: [
+      { titulo: 'Avaliação e escaneamento', texto: 'Exame clínico, fotos, radiografias e escaneamento ou moldagem dos dentes.', tempo: '1 consulta' },
+      { titulo: 'Planejamento digital', texto: 'Simulação dos movimentos e definição do número de placas.', tempo: 'em média 2 a 3 semanas' },
+      { titulo: 'Entrega e orientação', texto: 'Instalação de pequenos apoios (quando necessário) e instruções de uso.', tempo: '1 consulta' },
+      { titulo: 'Acompanhamento', texto: 'Retornos periódicos para conferir o avanço e trocar etapas.', tempo: 'a cada 6 a 10 semanas, em média' },
+      { titulo: 'Contenção', texto: 'Uso de contenção para ajudar a manter o resultado obtido.', tempo: 'conforme orientação' },
+    ],
+    tempoMedio: 'Em média, de 6 a 18 meses, conforme a complexidade',
+    sessoes: 'Em média, de 6 a 12 consultas de acompanhamento',
+    cuidados: [
+      'Usar as placas pelo tempo diário orientado pela equipe.',
+      'Retirar para comer e beber (exceto água) e higienizar antes de recolocar.',
+      'Guardar no estojo; evitar enrolar em guardanapos.',
+      'Manter retornos e a contenção após o término.',
+    ],
+    faq: [
+      { p: 'Alinhador funciona para todos os casos?', r: 'Não necessariamente. Muitos casos podem ser tratados, mas alguns pedem aparelho fixo ou tratamento combinado. Isso é definido na avaliação.' },
+      { p: 'Posso tirar para comer?', r: 'Sim, as placas são removíveis. Elas devem ser recolocadas após a higiene, pelo tempo diário recomendado.' },
+      { p: 'Dá para ver o planejamento antes?', r: 'Em geral, sim: o planejamento digital costuma ser apresentado antes do início, e é uma simulação, não uma promessa de resultado.' },
+      { p: 'Quanto tempo dura o tratamento?', r: 'Varia bastante. Casos simples podem levar menos de um ano, e casos mais complexos, mais tempo.' },
+    ],
+  },
+
+  'aparelho-ortodontico-fixo': {
+    slug: 'aparelho-ortodontico-fixo',
+    nome: 'Aparelho ortodôntico fixo',
+    resumo: 'Correção do alinhamento e da mordida com braquetes, em versões metálicas ou estéticas.',
+    motivo: 'ortodontia',
+    oQueE: [
+      'O aparelho fixo é composto por pequenas peças coladas aos dentes (braquetes) e por fios que aplicam forças suaves e contínuas para movimentá-los. Há versões metálicas, de cerâmica e autoligadas.',
+      'É uma técnica consolidada e versátil, indicada para diferentes tipos de desalinhamento e de problemas de mordida. A escolha do tipo depende da avaliação e da preferência do paciente.',
+    ],
+    indicadoPara: [
+      'Crianças, adolescentes e adultos com desalinhamentos ou problemas de mordida.',
+      'Casos em que o ortodontista indica controle mais próximo dos movimentos.',
+      'Quem prefere um aparelho que não precise ser removido para a higiene.',
+      'Pacientes que possam comparecer às manutenções periódicas.',
+    ],
+    etapas: [
+      { titulo: 'Avaliação ortodôntica', texto: 'Exame clínico, fotos, radiografias e escaneamento ou moldagem.', tempo: '1 a 2 consultas' },
+      { titulo: 'Planejamento', texto: 'Definição do tipo de aparelho e das etapas do tratamento.', tempo: 'em média 1 semana' },
+      { titulo: 'Instalação', texto: 'Colagem dos braquetes e orientações de higiene.', tempo: 'em média 1 consulta' },
+      { titulo: 'Manutenções', texto: 'Trocas de fios e ajustes periódicos.', tempo: 'em média a cada 4 a 8 semanas' },
+      { titulo: 'Remoção e contenção', texto: 'Retirada do aparelho e instalação da contenção.', tempo: 'em média 1 a 2 consultas' },
+    ],
+    tempoMedio: 'Em média, de 18 a 30 meses, conforme o caso',
+    sessoes: 'Em média, de 15 a 30 consultas de manutenção',
+    cuidados: [
+      'Escovar após as refeições, com escovas e acessórios próprios para aparelho.',
+      'Evitar alimentos muito duros ou pegajosos que possam soltar peças.',
+      'Comparecer às manutenções mesmo sem incômodo.',
+      'Usar a contenção conforme orientação após a remoção.',
+    ],
+    faq: [
+      { p: 'Aparelho fixo machuca?', r: 'Nos primeiros dias e após ajustes é comum sentir sensibilidade. A equipe orienta como lidar com o desconforto.' },
+      { p: 'Qual a idade ideal?', r: 'Não há idade única. A avaliação pode começar na infância, e adultos também podem se tratar, conforme saúde da gengiva e dos dentes.' },
+      { p: 'Existe aparelho discreto?', r: 'Sim, há opções estéticas, como os de cerâmica. A indicação depende do caso.' },
+      { p: 'Preciso usar contenção depois?', r: 'Sim, a contenção costuma ser recomendada para ajudar a manter os dentes na posição.' },
+    ],
+  },
+
+  'lentes-de-contato-dental': {
+    slug: 'lentes-de-contato-dental',
+    nome: 'Lentes de contato dental',
+    resumo: 'Lâminas finas de cerâmica sobre a face dos dentes, planejadas para harmonizar o sorriso.',
+    motivo: 'estetica',
+    oQueE: [
+      'As lentes de contato dental são lâminas muito finas, em geral de cerâmica, coladas na superfície frontal dos dentes para modificar cor, formato ou pequenas irregularidades.',
+      'Em alguns casos não é necessário desgaste, ou ele é mínimo; em outros, um preparo conservador é indicado. Só a avaliação mostra se o tratamento é adequado e quais alternativas existem.',
+    ],
+    indicadoPara: [
+      'Pessoas que desejam modificar formato, tamanho ou cor de dentes específicos.',
+      'Quem tem pequenos desgastes, espaços ou discretas irregularidades.',
+      'Pacientes com gengiva saudável e boa higiene.',
+      'Quem valoriza um planejamento prévio do desenho do sorriso.',
+    ],
+    etapas: [
+      { titulo: 'Avaliação e fotografias', texto: 'Análise do sorriso, do rosto e da mordida, com registro fotográfico.', tempo: '1 consulta' },
+      { titulo: 'Planejamento do sorriso', texto: 'Desenho digital e, quando indicado, uma prévia sobre os dentes (mock-up).', tempo: 'em média 1 a 2 semanas' },
+      { titulo: 'Preparo e moldagem', texto: 'Preparo conservador, quando necessário, e escaneamento para o laboratório.', tempo: 'em média 1 a 2 consultas' },
+      { titulo: 'Confecção', texto: 'As lâminas são produzidas em laboratório; pode haver provisórios.', tempo: 'em média 1 a 3 semanas' },
+      { titulo: 'Cimentação e ajustes', texto: 'Prova, colagem e ajuste fino da mordida.', tempo: 'em média 1 a 2 consultas' },
+    ],
+    tempoMedio: 'Em média, de 3 a 6 semanas, variando conforme o caso',
+    sessoes: 'Em média, de 3 a 5 consultas',
+    cuidados: [
+      'Higiene criteriosa, com fio dental e escova macia.',
+      'Evitar morder objetos duros ou usar os dentes como ferramenta.',
+      'Usar placa de proteção se houver ranger de dentes (bruxismo).',
+      'Manter consultas de revisão e limpeza profissional.',
+    ],
+    faq: [
+      { p: 'Lente de contato desgasta o dente?', r: 'Depende do caso. Alguns exigem preparo mínimo e outros nenhum. A equipe explica o que é indicado após a avaliação.' },
+      { p: 'Quanto tempo duram?', r: 'Não há prazo único. A durabilidade depende do material, da mordida, dos hábitos e dos cuidados de manutenção.' },
+      { p: 'Posso ver como vai ficar antes?', r: 'Em muitos casos é feita uma prévia do desenho do sorriso. Ela é uma simulação, e o resultado final pode ser diferente.' },
+      { p: 'Mancham com o tempo?', r: 'O material cerâmico tende a ser resistente a manchas, mas a higiene e a saúde da gengiva continuam importantes.' },
+    ],
+  },
+
+  'facetas-de-porcelana': {
+    slug: 'facetas-de-porcelana',
+    nome: 'Facetas e restaurações estéticas',
+    resumo: 'Facetas em porcelana ou resina para corrigir cor, forma e pequenas fraturas, de forma conservadora.',
+    motivo: 'estetica',
+    oQueE: [
+      'Facetas são recobrimentos da face dos dentes, feitos em porcelana (laboratório) ou em resina composta (modelada no consultório), para melhorar forma, cor e pequenas falhas.',
+      'A escolha entre os materiais depende da condição do dente, da expectativa do paciente e da avaliação da mordida. Em alguns casos, uma restauração simples já atende à necessidade.',
+    ],
+    indicadoPara: [
+      'Dentes com manchas que não respondem ao clareamento.',
+      'Pequenas fraturas, desgastes ou espaços entre os dentes.',
+      'Dentes com formato ou tamanho que o paciente deseja harmonizar.',
+      'Quem busca um tratamento conservador e planejado.',
+    ],
+    etapas: [
+      { titulo: 'Avaliação', texto: 'Exame clínico, fotos e conversa sobre expectativas.', tempo: '1 consulta' },
+      { titulo: 'Planejamento', texto: 'Escolha do material e desenho do sorriso.', tempo: 'em média 1 semana' },
+      { titulo: 'Preparo', texto: 'Preparo conservador dos dentes, quando necessário.', tempo: 'em média 1 consulta' },
+      { titulo: 'Confecção', texto: 'Em resina, feita no consultório; em porcelana, em laboratório.', tempo: 'de 1 consulta a 2 semanas' },
+      { titulo: 'Instalação e ajustes', texto: 'Colagem, polimento e ajuste da mordida.', tempo: 'em média 1 consulta' },
+    ],
+    tempoMedio: 'Em média, de 1 a 4 semanas, conforme o material',
+    sessoes: 'Em média, de 2 a 4 consultas',
+    cuidados: [
+      'Escovação e fio dental diários.',
+      'Evitar hábitos como roer unhas ou morder objetos duros.',
+      'Revisões periódicas para polimento e checagem da mordida.',
+      'Informar a equipe sobre ranger de dentes.',
+    ],
+    faq: [
+      { p: 'Qual a diferença entre resina e porcelana?', r: 'A resina é modelada diretamente nos dentes; a porcelana é confeccionada em laboratório. Cada uma tem vantagens e limitações, que são discutidas na avaliação.' },
+      { p: 'É reversível?', r: 'Depende do preparo. Por isso é importante conversar sobre o nível de desgaste antes de decidir.' },
+      { p: 'Posso clarear antes?', r: 'Em muitos casos, o clareamento é feito antes para definir a cor-base. A equipe indica a melhor sequência.' },
+      { p: 'Quanto tempo duram?', r: 'Varia conforme o material, a mordida e os cuidados. A manutenção periódica ajuda na conservação.' },
+    ],
+  },
+
+  'clareamento-dental': {
+    slug: 'clareamento-dental',
+    nome: 'Clareamento dental',
+    resumo: 'Clareamento de consultório ou caseiro supervisionado, após avaliação da saúde dos dentes.',
+    motivo: 'estetica',
+    oQueE: [
+      'O clareamento utiliza géis à base de peróxido, em concentrações controladas, para aclarar a cor dos dentes. Pode ser feito no consultório, em casa com moldeiras sob supervisão, ou combinando as duas técnicas.',
+      'Antes de começar, é preciso avaliar cáries, restaurações, gengiva e sensibilidade. O grau de clareamento varia de pessoa para pessoa e não é possível prever o resultado exato.',
+    ],
+    indicadoPara: [
+      'Adultos com dentes saudáveis que desejam aclarar a cor natural.',
+      'Quem percebe amarelamento ligado ao tempo, ao café, ao chá ou ao vinho.',
+      'Pacientes que fizeram limpeza e tratamento de cáries previamente.',
+      'Quem está atento à sensibilidade e aceita acompanhamento profissional.',
+    ],
+    etapas: [
+      { titulo: 'Avaliação', texto: 'Exame da saúde bucal e registro da cor inicial com escala.', tempo: '1 consulta' },
+      { titulo: 'Limpeza e preparo', texto: 'Remoção de placa e tártaro e proteção da gengiva.', tempo: 'em média 1 consulta' },
+      { titulo: 'Clareamento de consultório', texto: 'Aplicação do gel em sessões, com proteção dos tecidos.', tempo: 'em média 45 a 60 min por sessão' },
+      { titulo: 'Clareamento caseiro', texto: 'Uso de moldeiras sob medida com gel de menor concentração.', tempo: 'em média 2 a 3 semanas' },
+      { titulo: 'Reavaliação', texto: 'Conferência da cor e orientações de manutenção.', tempo: '1 consulta' },
+    ],
+    tempoMedio: 'Em média, de 1 a 3 semanas, conforme a técnica',
+    sessoes: 'Em média, de 1 a 3 sessões no consultório; ou 2 a 3 semanas em casa',
+    cuidados: [
+      'Evitar alimentos e bebidas muito pigmentados durante o período do clareamento.',
+      'Usar dessensibilizantes se indicados pela equipe.',
+      'Seguir o tempo de uso do gel conforme a orientação.',
+      'Manter revisões, pois a cor pode variar com os hábitos.',
+    ],
+    faq: [
+      { p: 'Clareamento estraga o dente?', r: 'Quando feito com indicação, produtos regulados e supervisão profissional, em geral é considerado seguro. O uso sem acompanhamento pode causar problemas.' },
+      { p: 'Dá sensibilidade?', r: 'Pode ocorrer sensibilidade temporária em alguns pacientes. A equipe orienta medidas para reduzi-la.' },
+      { p: 'Quanto tempo dura?', r: 'Varia conforme os hábitos, como café, tabagismo e higiene. Retoques podem ser indicados em algum momento.' },
+      { p: 'Restaurações clareiam?', r: 'Não. Materiais restauradores não mudam de cor com o clareamento, e isso é considerado no planejamento.' },
+    ],
+  },
+
+  'harmonizacao-orofacial': {
+    slug: 'harmonizacao-orofacial',
+    nome: 'Harmonização orofacial',
+    resumo: 'Procedimentos complementares à odontologia, realizados por cirurgiões-dentistas habilitados.',
+    motivo: 'harmonizacao',
+    oQueE: [
+      'A harmonização orofacial reúne procedimentos que dialogam com a estética do sorriso e do terço inferior da face, realizados por cirurgiões-dentistas com habilitação específica.',
+      'A indicação é individual e sempre vem após anamnese e exame clínico. Há procedimentos que exigem avaliação de riscos, e nem todos os pacientes são candidatos.',
+    ],
+    indicadoPara: [
+      'Pacientes que já fazem acompanhamento odontológico e desejam avaliar opções complementares.',
+      'Quem busca discutir equilíbrio entre sorriso, lábios e contorno do rosto.',
+      'Adultos com saúde geral compatível, após avaliação.',
+      'Pessoas dispostas a conversar sobre expectativas realistas.',
+    ],
+    etapas: [
+      { titulo: 'Consulta e anamnese', texto: 'Histórico de saúde, medicamentos, expectativas e exame.', tempo: '1 consulta' },
+      { titulo: 'Análise facial e do sorriso', texto: 'Fotos, avaliação das proporções e discussão de possibilidades.', tempo: 'em média 1 consulta' },
+      { titulo: 'Plano individual', texto: 'Definição do que é indicado, do que não é e da ordem das etapas.', tempo: 'na mesma consulta ou em retorno' },
+      { titulo: 'Procedimento', texto: 'Realização conforme o plano, com cuidados de biossegurança.', tempo: 'em média 30 a 60 min' },
+      { titulo: 'Acompanhamento', texto: 'Revisão para avaliar a evolução e orientar cuidados.', tempo: 'em média 15 a 30 dias' },
+    ],
+    tempoMedio: 'Em média, de 1 a 4 semanas entre avaliação, procedimento e revisão',
+    sessoes: 'Em média, de 2 a 3 consultas',
+    cuidados: [
+      'Seguir as orientações específicas de cada procedimento.',
+      'Informar alergias, medicações e condições de saúde.',
+      'Evitar manipular a região nas horas seguintes, conforme orientação.',
+      'Comparecer à revisão e relatar qualquer reação incomum.',
+    ],
+    faq: [
+      { p: 'Quem pode realizar?', r: 'Cirurgiões-dentistas com habilitação em harmonização orofacial, conforme regulamentação do conselho profissional.' },
+      { p: 'Todos os pacientes são candidatos?', r: 'Não. A indicação depende da avaliação individual e de condições de saúde.' },
+      { p: 'Os efeitos são permanentes?', r: 'Geralmente não. A duração varia conforme o procedimento e o organismo, e novas aplicações podem ser discutidas.' },
+      { p: 'Existem riscos?', r: 'Todo procedimento tem riscos, que são explicados na consulta junto com as alternativas.' },
+    ],
+  },
+
+  odontopediatria: {
+    slug: 'odontopediatria',
+    nome: 'Odontopediatria',
+    resumo: 'Cuidado com os dentes de bebês, crianças e adolescentes, com acolhimento e linguagem adequada à idade.',
+    motivo: 'odontopediatria',
+    oQueE: [
+      'A odontopediatria cuida da saúde bucal desde os primeiros dentes até a adolescência, com foco em prevenção, orientação à família e acompanhamento do crescimento.',
+      'A consulta é conduzida com linguagem e ritmo adequados a cada idade. Em muitos casos, a primeira visita é apenas de conhecimento do ambiente, para que a criança se sinta à vontade.',
+    ],
+    indicadoPara: [
+      'Bebês, a partir da erupção dos primeiros dentes.',
+      'Crianças em fase de troca dos dentes de leite.',
+      'Adolescentes que precisam de acompanhamento preventivo ou ortodôntico.',
+      'Famílias que desejam orientação sobre higiene, alimentação e hábitos.',
+    ],
+    etapas: [
+      { titulo: 'Primeira visita', texto: 'Conversa com os responsáveis e apresentação do consultório à criança.', tempo: '1 consulta curta' },
+      { titulo: 'Exame e prevenção', texto: 'Avaliação dos dentes, da gengiva e dos hábitos; limpeza e flúor, quando indicados.', tempo: 'em média 30 a 40 min' },
+      { titulo: 'Orientação à família', texto: 'Instruções de escovação, alimentação e uso de fio dental.', tempo: 'na mesma consulta' },
+      { titulo: 'Tratamentos necessários', texto: 'Restaurações ou outros procedimentos, com técnicas adequadas à idade.', tempo: 'conforme a necessidade' },
+      { titulo: 'Retornos', texto: 'Consultas periódicas para acompanhar a troca de dentes e o crescimento.', tempo: 'em média a cada 6 meses' },
+    ],
+    tempoMedio: 'Acompanhamento contínuo; consultas de rotina em média a cada 6 meses',
+    sessoes: 'Variável: de 1 consulta de prevenção a várias, conforme a necessidade',
+    cuidados: [
+      'Escovar duas ou três vezes ao dia, com supervisão de um adulto.',
+      'Limitar alimentos e bebidas açucarados, principalmente entre as refeições.',
+      'Evitar o uso prolongado de mamadeira e chupeta, conforme orientação.',
+      'Manter consultas regulares, mesmo sem queixa.',
+    ],
+    faq: [
+      { p: 'Quando levar a criança pela primeira vez?', r: 'Em geral, recomenda-se a primeira visita ao redor da erupção dos primeiros dentes ou até o primeiro ano de vida.' },
+      { p: 'Meu filho tem medo. E agora?', r: 'É comum. A equipe conduz a consulta com calma, explica cada passo de forma lúdica e respeita o tempo da criança.' },
+      { p: 'Dente de leite precisa de tratamento?', r: 'Sim. Eles mantêm o espaço para os dentes permanentes e influenciam a mastigação e a fala.' },
+      { p: 'Os pais podem acompanhar?', r: 'Sim, a presença dos responsáveis é bem-vinda, conforme a preferência da criança e da equipe.' },
+    ],
+  },
+
+  'limpeza-e-prevencao': {
+    slug: 'limpeza-e-prevencao',
+    nome: 'Limpeza e prevenção',
+    resumo: 'Profilaxia, controle da gengiva e orientação de higiene para manter a saúde bucal em dia.',
+    motivo: 'limpeza',
+    oQueE: [
+      'A limpeza profissional (profilaxia) remove placa bacteriana e tártaro que a escovação em casa não alcança. Faz parte do acompanhamento preventivo e do cuidado com a gengiva.',
+      'Quando há sinais de inflamação ou perda de suporte, a equipe pode indicar tratamento periodontal específico, com raspagem e acompanhamento mais próximo.',
+    ],
+    indicadoPara: [
+      'Pessoas de todas as idades, como rotina de prevenção.',
+      'Quem percebe sangramento ou sensibilidade na gengiva.',
+      'Quem deseja se preparar para outros tratamentos, como clareamento e ortodontia.',
+      'Pacientes com aparelho, implantes ou próteses, que demandam manutenção.',
+    ],
+    etapas: [
+      { titulo: 'Avaliação', texto: 'Exame da gengiva e dos dentes e conversa sobre hábitos de higiene.', tempo: '1 consulta' },
+      { titulo: 'Remoção de tártaro', texto: 'Limpeza com ultrassom e instrumentos manuais.', tempo: 'em média 30 a 50 min' },
+      { titulo: 'Polimento', texto: 'Polimento dos dentes e, se indicado, aplicação de flúor.', tempo: 'na mesma consulta' },
+      { titulo: 'Orientação', texto: 'Ajuste da técnica de escovação e do uso de fio dental.', tempo: 'na mesma consulta' },
+      { titulo: 'Retorno', texto: 'Periodicidade definida conforme o risco de cada paciente.', tempo: 'em média a cada 6 meses' },
+    ],
+    tempoMedio: 'Em média, de 30 a 60 minutos por consulta',
+    sessoes: 'Em média, 1 consulta, com retornos periódicos',
+    cuidados: [
+      'Escovar por pelo menos dois minutos, com creme dental com flúor.',
+      'Usar fio dental ou escovas interdentais diariamente.',
+      'Evitar o tabagismo, que prejudica a saúde da gengiva.',
+      'Manter retornos regulares com a equipe.',
+    ],
+    faq: [
+      { p: 'Limpeza desgasta o dente?', r: 'Realizada por profissional e com técnica adequada, a limpeza remove depósitos sem causar desgaste relevante.' },
+      { p: 'A gengiva sangrar é normal?', r: 'Sangramento frequente pode indicar inflamação e merece avaliação. Não é algo para ignorar.' },
+      { p: 'De quanto em quanto tempo devo fazer?', r: 'Em média, a cada seis meses, mas a periodicidade é individual e pode ser menor.' },
+      { p: 'Pode fazer em criança?', r: 'Sim, adaptada à idade, com orientação à família.' },
+    ],
+  },
+
+  'tratamento-de-canal': {
+    slug: 'tratamento-de-canal',
+    nome: 'Tratamento de canal',
+    resumo: 'Tratamento endodôntico para preservar dentes com comprometimento da polpa, com técnica e conforto.',
+    motivo: 'avaliacao',
+    oQueE: [
+      'O tratamento de canal (endodontia) trata a parte interna do dente, onde ficam os vasos e nervos, quando ela está inflamada ou infectada. O objetivo é preservar o dente natural, quando possível.',
+      'A indicação depende de exame clínico e radiográfico. O procedimento é feito com anestesia local, e o dente costuma precisar de uma restauração definitiva depois.',
+    ],
+    indicadoPara: [
+      'Pessoas com dor persistente ou sensibilidade prolongada em um dente.',
+      'Dentes escurecidos após trauma ou com infecção diagnosticada.',
+      'Cáries profundas que atingiram a polpa.',
+      'Casos em que a extração pode ser evitada, a critério clínico.',
+    ],
+    etapas: [
+      { titulo: 'Diagnóstico', texto: 'Exame clínico e radiografias para confirmar a necessidade.', tempo: '1 consulta' },
+      { titulo: 'Anestesia e acesso', texto: 'Anestesia local e abertura do dente.', tempo: 'em média 15 min' },
+      { titulo: 'Limpeza dos canais', texto: 'Remoção do tecido comprometido e desinfecção.', tempo: 'em média 45 a 90 min' },
+      { titulo: 'Obturação', texto: 'Preenchimento dos canais com material próprio.', tempo: 'na mesma sessão ou em retorno' },
+      { titulo: 'Restauração final', texto: 'Reconstrução do dente, às vezes com coroa.', tempo: 'em média 1 a 2 consultas' },
+    ],
+    tempoMedio: 'Em média, de 1 a 3 semanas, conforme o dente',
+    sessoes: 'Em média, de 1 a 3 consultas',
+    cuidados: [
+      'Evitar mastigar com o dente tratado até a restauração definitiva.',
+      'Tomar apenas medicações prescritas pela equipe.',
+      'Retornar para a restauração no prazo indicado.',
+      'Comunicar dor intensa ou inchaço.',
+    ],
+    faq: [
+      { p: 'O procedimento incomoda?', r: 'É realizado com anestesia local. Pode haver sensibilidade nos dias seguintes, que a equipe orienta como tratar.' },
+      { p: 'Quanto tempo dura?', r: 'Cada dente é diferente: pode ser resolvido em uma sessão ou em algumas, conforme a complexidade.' },
+      { p: 'Preciso de coroa depois?', r: 'Em alguns dentes, sim. A equipe indica de acordo com a quantidade de estrutura remanescente.' },
+      { p: 'Dente tratado escurece?', r: 'Pode haver mudança de cor em alguns casos. Há opções para tratar isso, discutidas na avaliação.' },
+    ],
+  },
+
+  'planejamento-digital-do-sorriso': {
+    slug: 'planejamento-digital-do-sorriso',
+    nome: 'Planejamento digital do sorriso',
+    resumo: 'Análise por fotografias, escaneamento e simulação para decidir o tratamento com mais clareza.',
+    motivo: 'estetica',
+    oQueE: [
+      'O planejamento digital reúne fotografias, escaneamento intraoral e softwares de simulação para estudar proporções do sorriso, mordida e possibilidades de tratamento antes de qualquer procedimento.',
+      'A simulação é uma ferramenta de diálogo e de planejamento, e não uma garantia de resultado. Ela ajuda paciente e dentista a alinhar expectativas e a escolher o caminho mais adequado.',
+    ],
+    indicadoPara: [
+      'Pacientes que desejam entender as opções antes de decidir.',
+      'Casos que envolvem mais de uma especialidade, como ortodontia, implantes e estética.',
+      'Quem busca reduzir moldagens tradicionais com material.',
+      'Pessoas que preferem visualizar as etapas do tratamento.',
+    ],
+    etapas: [
+      { titulo: 'Consulta inicial', texto: 'Conversa sobre queixas, histórico e objetivos.', tempo: '1 consulta' },
+      { titulo: 'Registros digitais', texto: 'Fotografias, escaneamento intraoral e exames de imagem quando indicados.', tempo: 'em média 40 a 60 min' },
+      { titulo: 'Análise e simulação', texto: 'Estudo das proporções e criação de cenários de tratamento.', tempo: 'em média 3 a 7 dias' },
+      { titulo: 'Apresentação', texto: 'Revisão do plano com o paciente, alternativas e etapas.', tempo: '1 consulta' },
+      { titulo: 'Decisão e cronograma', texto: 'Escolha do tratamento e organização das etapas.', tempo: 'conforme o caso' },
+    ],
+    tempoMedio: 'Em média, de 1 a 2 semanas para concluir o planejamento',
+    sessoes: 'Em média, 2 consultas',
+    cuidados: [
+      'Levar exames anteriores e a lista de medicamentos em uso.',
+      'Informar expectativas e preocupações com sinceridade.',
+      'Entender que a simulação é uma estimativa.',
+      'Manter a saúde da gengiva em dia antes de iniciar etapas estéticas.',
+    ],
+    faq: [
+      { p: 'O escaneamento incomoda?', r: 'O escâner intraoral substitui, em muitos casos, a moldagem com massa. A maioria dos pacientes o considera confortável.' },
+      { p: 'O resultado será igual à simulação?', r: 'Não necessariamente. A simulação orienta o planejamento, mas o resultado depende de vários fatores clínicos.' },
+      { p: 'Preciso ter pressa para decidir?', r: 'Não. O planejamento serve justamente para que a decisão seja tomada com calma.' },
+      { p: 'Posso levar o planejamento para outro profissional?', r: 'Você pode solicitar seus registros e exames, conforme as normas profissionais.' },
+    ],
+  },
+};

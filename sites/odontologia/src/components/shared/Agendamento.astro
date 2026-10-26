@@ -1,0 +1,177 @@
+---
+// Agendamento online em 5 etapas. Compartilhado pelas 3 clínicas; o visual vem das variáveis CSS do modelo.
+import type { Clinica, Motivo } from '../../data/odonto-types';
+import { motivos } from '../../data/odonto-config';
+import { dadosCliente } from '../../lib/clinicas';
+import { jsonLd } from '../../lib/schema';
+import Icon from './Icon.astro';
+import Picture from './Picture.astro';
+
+interface Props {
+  clinica: Clinica;
+  motivoInicial?: Motivo;
+  titulo?: string;
+  intro?: string;
+  id?: string;
+}
+const { clinica, motivoInicial, titulo = 'Agende sua avaliação', intro = 'Escolha o motivo, o horário e confirme pelo WhatsApp. Leva menos de um minuto.', id = 'agendar' } = Astro.props;
+const dados = { ...dadosCliente(clinica), motivos: motivos.map((m) => ({ id: m.id, titulo: m.titulo })) };
+const etapas = ['Motivo', 'Profissional', 'Data e horário', 'Seus dados', 'Confirmação'];
+---
+
+<section id={id} class="ag sec" data-ag data-motivo-inicial={motivoInicial ?? ''} aria-labelledby={`${id}-t`}>
+  <div class="wrap">
+    <header class="ag-intro" data-reveal>
+      <p class="eyebrow">Agendamento online</p>
+      <h2 id={`${id}-t`} class="ag-title">{titulo}</h2>
+      <p class="ag-lead">{intro}</p>
+    </header>
+
+    <div class="ag-box" data-reveal>
+      <ol class="ag-steps" aria-label="Etapas do agendamento">
+        {etapas.map((e, i) => (
+          <li data-step-ind={i + 1} aria-current={i === 0 ? 'step' : undefined}><span class="ag-n">{i + 1}</span><span class="ag-t">{e}</span></li>
+        ))}
+      </ol>
+      <div class="ag-bar" aria-hidden="true"><i data-bar></i></div>
+
+      <form novalidate data-form autocomplete="on">
+        <!-- 1. Motivo -->
+        <section class="ag-panel" data-panel="1" aria-labelledby={`${id}-h1`}>
+          <h3 class="ag-h" id={`${id}-h1`} tabindex="-1">Qual o motivo da consulta?</h3>
+          <div class="ag-cards ag-cards-motivo" role="radiogroup" aria-labelledby={`${id}-h1`}>
+            {motivos.map((m) => (
+              <label class="ag-card">
+                <input class="ag-input" type="radio" name="motivo" value={m.id} checked={m.id === motivoInicial} />
+                <span class="ag-card-body">
+                  <Icon name={m.icone} size={26} class="ag-ico" />
+                  <span class="ag-card-t">{m.titulo}</span>
+                  <span class="ag-card-d">{m.texto}</span>
+                </span>
+              </label>
+            ))}
+          </div>
+        </section>
+
+        <!-- Urgência -->
+        <section class="ag-panel" data-panel="urg" hidden aria-labelledby={`${id}-hu`}>
+          <h3 class="ag-h" id={`${id}-hu`} tabindex="-1">Vamos priorizar o seu atendimento</h3>
+          <p class="ag-p">Em casos de dor ou urgência, o caminho mais rápido é falar direto com a equipe. Informe o que está acontecendo e responderemos o quanto antes dentro do horário de funcionamento.</p>
+          <div class="ag-urg">
+            <a class="btn btn-primary" data-urg-wa href="#" target="_blank" rel="noopener"><Icon name="whatsapp" size={20} />Falar agora pelo WhatsApp</a>
+            <a class="btn btn-ghost" data-urg-tel href="#"><Icon name="phone" size={20} />Ligar para a clínica</a>
+          </div>
+          <p class="ag-note" role="note">Em caso de trauma grave, sangramento que não para, inchaço que dificulta respirar ou engolir, ou febre alta, procure um pronto-atendimento ou ligue 192.</p>
+        </section>
+
+        <!-- 2. Profissional -->
+        <section class="ag-panel" data-panel="2" hidden aria-labelledby={`${id}-h2`}>
+          <h3 class="ag-h" id={`${id}-h2`} tabindex="-1">Com quem você prefere ser atendido?</h3>
+          <p class="ag-p">Opcional. Se não tiver preferência, a equipe encaminha para o profissional mais indicado.</p>
+          <div class="ag-cards ag-cards-prof" role="radiogroup" aria-labelledby={`${id}-h2`}>
+            <label class="ag-card" data-prof-card="">
+              <input class="ag-input" type="radio" name="profissional" value="" checked />
+              <span class="ag-card-body ag-prof">
+                <span class="ag-ph ag-ph-any"><Icon name="smile" size={30} /></span>
+                <span><span class="ag-card-t">Sem preferência</span><span class="ag-card-d">Equipe completa</span></span>
+              </span>
+            </label>
+            {clinica.equipe.map((d) => (
+              <label class="ag-card" data-prof-card={d.motivos.join(' ')}>
+                <input class="ag-input" type="radio" name="profissional" value={`${d.titulo} ${d.nome}`} />
+                <span class="ag-card-body ag-prof">
+                  <span class="ag-ph"><Picture img={d.foto} sizes="72px" decorativa class="ag-ph-img" /></span>
+                  <span>
+                    <span class="ag-card-t">{d.titulo} {d.nome}</span>
+                    <span class="ag-card-d">{d.especialidade}</span>
+                    <span class="ag-card-cro">{d.cro}</span>
+                  </span>
+                </span>
+              </label>
+            ))}
+          </div>
+        </section>
+
+        <!-- 3. Data e horário -->
+        <section class="ag-panel" data-panel="3" hidden aria-labelledby={`${id}-h3`}>
+          <h3 class="ag-h" id={`${id}-h3`} tabindex="-1">Escolha o dia e o horário</h3>
+          <div class="ag-when">
+            <div class="ag-cal" data-cal>
+              <div class="ag-cal-head">
+                <button type="button" class="ag-nav-btn" data-cal-prev aria-label="Mês anterior"><Icon name="back" size={18} /></button>
+                <strong data-cal-title aria-live="polite"></strong>
+                <button type="button" class="ag-nav-btn" data-cal-next aria-label="Próximo mês"><Icon name="arrow" size={18} /></button>
+              </div>
+              <div class="ag-dow" aria-hidden="true"><span>D</span><span>S</span><span>T</span><span>Q</span><span>Q</span><span>S</span><span>S</span></div>
+              <div class="ag-grid" role="grid" data-cal-grid aria-label="Dias disponíveis"></div>
+              <p class="ag-legend"><span class="ag-dot ag-dot-on"></span> disponível <span class="ag-dot ag-dot-off"></span> indisponível</p>
+            </div>
+            <div class="ag-slots-box" aria-live="polite">
+              <p class="ag-slots-ph" data-slots-ph>Selecione um dia para ver os horários.</p>
+              <div data-slots></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 4. Dados -->
+        <section class="ag-panel" data-panel="4" hidden aria-labelledby={`${id}-h4`}>
+          <h3 class="ag-h" id={`${id}-h4`} tabindex="-1">Seus dados</h3>
+          <div class="ag-fields">
+            <div class="ag-field">
+              <label for={`${id}-nome`}>Nome completo <span class="ag-req">obrigatório</span></label>
+              <input class="ag-in" id={`${id}-nome`} name="nome" type="text" autocomplete="name" aria-describedby={`${id}-nome-e`} />
+              <p class="ag-err" id={`${id}-nome-e`} data-err="nome" role="alert"></p>
+            </div>
+            <div class="ag-field">
+              <label for={`${id}-tel`}>WhatsApp <span class="ag-req">obrigatório</span></label>
+              <input class="ag-in" id={`${id}-tel`} name="tel" type="tel" inputmode="tel" autocomplete="tel-national" placeholder="(41) 99999-9999" aria-describedby={`${id}-tel-e`} />
+              <p class="ag-err" id={`${id}-tel-e`} data-err="tel" role="alert"></p>
+            </div>
+            <fieldset class="ag-field ag-radios">
+              <legend>É a sua primeira consulta aqui?</legend>
+              <label><input type="radio" name="primeira" value="sim" checked /> <span>Sim</span></label>
+              <label><input type="radio" name="primeira" value="nao" /> <span>Não, já sou paciente</span></label>
+            </fieldset>
+            {dados.convenios.length > 0 && (
+              <div class="ag-field">
+                <label for={`${id}-conv`}>Convênio <span class="ag-opt">opcional</span></label>
+                <select class="ag-in" id={`${id}-conv`} name="convenio">
+                  <option value="">Particular / sem convênio</option>
+                  {dados.convenios.map((c) => <option value={c}>{c}</option>)}
+                </select>
+              </div>
+            )}
+            <div class="ag-field ag-full">
+              <label for={`${id}-obs`}>Observação <span class="ag-opt">opcional</span></label>
+              <textarea class="ag-in" id={`${id}-obs`} name="obs" rows="3" maxlength="300" placeholder="Conte algo que a equipe deva saber antes da consulta."></textarea>
+            </div>
+          </div>
+        </section>
+
+        <!-- 5. Confirmação -->
+        <section class="ag-panel" data-panel="5" hidden aria-labelledby={`${id}-h5`}>
+          <h3 class="ag-h" id={`${id}-h5`} tabindex="-1">Confira e confirme</h3>
+          <dl class="ag-sum" data-sum></dl>
+          <p class="ag-p">O agendamento só é confirmado após a resposta da equipe pelo WhatsApp.</p>
+          <div class="ag-urg">
+            <a class="btn btn-primary" data-confirm href="#" target="_blank" rel="noopener"><Icon name="whatsapp" size={20} />Confirmar pelo WhatsApp</a>
+            <button type="button" class="btn btn-ghost" data-ics><Icon name="calendar" size={20} />Adicionar ao calendário</button>
+          </div>
+          <button type="button" class="ag-link" data-reset>Fazer um novo agendamento</button>
+        </section>
+
+        <p class="ag-live" data-msg role="alert"></p>
+        <div class="ag-nav" data-nav>
+          <button type="button" class="btn btn-ghost" data-back hidden><Icon name="back" size={18} />Voltar</button>
+          <button type="button" class="btn btn-primary" data-next><span data-next-label>Continuar</span><Icon name="arrow" size={18} /></button>
+        </div>
+      </form>
+    </div>
+    <p class="ag-fine">As informações são usadas apenas para organizar o seu atendimento. Nenhum dado é enviado a servidores: a confirmação é feita pelo seu próprio WhatsApp.</p>
+  </div>
+  <script type="application/json" data-ag-data set:html={jsonLd(dados)} />
+</section>
+
+<script>
+  import '../../scripts/agendamento';
+</script>

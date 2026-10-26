@@ -1,0 +1,37 @@
+---
+const paginas = [
+  { href: '/modelo-1', nome: 'Aurora Engenharia Solar', detalhe: 'Escuro, tecnológico, âmbar. São Paulo/SP' },
+  { href: '/modelo-2', nome: 'Lume Energia Solar', detalhe: 'Claro, residencial, verde e amarelo. Belo Horizonte/MG' },
+  { href: '/modelo-3', nome: 'Vale Verde Solar', detalhe: 'Industrial e agro, laranja e preto. Goiânia/GO' },
+];
+---
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Landing pages de energia solar</title>
+    <meta name="description" content="Acesso às três landing pages de energia solar com simulador de economia." />
+    <style>
+      body { margin: 0; font-family: system-ui, sans-serif; background: #f4f4f2; color: #1c1c1c; }
+      main { max-width: 40rem; margin: 0 auto; padding: 4rem 1.25rem; }
+      h1 { font-size: 1.6rem; margin: 0 0 .5rem; }
+      p { color: #4a4a4a; margin: 0 0 2rem; }
+      ul { list-style: none; padding: 0; margin: 0; display: grid; gap: .75rem; }
+      a { display: block; padding: 1.1rem 1.25rem; min-height: 44px; background: #fff; border: 1px solid #d8d8d4; border-radius: .6rem; color: inherit; text-decoration: none; }
+      a:hover, a:focus-visible { border-color: #1c1c1c; outline: none; box-shadow: 0 0 0 3px #1c1c1c33; }
+      strong { display: block; } span { color: #5a5a5a; font-size: .92rem; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Landing pages de energia solar</h1>
+      <p>Três direções visuais, todas com o simulador de economia na conta de luz.</p>
+      <ul>
+        {paginas.map((p) => <li><a href={p.href}><strong>{p.nome}</strong><span>{p.detalhe}</span></a></li>)}
+      </ul>
+    </main>
+  </body>
+</html>

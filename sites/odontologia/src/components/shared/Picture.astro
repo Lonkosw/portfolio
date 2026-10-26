@@ -1,0 +1,35 @@
+---
+import imagens from '../../data/imagens.generated.json';
+
+interface Props {
+  img: string;
+  sizes?: string;
+  eager?: boolean;
+  class?: string;
+  alt?: string;
+  /** Imagem decorativa (alt vazio). */
+  decorativa?: boolean;
+  style?: string;
+}
+const { img, sizes = '100vw', eager = false, class: cls = '', alt, decorativa = false, style = '' } = Astro.props;
+const m = (imagens as Record<string, { w: number; h: number; widths: number[]; fallback: number; alt: string; pos: string; cor: string }>)[img];
+if (!m) throw new Error(`Imagem não encontrada no manifesto: ${img}`);
+const base = `/img/${img}`;
+const srcset = (ext: string) => m.widths.map((w) => `${base}-${w}.${ext} ${w}w`).join(', ');
+---
+
+<picture>
+  <source type="image/avif" srcset={srcset('avif')} sizes={sizes} />
+  <source type="image/webp" srcset={srcset('webp')} sizes={sizes} />
+  <img
+    src={`${base}-${m.fallback}.jpg`}
+    width={m.w}
+    height={m.h}
+    alt={decorativa ? '' : (alt ?? m.alt)}
+    loading={eager ? 'eager' : 'lazy'}
+    fetchpriority={eager ? 'high' : undefined}
+    decoding={eager ? 'sync' : 'async'}
+    class={cls}
+    style={`object-position:${m.pos};background-color:${m.cor};${style}`}
+  />
+</picture>

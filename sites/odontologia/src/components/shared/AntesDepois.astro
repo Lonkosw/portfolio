@@ -1,0 +1,70 @@
+---
+// Antes/depois ILUSTRATIVO (desenho genérico, sem pacientes reais) — conforme regras do CFO.
+// Ligue/desligue em src/data/odonto-config.ts → flags.mostrarAntesDepois
+import { aviso, flags } from '../../data/odonto-config';
+interface Props { id?: string; titulo?: string; intro?: string }
+const { id = 'antes-depois', titulo = 'Ilustração: o que um planejamento pode considerar', intro = 'Arraste o controle para comparar uma ilustração de alinhamento e cor. É apenas um desenho para conversar sobre possibilidades.' } = Astro.props;
+
+// Dentes ao longo de uma curva de sorriso. "antes": leve desalinhamento e tom mais escuro. "depois": harmonizado.
+const n = 10;
+const dentes = Array.from({ length: n }, (_, i) => {
+  const t = (i - (n - 1) / 2) / ((n - 1) / 2);
+  const x = 200 + t * 150;
+  const y = 40 + t * t * 38;
+  const larg = 30 - Math.abs(t) * 8;
+  const alt = 46 - Math.abs(t) * 12;
+  const rot = t * 18;
+  const jx = [4, -5, 6, -3, 5, -6, 3, -5, 6, -4][i];
+  const jr = [8, -10, 14, -6, 10, -12, 6, -9, 12, -8][i];
+  const ja = [-4, 2, -6, 3, -2, 4, -5, 2, -3, 5][i];
+  return { x, y, larg, alt, rot, jx, jr, ja };
+});
+const forma = (d: (typeof dentes)[number], antes: boolean) => {
+  const x = d.x + (antes ? d.jx : 0);
+  const y = d.y + (antes ? d.ja : 0);
+  const rot = d.rot + (antes ? d.jr : 0);
+  return { x, y, rot, w: d.larg, h: d.alt };
+};
+---
+
+{flags.mostrarAntesDepois && (
+  <section id={id} class="ad sec" aria-labelledby={`${id}-t`}>
+    <div class="wrap">
+      <header class="qz-head" data-reveal>
+        <p class="eyebrow">Ilustração</p>
+        <h2 id={`${id}-t`} class="qz-title">{titulo}</h2>
+        <p class="qz-lead">{intro}</p>
+      </header>
+      <figure class="ad-fig" data-reveal data-ad style="--pos:50%">
+        <div class="ad-stage">
+          {[true, false].map((antes) => (
+            <svg viewBox="0 0 400 150" class:list={['ad-svg', antes ? 'ad-before' : 'ad-after']} role="img" aria-label={antes ? 'Ilustração de sorriso com dentes levemente desalinhados e mais amarelados' : 'Ilustração de sorriso com dentes alinhados e mais claros'}>
+              <path d="M30 30C90 -4 310 -4 370 30C350 120 270 142 200 142C130 142 50 120 30 30Z" class="ad-mouth" />
+              {dentes.map((d) => {
+                const f = forma(d, antes);
+                return <rect x={-f.w / 2} y={-f.h / 2} width={f.w} height={f.h} rx={f.w / 2.6} transform={`translate(${f.x} ${f.y + f.h / 2 + 8}) rotate(${f.rot})`} class="ad-tooth" />;
+              })}
+            </svg>
+          ))}
+          <span class="ad-tag ad-tag-a">Antes (ilustração)</span>
+          <span class="ad-tag ad-tag-d">Depois (ilustração)</span>
+          <span class="ad-line" aria-hidden="true"></span>
+        </div>
+        <label class="ad-range">
+          <span class="sr-only-od">Comparar as duas ilustrações</span>
+          <input type="range" min="0" max="100" value="50" data-ad-range aria-label="Comparar as duas ilustrações" />
+        </label>
+        <figcaption class="qz-fine">{aviso.ilustrativo}</figcaption>
+      </figure>
+    </div>
+  </section>
+)}
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-ad]').forEach((f) => {
+    const r = f.querySelector<HTMLInputElement>('[data-ad-range]')!;
+    const set = () => f.style.setProperty('--pos', `${r.value}%`);
+    r.addEventListener('input', set);
+    set();
+  });
+</script>

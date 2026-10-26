@@ -1,0 +1,31 @@
+---
+import '../styles/global.css';
+import type { ClientColors } from '../data/types';
+
+interface Props {
+  title: string;
+  description: string;
+  colors: ClientColors;
+}
+
+const { title, description, colors } = Astro.props;
+---
+
+<html lang="pt-BR" style={{
+  '--color-primary': colors.primary,
+  '--color-secondary': colors.secondary,
+  '--color-accent': colors.accent,
+  '--color-background': colors.background,
+  '--color-text': colors.text,
+}}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+  </head>
+  <body class="bg-[var(--color-background)] text-[var(--color-text)]">
+    <slot />
+  </body>
+</html>

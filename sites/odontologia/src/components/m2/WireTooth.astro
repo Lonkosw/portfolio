@@ -1,0 +1,17 @@
+---
+// Dente em malha (wireframe) — animação de assinatura do Instituto: linha de varredura (transform) sobre a malha.
+interface Props { class?: string }
+const { class: cls = '' } = Astro.props;
+const dente = 'M28 10C14 10 6 20 6 36c0 12 4 20 7 33 3 14 4 36 15 36 8 0 8-26 22-26s14 26 22 26c11 0 12-22 15-36 3-13 7-21 7-33C94 20 86 10 72 10c-9 0-14 4-22 4s-13-4-22-4Z';
+const paralelos = [20, 30, 40, 50, 60, 70, 80, 90];
+const meridianos = [22, 34, 46, 58, 70, 82];
+---
+<svg viewBox="0 0 100 112" class:list={['wt', cls]} role="img" aria-label="Ilustração em malha 3D de um dente">
+  <defs><clipPath id="wt-clip"><path d={dente} /></clipPath></defs>
+  <path d={dente} class="wt-out" pathLength="1" />
+  <g clip-path="url(#wt-clip)" class="wt-mesh">
+    {paralelos.map((y, i) => <path d={`M0 ${y}Q50 ${y + (i % 2 ? 7 : 11)} 100 ${y}`} style={`--i:${i}`} />)}
+    {meridianos.map((x, i) => <path d={`M${x} 6C${x - 12 + i * 4} 40 ${x + 6 - i * 3} 70 ${x + (i - 2.5) * 2} 112`} style={`--i:${i + 3}`} />)}
+    <rect class="wt-scan" x="-4" y="-6" width="108" height="3" />
+  </g>
+</svg>

@@ -1,0 +1,43 @@
+---
+import type { Clinica } from '../../data/odonto-types';
+import { tratamentos } from '../../data/tratamentos';
+interface Props { clinica: Clinica; id?: string; titulo?: string; intro?: string }
+const { clinica, id = 'linha-do-tempo', titulo = 'Como é o caminho, etapa por etapa', intro = 'Os tempos abaixo são médias gerais e variam de pessoa para pessoa. Seu plano é definido na avaliação.' } = Astro.props;
+const lista = clinica.linhasDoTempo.map((s) => tratamentos[s]).filter(Boolean);
+---
+
+<section id={id} class="tl-sec sec" aria-labelledby={`${id}-t`}>
+  <div class="wrap">
+    <header class="qz-head" data-reveal>
+      <p class="eyebrow">Linha do tempo</p>
+      <h2 id={`${id}-t`} class="qz-title">{titulo}</h2>
+      <p class="qz-lead">{intro}</p>
+    </header>
+    <div data-tabs class="cp-box" data-reveal>
+      <div role="tablist" aria-label="Tratamentos" class="tabs">
+        {lista.map((t, i) => <button role="tab" type="button" id={`${id}-tab-${t.slug}`} aria-controls={`${id}-p-${t.slug}`} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1} class="tab">{t.nome}</button>)}
+      </div>
+      {lista.map((t) => (
+        <div role="tabpanel" id={`${id}-p-${t.slug}`} aria-labelledby={`${id}-tab-${t.slug}`} hidden>
+          <ol class="tl" data-stagger>
+            {t.etapas.map((e, i) => (
+              <li data-reveal>
+                <span class="tl-n">{i + 1}</span>
+                <div class="tl-b">
+                  <h3>{e.titulo}</h3>
+                  <p>{e.texto}</p>
+                  <span class="tl-t">{e.tempo}</span>
+                </div>
+              </li>
+            ))}
+          </ol>
+          <p class="qz-fine">Tempo total, em média: {t.tempoMedio}.</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  import '../../scripts/tabs';
+</script>

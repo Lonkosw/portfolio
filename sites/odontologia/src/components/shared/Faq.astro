@@ -1,0 +1,12 @@
+---
+interface Props { itens: { p: string; r: string }[]; id?: string; nome?: string }
+const { itens, id = 'faq', nome = 'faq' } = Astro.props;
+---
+<div class="faq" data-stagger id={id}>
+  {itens.map((f, i) => (
+    <details class="faq-i" name={nome} data-reveal>
+      <summary><span>{f.p}</span><i class="faq-ic" aria-hidden="true"></i></summary>
+      <div class="faq-r"><p>{f.r}</p></div>
+    </details>
+  ))}
+</div>

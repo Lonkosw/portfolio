@@ -1,0 +1,125 @@
+import type { Empresa } from './empresa-types';
+import { faqBase } from './faq-base';
+
+export const empresa3: Empresa = {
+  slug: 'valeverde',
+  nome: 'Vale Verde Solar',
+  marca: 'Vale Verde',
+  slogan: 'Usinas solares para indústria, comércio e campo.',
+  cidade: 'Goiânia',
+  uf: 'GO',
+  endereco: { rua: 'Av. Perimetral Norte, 3.870, galpão 4', bairro: 'Vila Brasília', cep: '74480-000' },
+  telefone: '(62) 3255-9040',
+  whatsapp: '5511999990000',
+  email: 'projetos@valeverdesolar.com.br',
+  instagram: '@valeverdesolar',
+  horario: 'Seg a sex, 7h30 às 17h30',
+  fundacao: 2013,
+  cores: {
+    fundo: '#0D0D0C',
+    superficie: '#E3E0D8',
+    texto: '#F2F0EA',
+    suave: '#B5B1A6',
+    destaque: '#FF5A00',
+    destaque2: '#FFB800',
+    sobre: '#0D0D0C',
+    linha: 'rgb(242 240 234 / .22)',
+  },
+  fontes: {
+    display: 'Anton',
+    corpo: 'Barlow',
+    mono: 'IBM Plex Mono',
+    url: 'https://fonts.googleapis.com/css2?family=Anton&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap',
+  },
+  seo: {
+    titulo: 'Vale Verde Solar | Energia solar para indústria, comércio e propriedades rurais',
+    descricao:
+      'Usinas solares para empresas, indústrias e propriedades rurais em Goiás e região. Simule a economia, veja o retorno e receba projeto, instalação e homologação completos.',
+    og: '/og/valeverde.jpg',
+  },
+  hero: {
+    etiqueta: 'Comercial · Industrial · Agro',
+    titulo: 'Energia que paga',
+    destaque: 'a própria obra.',
+    subtitulo:
+      'Usinas solares dimensionadas para galpões, fábricas, irrigação e propriedades rurais. Engenharia própria, equipe própria e retorno calculado antes da assinatura.',
+    cta: 'Simule sua economia',
+    ctaSecundario: 'Pedir proposta técnica',
+    foto: { base: 'modelo-3/usina-aerea', alt: 'Vista aérea de fileiras de painéis solares sobre um gramado' },
+  },
+  numeros: [
+    { valor: 12, rotulo: 'anos de mercado' },
+    { valor: 640, prefixo: '+', rotulo: 'usinas entregues' },
+    { valor: 41800, sufixo: ' kWp', rotulo: 'instalados em Goiás e região' },
+    { valor: 4.8, casas: 1, rotulo: 'nota no Google' },
+  ],
+  passos: [
+    { titulo: 'Análise da fatura', texto: 'Estudamos 12 meses de consumo, a demanda contratada e o grupo tarifário para dimensionar a usina.', prazo: '2 dias' },
+    { titulo: 'Visita e levantamento', texto: 'Engenheiro em campo mede cobertura, solo, estrutura e a subestação ou padrão de entrada.', prazo: 'até 7 dias' },
+    { titulo: 'Projeto e homologação', texto: 'Projeto executivo com ART, memorial e solicitação de acesso protocolada junto à distribuidora.', prazo: '20 a 45 dias' },
+    { titulo: 'Obra e comissionamento', texto: 'Equipe própria instala, testa e comissiona. Obra sem parar sua operação.', prazo: '1 a 4 semanas' },
+    { titulo: 'Monitoramento e retorno', texto: 'Geração monitorada em tempo real e relatório mensal de economia e desempenho.', prazo: 'por 25 anos' },
+  ],
+  simulador: {
+    titulo: 'Dimensione sua usina em um minuto',
+    texto: 'Informe o valor médio da conta e o tipo de propriedade. O cálculo traz potência, área, investimento e retorno, já considerando a Lei 14.300.',
+    ufPadrao: 'GO',
+    contaPadrao: 3500,
+  },
+  beneficios: [
+    { titulo: 'Custo de energia previsível', texto: 'Energia é insumo. Gerar a sua própria tira o reajuste tarifário do centro do seu custo operacional.', icone: 'raio', destaque: '-85%' },
+    { titulo: 'Retorno em poucos anos', texto: 'Sistemas de maior porte têm custo por kWp menor, e o retorno costuma chegar antes de 4 anos.', icone: 'grafico', destaque: '3 a 4 anos' },
+    { titulo: 'Irrigação e agroindústria', texto: 'Bombas, resfriadores, silos e beneficiamento funcionam com a energia gerada na própria propriedade.', icone: 'trator', destaque: 'zona rural' },
+    { titulo: 'Ativo que vale mais', texto: 'Usina própria reduz custo fixo, melhora o resultado e pode ser contabilizada como investimento.', icone: 'fabrica', destaque: '25 anos' },
+  ],
+  portfolio: [
+    { titulo: 'Usina de solo, 1,2 MWp', tipo: 'comercial', local: 'Aparecida de Goiânia, GO', kwp: 1200, foto: { base: 'modelo-3/usina-nuvens', alt: 'Usina solar com painéis em linha sob céu azul com nuvens' } },
+    { titulo: 'Usina de solo, 540 kWp', tipo: 'comercial', local: 'Anápolis, GO', kwp: 540, foto: { base: 'modelo-3/usina-ceu-azul', alt: 'Longas fileiras de painéis solares sob um céu azul com nuvens finas' } },
+    { titulo: 'Fazenda de grãos', tipo: 'rural', local: 'Rio Verde, GO', kwp: 180, foto: { base: 'modelo-3/lavoura-por-do-sol', alt: 'Lavoura dourada ao fim do dia, com o sol se pondo no horizonte' } },
+    { titulo: 'Centro de distribuição', tipo: 'comercial', local: 'Goiânia, GO', kwp: 420, foto: { base: 'modelo-3/galpao-estoque', alt: 'Interior de um galpão com prateleiras altas e paletes de mercadoria' } },
+    { titulo: 'Pecuária de corte', tipo: 'rural', local: 'Jataí, GO', kwp: 96, foto: { base: 'modelo-3/pecuaria', alt: 'Bois e bezerros em pasto ao entardecer' } },
+    { titulo: 'Metalúrgica', tipo: 'comercial', local: 'Trindade, GO', kwp: 310, foto: { base: 'modelo-3/solda-industrial', alt: 'Soldador trabalhando com máscara, soltando faíscas' } },
+    { titulo: 'Produtor de milho', tipo: 'rural', local: 'Catalão, GO', kwp: 135, foto: { base: 'modelo-3/milharal', alt: 'Plantas jovens de milho em fileiras na terra, vistas de perto' } },
+  ],
+  pagamento: [
+    { titulo: 'Financiamento de longo prazo', texto: 'Linhas para empresas e para o agro, com carência e prazo ajustado ao ciclo de caixa da operação.', icone: 'grafico', detalhe: 'até 120 meses' },
+    { titulo: 'Parcela menor que a economia', texto: 'Montamos a condição para que a parcela e a nova fatura somem menos que a conta atual.', icone: 'carteira', detalhe: 'caixa positivo' },
+    { titulo: 'Cartão e Pix', texto: 'Para sistemas menores, parcelamento no cartão ou desconto no pagamento à vista.', icone: 'cartao', detalhe: 'em até 18x' },
+    { titulo: 'Safra e sazonalidade', texto: 'Para o produtor rural, parcelas que acompanham o calendário de colheita.', icone: 'trator', detalhe: 'calendário agrícola' },
+  ],
+  depoimentos: [
+    { nome: 'Wilson P.', cidade: 'Rio Verde, GO', perfil: 'Produtor de grãos', nota: 5, texto: 'Os pivôs consumiam a maior parte da conta. Com a usina na propriedade, a energia deixou de ser o gargalo da safra.' },
+    { nome: 'Cláudia R.', cidade: 'Anápolis, GO', perfil: 'Indústria de alimentos', nota: 5, texto: 'Projeto e obra dentro do prazo, sem parar a linha de produção. O relatório mensal de economia é claro e confere com a fatura.' },
+    { nome: 'Domingos F.', cidade: 'Jataí, GO', perfil: 'Pecuarista', nota: 5, texto: 'Fui visitado por engenheiro, e não por vendedor. Explicou a Lei 14.300 e disse quanto eu realmente ia economizar.' },
+    { nome: 'Eduardo S.', cidade: 'Goiânia, GO', perfil: 'Atacadista', nota: 5, texto: 'Minha câmara fria roda o dia inteiro. Com a usina no telhado do galpão, a conta caiu mais de 80%.' },
+    { nome: 'Luís Fernando G.', cidade: 'Trindade, GO', perfil: 'Metalúrgica', nota: 4, texto: 'Boa execução e equipe organizada. A homologação levou um pouco mais por causa da distribuidora, mas eles acompanharam tudo.' },
+    { nome: 'Raimunda A.', cidade: 'Catalão, GO', perfil: 'Produtora rural', nota: 5, texto: 'Fui atendida com respeito e sem enrolação. A parcela acompanha a colheita, e isso fez toda a diferença.' },
+    { nome: 'Cleber M.', cidade: 'Aparecida de Goiânia, GO', perfil: 'Transportadora', nota: 5, texto: 'Pátio e galpão com usina própria. Em três anos e meio o investimento voltou.' },
+  ],
+  garantias: [
+    { valor: '25 anos', titulo: 'Desempenho dos módulos', texto: 'Garantia linear de geração do fabricante.' },
+    { valor: '12 anos', titulo: 'Defeitos de fabricação', texto: 'Cobertura do módulo contra falhas de material.' },
+    { valor: '10 anos', titulo: 'Inversores', texto: 'Garantia do fabricante, com suporte técnico regional.' },
+    { valor: '5 anos', titulo: 'Obra e estrutura', texto: 'Garantia Vale Verde sobre fixação, cabeamento e mão de obra.' },
+  ],
+  certificacoes: ['Módulos e inversores certificados pelo Inmetro', 'Projeto executivo com ART junto ao CREA', 'Equipe treinada em NR-10, NR-12 e NR-35', 'Homologação conforme normas da distribuidora'],
+  faq: [
+    ...faqBase.slice(0, 6),
+    {
+      pergunta: 'Posso usar a usina para alimentar irrigação e maquinário rural?',
+      resposta:
+        'Pode. Dimensionamos o sistema a partir da fatura da propriedade, incluindo bombas, pivôs, resfriadores e secadores. Quando a geração é distante do ponto de consumo, avaliamos também a geração remota e o autoconsumo remoto.',
+    },
+    ...faqBase.slice(6),
+  ],
+  ctaFinal: {
+    titulo: 'Sua fatura é grande. Seu retorno também pode ser.',
+    texto: 'Envie a conta de luz da operação e receba uma proposta técnica com potência, área, prazo e retorno.',
+    botao: 'Pedir proposta pelo WhatsApp',
+  },
+  imagens: {
+    obra: { base: 'modelo-3/obra', alt: 'Vista de cima de uma obra com equipe de capacete e colete caminhando sobre a laje' },
+    usinaFileiras: { base: 'modelo-3/usina-fileiras', alt: 'Painéis solares azuis em fileiras sob céu limpo' },
+    usinaGramado: { base: 'modelo-3/usina-gramado', alt: 'Painéis solares inclinados em fila sobre um gramado verde' },
+  },
+};

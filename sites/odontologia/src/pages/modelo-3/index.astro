@@ -1,0 +1,229 @@
+---
+import Layout3 from '../../layouts/Layout3.astro';
+import Picture from '../../components/shared/Picture.astro';
+import Icon from '../../components/shared/Icon.astro';
+import Mascote from '../../components/m3/Mascote.astro';
+import Quiz from '../../components/shared/Quiz.astro';
+import Agendamento from '../../components/shared/Agendamento.astro';
+import Clareamento from '../../components/shared/Clareamento.astro';
+import Comparador from '../../components/shared/Comparador.astro';
+import Timeline from '../../components/shared/Timeline.astro';
+import AntesDepois from '../../components/shared/AntesDepois.astro';
+import Parcelamento from '../../components/shared/Parcelamento.astro';
+import Faq from '../../components/shared/Faq.astro';
+import Mapa from '../../components/shared/Mapa.astro';
+import Rodape from '../../components/shared/Rodape.astro';
+import Flutuantes from '../../components/shared/Flutuantes.astro';
+import { clinicas, tratamentosDa, resumoHorarios, enderecoCompleto, whatsFormatado } from '../../lib/clinicas';
+import { schemaDentist, schemaFaq } from '../../lib/schema';
+import { flags } from '../../data/odonto-config';
+
+const c = clinicas['modelo-3'];
+const trats = tratamentosDa(c);
+const hor = resumoHorarios(c);
+const iconeDe: Record<string, string> = { odontopediatria: 'child', 'limpeza-e-prevencao': 'sparkle', 'aparelho-ortodontico-fixo': 'aligner', 'alinhadores-transparentes': 'aligner', 'clareamento-dental': 'smile', 'tratamento-de-canal': 'tooth', 'implantes-dentarios': 'implant' };
+const ini = (n: string) => n.split(' ').map((p) => p[0]).slice(0, 2).join('');
+const fam = [
+  { t: 'Bebês e crianças', d: 'Primeira visita sem pressa, conversa lúdica e orientação para os pais.', img: 'modelo-3/crianca-rindo', href: '/modelo-3/tratamentos/odontopediatria' },
+  { t: 'Adolescentes', d: 'Acompanhamento da troca dos dentes e opções de ortodontia.', img: 'modelo-3/menina-alinhador', href: '/modelo-3/tratamentos/aparelho-ortodontico-fixo' },
+  { t: 'Adultos', d: 'Limpeza, restaurações, canal, clareamento e reposição de dentes.', img: 'modelo-3/rindo-azul', href: '/modelo-3/tratamentos/limpeza-e-prevencao' },
+  { t: 'A família toda', d: 'Sempre que possível, organizamos as consultas da família no mesmo dia.', img: 'modelo-3/pai-filha', href: '#agendar' },
+];
+const nota = String(c.notaGoogle).replace('.', ',');
+---
+
+<Layout3
+  clinica={c}
+  title={`${c.nome} · Odontologia para a família em ${c.cidade}`}
+  description={c.descricao}
+  og="modelo-3/hero"
+  preload={{ img: "modelo-3/hero", sizes: "(min-width:960px) 46vw, 100vw" }}
+  schemas={[schemaDentist(c, Astro.url.href, new URL('/img/modelo-3/hero-1280.jpg', Astro.url).href), schemaFaq(c.faq)]}
+>
+  <header class="m3-nav" data-header>
+    <div class="wrap">
+      <div class="m3-nav-in">
+        <a class="m3-logo" href="/modelo-3/" aria-label={`${c.nome}, página inicial`}><Icon name="tooth" size={28} sw={1.8} />{c.nome}</a>
+        <ul class="m3-links">
+          <li><a href="#tratamentos">Tratamentos</a></li><li><a href="#familia">Família</a></li><li><a href="#equipe">Equipe</a></li><li><a href="#faq">Dúvidas</a></li><li><a href="#localizacao">Onde estamos</a></li>
+        </ul>
+        <div class="m3-nav-cta">
+          <a class="btn btn-primary" href="#agendar">Agendar<span class="m3-hide-sm">&nbsp;avaliação</span></a>
+          <button class="m3-burger" type="button" data-menu-btn aria-expanded="false" aria-controls="m3-menu" aria-label="Abrir menu"><Icon name="menu" size={22} /></button>
+        </div>
+      </div>
+    </div>
+  </header>
+  <nav class="m3-menu" id="m3-menu" data-menu aria-label="Menu principal">
+    <a href="#tratamentos">Tratamentos</a><a href="#familia">Família</a><a href="#equipe">Equipe</a><a href="#faq">Dúvidas</a><a href="#localizacao">Onde estamos</a><a href="#agendar">Agendar avaliação</a>
+  </nav>
+
+  <main>
+    <section class="m3-hero" aria-labelledby="m3-h1">
+      <div class="m3-blob m3-blob-a" aria-hidden="true"></div><div class="m3-blob m3-blob-b" aria-hidden="true"></div>
+      <div class="wrap m3-hero-g">
+        <div>
+          <p class="eyebrow" data-hero="fade">Odontologia familiar · {c.endereco.bairro}</p>
+          <h1 id="m3-h1" data-hero>Cuidar do sorriso da família, com <span>calma e carinho</span>.</h1>
+          <p class="m3-lead" data-hero style="--d:.12s">Atendemos bebês, crianças, adolescentes e adultos em {c.cidade}. A primeira visita pode ser só para conhecer a equipe e o consultório.</p>
+          <div class="m3-hero-cta" data-hero style="--d:.24s">
+            <a class="btn btn-primary" href="#agendar">Agendar avaliação</a>
+            <a class="btn btn-ghost" href="#quiz">Descobrir meu tratamento</a>
+          </div>
+          <p class="m3-trust" data-hero="fade" style="--d:.4s"><span>Atendimento sem pressa</span><span>Equipe com CRO</span><span>Aceitamos convênios</span></p>
+        </div>
+        <div class="m3-hero-vis" data-hero="zoom">
+          <div class="m3-photo"><Picture img="modelo-3/hero" eager sizes="(min-width:960px) 46vw, 100vw" /></div>
+          <div class="m3-float m3-float-b"><Icon name="family" size={22} />Bebês a idosos</div>
+          <div class="m3-float m3-float-a"><Icon name="heart" size={22} />Primeira visita tranquila</div>
+          <div class="m3-mascot" aria-hidden="true"><Mascote /></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="m3-info" aria-label="Informações rápidas">
+      <div class="wrap m3-info-g" data-stagger>
+        <div class="m3-info-c" data-reveal><span class="ic"><Icon name="clock" size={24} /></span><div><b>{hor[0].dias}</b><span>{hor[0].horas}</span></div></div>
+        <div class="m3-info-c" data-reveal><span class="ic"><Icon name="whatsapp" size={24} /></span><div><b>{whatsFormatado(c)}</b><span>WhatsApp da clínica</span></div></div>
+        <div class="m3-info-c" data-reveal><span class="ic"><Icon name="star" size={24} /></span><div><b><span class="m3-big" data-count={c.notaGoogle} data-dec="1">{nota}</span> no Google</b><span>{c.avaliacoes} avaliações · {c.pacientes.toLocaleString('pt-BR')} pacientes</span></div></div>
+        <div class="m3-info-c" data-reveal><span class="ic"><Icon name="heart" size={24} /></span><div><b><span class="m3-big" data-count={c.anos}>{c.anos}</span> anos</b><span>cuidando de famílias · {c.equipe.length} especialistas</span></div></div>
+      </div>
+    </section>
+
+    <section class="sec" id="tratamentos">
+      <div class="wrap">
+        <div class="m3-sec-h"><p class="eyebrow" data-reveal>Tratamentos</p><h2 data-reveal>Tudo o que sua família precisa, no mesmo lugar.</h2><p data-reveal>Toque em um tratamento para entender como funciona, quanto tempo costuma levar e quais cuidados são recomendados.</p></div>
+        <div class="m3-esp" data-stagger>
+          {trats.map((t) => (
+            <a class="m3-ec" href={`/modelo-3/tratamentos/${t.slug}`} data-reveal>
+              <span class="m3-ec-i"><Picture img={c.imagens[t.slug]} sizes="(min-width:1050px) 40vw, (min-width:700px) 50vw, 100vw" decorativa /></span>
+              <span class="m3-ec-b"><span class="bub"><Icon name={iconeDe[t.slug] ?? 'smile'} size={24} /></span><h3>{t.nome}</h3><p>{c.chamadas[t.slug]}</p><span class="go">Saiba mais <Icon name="arrow" size={18} /></span></span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="sec m3-band" id="familia">
+      <div class="wrap">
+        <div class="m3-sec-h"><p class="eyebrow" data-reveal>Para toda a família</p><h2 data-reveal>Cada idade tem o seu jeitinho.</h2><p data-reveal>Adaptamos a conversa, o ritmo e os cuidados para cada fase.</p></div>
+        <div class="m3-fam" data-stagger>
+          {fam.map((f) => (
+            <a class="m3-fc" href={f.href} data-reveal>
+              <span class="m3-fc-i"><Picture img={f.img} sizes="(min-width:1050px) 24vw, (min-width:640px) 46vw, 92vw" decorativa /></span>
+              <h3>{f.t}</h3><p>{f.d}</p>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <Quiz clinica={c} titulo="Qual cuidado faz sentido para você ou para a sua família?" intro="São 7 perguntas rápidas. No final, mostramos caminhos que costumam ser avaliados em casos parecidos." />
+
+    <section class="sec m3-band" id="equipe">
+      <div class="wrap">
+        <div class="m3-sec-h"><p class="eyebrow" data-reveal>Equipe</p><h2 data-reveal>Quem vai cuidar de vocês.</h2></div>
+        <div class="m3-team" data-stagger>
+          {c.equipe.map((d) => (
+            <article class="m3-member" data-reveal>
+              <div class="m3-avatar"><Picture img={d.foto} sizes="160px" /></div>
+              <h3>{d.titulo} {d.nome}</h3>
+              <p class="esp">{d.especialidade}</p>
+              <p class="cro">{d.cro}</p>
+              <p class="bio">{d.bio}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <Agendamento clinica={c} titulo="Vamos marcar a sua visita?" intro="Escolha o motivo, o profissional e o melhor horário. A confirmação é feita pelo WhatsApp, com a nossa equipe." />
+
+    <section class="sec m3-band" aria-labelledby="m3-dep-t">
+      <div class="wrap" data-carousel>
+        <div class="m3-car-h">
+          <div class="m3-sec-h" style="margin:0"><p class="eyebrow" data-reveal>Depoimentos</p><h2 id="m3-dep-t" data-reveal>O que as famílias contam.</h2></div>
+          <div class="m3-car-btns"><button type="button" data-prev aria-label="Depoimentos anteriores"><Icon name="back" size={22} /></button><button type="button" data-next aria-label="Próximos depoimentos"><Icon name="arrow" size={22} /></button></div>
+        </div>
+        <div class="m3-track" data-track tabindex="0" role="region" aria-label="Depoimentos de pacientes">
+          {c.depoimentos.map((d) => (
+            <figure class="m3-dep"><div class="stars" aria-hidden="true">★★★★★</div><blockquote><p>{d.texto}</p></blockquote><footer><span class="ini" aria-hidden="true">{ini(d.nome)}</span><div><b>{d.nome}</b><span>{d.contexto}</span></div></footer></figure>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="sec">
+      <div class="wrap m3-medo">
+        <div class="m3-medo-img" data-reveal="zoom"><Picture img="modelo-3/mae-filha" sizes="(min-width:960px) 45vw, 100vw" /></div>
+        <div>
+          <p class="eyebrow" data-reveal>Sem medo de dentista</p>
+          <h2 style="font-size:clamp(2rem,4.2vw,3rem);line-height:1.08;margin-top:.9rem" data-reveal>Aqui a gente conversa antes de começar.</h2>
+          <ul data-stagger>
+            {c.biosseguranca.map((b) => <li data-reveal><Icon name="check" size={24} /><div><b>{b.titulo}</b><span>{b.texto}</span></div></li>)}
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <div class="m3-band"><Clareamento titulo="Qual é o tom dos seus dentes?" /></div>
+    <Comparador clinica={c} />
+    <div class="m3-band"><Timeline clinica={c} /></div>
+    <Parcelamento />
+    <AntesDepois />
+
+    {flags.mostrarConvenios && c.convenios.length > 0 && (
+      <section class="sec m3-band" aria-labelledby="m3-conv-t">
+        <div class="wrap">
+          <div class="m3-sec-h" style="margin-bottom:0"><p class="eyebrow" data-reveal>Convênios</p><h2 id="m3-conv-t" data-reveal>Convênios que atendemos.</h2><p data-reveal>A cobertura depende do seu plano. Confirme com a operadora antes de agendar.</p></div>
+          <ul class="m3-chips" data-reveal>{c.convenios.map((v) => <li>{v}</li>)}</ul>
+        </div>
+      </section>
+    )}
+
+    <section class="sec">
+      <div class="wrap">
+        <div class="m3-sec-h"><p class="eyebrow" data-reveal>Conheça a clínica</p><h2 data-reveal>Um cantinho pensado para receber bem.</h2></div>
+        <div class="m3-tour" data-stagger>
+          {c.tour.map((t) => <figure data-reveal="zoom"><Picture img={t.img} sizes="(min-width:900px) 24vw, 46vw" /><figcaption>{t.legenda}</figcaption></figure>)}
+        </div>
+      </div>
+    </section>
+
+    <section class="sec m3-band">
+      <div class="wrap m3-faq">
+        <div class="m3-sec-h"><p class="eyebrow" data-reveal>Dúvidas frequentes</p><h2 data-reveal>Perguntas que a gente mais escuta.</h2><p data-reveal>Não encontrou a sua? Mande uma mensagem pelo WhatsApp.</p></div>
+        <Faq itens={c.faq} nome="faq-m3" />
+      </div>
+    </section>
+
+    <section class="sec" id="localizacao">
+      <div class="wrap m3-loc">
+        <div>
+          <p class="eyebrow" data-reveal>Onde estamos</p>
+          <h2 style="font-size:clamp(2rem,4vw,3rem);line-height:1.08;margin-top:.9rem" data-reveal>Venha fazer uma visita.</h2>
+          <dl data-reveal>
+            <div><dt>Endereço</dt><dd>{enderecoCompleto(c)}</dd><dd style="color:var(--muted);font-size:.92rem;margin-top:.4rem">{c.endereco.referencia}</dd></div>
+            <div><dt>Horários</dt><dd class="m3-hor">{hor.map((h) => <span><span>{h.dias}</span><b>{h.horas}</b></span>)}</dd></div>
+          </dl>
+          <a class="btn btn-ghost" href={`https://www.google.com/maps/dir/?api=1&destination=${c.geo.lat},${c.geo.lng}`} target="_blank" rel="noopener" data-reveal>Como chegar</a>
+        </div>
+        <div data-reveal="fade"><Mapa clinica={c} tema="light" /></div>
+      </div>
+    </section>
+
+    <section class="sec" style="padding-top:0">
+      <div class="wrap">
+        <div class="m3-cta" data-reveal="zoom">
+          <div class="m3-blob m3-blob-a" aria-hidden="true"></div><div class="m3-blob m3-blob-b" aria-hidden="true"></div>
+          <p class="eyebrow">Vamos começar?</p>
+          <h2>Agende uma visita para conhecer a nossa equipe.</h2>
+          <div class="m3-cta-b"><a class="btn btn-primary" href="#agendar">Agendar avaliação</a><a class="btn btn-ghost" href={`https://wa.me/${c.whatsapp}`} target="_blank" rel="noopener">Falar pelo WhatsApp</a></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Rodape clinica={c} />
+  <Flutuantes clinica={c} />
+</Layout3>

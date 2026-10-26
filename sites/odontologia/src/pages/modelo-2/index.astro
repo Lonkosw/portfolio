@@ -1,0 +1,225 @@
+---
+import Layout2 from '../../layouts/Layout2.astro';
+import Picture from '../../components/shared/Picture.astro';
+import Icon from '../../components/shared/Icon.astro';
+import WireTooth from '../../components/m2/WireTooth.astro';
+import Quiz from '../../components/shared/Quiz.astro';
+import Agendamento from '../../components/shared/Agendamento.astro';
+import Clareamento from '../../components/shared/Clareamento.astro';
+import Comparador from '../../components/shared/Comparador.astro';
+import Timeline from '../../components/shared/Timeline.astro';
+import AntesDepois from '../../components/shared/AntesDepois.astro';
+import Parcelamento from '../../components/shared/Parcelamento.astro';
+import Faq from '../../components/shared/Faq.astro';
+import Mapa from '../../components/shared/Mapa.astro';
+import Rodape from '../../components/shared/Rodape.astro';
+import Flutuantes from '../../components/shared/Flutuantes.astro';
+import { clinicas, tratamentosDa, resumoHorarios, enderecoCompleto } from '../../lib/clinicas';
+import { schemaDentist, schemaFaq } from '../../lib/schema';
+import { flags } from '../../data/odonto-config';
+
+const c = clinicas['modelo-2'];
+const trats = tratamentosDa(c);
+const pad = (n: number) => String(n).padStart(2, '0');
+const nota = String(c.notaGoogle).replace('.', ',');
+---
+
+<Layout2
+  clinica={c}
+  title={`${c.nome} · Implantes e odontologia digital em ${c.cidade}`}
+  description={c.descricao}
+  og="modelo-2/hero"
+  preload={{ img: "modelo-2/hero", sizes: "(min-width:1000px) 48vw, 100vw" }}
+  schemas={[schemaDentist(c, Astro.url.href, new URL('/img/modelo-2/hero-1280.jpg', Astro.url).href), schemaFaq(c.faq)]}
+>
+  <header class="m2-nav" data-header>
+    <div class="wrap m2-nav-in">
+      <a class="m2-logo" href="/modelo-2/" aria-label={`${c.nome}, página inicial`}>
+        <svg class="m2-logo-m" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M16 3 4 9v9c0 6 5 9.500 12 11 7-1.500 12-5 12-11V9L16 3Z"/><path d="m10 14 6 8 6-8" /></svg>
+        <span>{c.nome}</span>
+      </a>
+      <ul class="m2-links">
+        <li><a href="#tratamentos">Tratamentos</a></li>
+        <li><a href="#tecnologia">Tecnologia</a></li>
+        <li><a href="#equipe">Equipe</a></li>
+        <li><a href="#faq">Dúvidas</a></li>
+        <li><a href="#localizacao">Local</a></li>
+      </ul>
+      <div class="m2-nav-cta">
+        <a class="btn btn-primary" href="#agendar" data-magnetic>Agendar<span class="m2-hide-sm">&nbsp;avaliação</span></a>
+        <button class="m2-burger" type="button" data-menu-btn aria-expanded="false" aria-controls="m2-menu" aria-label="Abrir menu"><Icon name="menu" size={22} /></button>
+      </div>
+    </div>
+  </header>
+  <nav class="m2-menu" id="m2-menu" data-menu aria-label="Menu principal">
+    <a href="#tratamentos">Tratamentos</a><a href="#tecnologia">Tecnologia</a><a href="#equipe">Equipe</a><a href="#faq">Dúvidas</a><a href="#localizacao">Local</a><a href="#agendar">Agendar avaliação</a>
+  </nav>
+
+  <main>
+    <section class="m2-hero" aria-labelledby="m2-h1">
+      <div class="wrap m2-hero-g">
+        <div>
+          <p class="eyebrow" data-hero="fade">Odontologia digital · {c.endereco.bairro}</p>
+          <h1 id="m2-h1" data-hero>Implantes e reabilitação com <em>planejamento digital</em>.</h1>
+          <p class="m2-lead" data-hero style="--d:.12s">Tomografia, escaneamento intraoral e simulação virtual ajudam a planejar cada caso antes do procedimento. Avaliação individual em {c.cidade}.</p>
+          <div class="m2-hero-cta" data-hero style="--d:.24s">
+            <a class="btn btn-primary" href="#agendar" data-magnetic>Agendar avaliação</a>
+            <a class="btn btn-ghost" href="#quiz">Descobrir meu tratamento</a>
+          </div>
+          <p class="m2-readout" data-hero="fade" style="--d:.5s"><span><b>RT</b> {c.responsavelTecnico.titulo} {c.responsavelTecnico.nome}</span><span><b>CRO</b> {c.responsavelTecnico.cro}</span></p>
+        </div>
+        <div class="hud m2-frame" data-hero="zoom">
+          <Picture img="modelo-2/hero" eager sizes="(min-width:1000px) 48vw, 100vw" />
+          <div class="m2-scan" aria-hidden="true"></div>
+          <span class="m2-tag m2-tag-a" aria-hidden="true">Tomografia · 3D</span>
+          <span class="m2-tag m2-tag-b" aria-hidden="true">Planejamento virtual</span>
+          <span class="m2-tag m2-tag-c" aria-hidden="true">Escaneamento intraoral</span>
+          <div class="wt-box" aria-hidden="true"><WireTooth /></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="m2-stats" aria-label="O instituto em números">
+      <div class="wrap m2-stats-g">
+        <div class="m2-stat" data-reveal><p class="m2-stat-l">Anos de atuação</p><p class="m2-stat-n"><span data-count={c.anos}>{c.anos}</span></p></div>
+        <div class="m2-stat" data-reveal style="--d:.08s"><p class="m2-stat-l">Pacientes atendidos</p><p class="m2-stat-n"><span data-count={c.pacientes}>{c.pacientes}</span></p></div>
+        <div class="m2-stat" data-reveal style="--d:.16s"><p class="m2-stat-l">Nota no Google</p><p class="m2-stat-n"><span data-count={c.notaGoogle} data-dec="1">{nota}</span><small>★ {c.avaliacoes} aval.</small></p></div>
+        <div class="m2-stat" data-reveal style="--d:.24s"><p class="m2-stat-l">Especialistas</p><p class="m2-stat-n"><span data-count={c.equipe.length}>{c.equipe.length}</span></p></div>
+      </div>
+    </section>
+
+    <section class="sec" id="tratamentos">
+      <div class="wrap">
+        <div class="m2-sec-h"><p class="eyebrow" data-reveal>Especialidades</p><h2 data-reveal>Cada caso começa <em>por um diagnóstico</em>.</h2><p data-reveal>Conheça as etapas, o tempo médio e as dúvidas de cada tratamento.</p></div>
+        <div class="m2-bento" data-stagger>
+          {trats.map((t, i) => (
+            <a class="m2-bc" href={`/modelo-2/tratamentos/${t.slug}`} data-reveal>
+              <Picture img={c.imagens[t.slug]} sizes="(min-width:800px) 40vw, 100vw" decorativa />
+              <div class="m2-bc-b">
+                <span class="m2-bc-n">{pad(i + 1)} / {pad(trats.length)}</span>
+                <h3>{t.nome}</h3>
+                <p>{c.chamadas[t.slug]}</p>
+                <span class="m2-bc-go">Ver detalhes <Icon name="arrow" size={16} /></span>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="sec m2-band" id="tecnologia">
+      <div class="wrap m2-tec">
+        <div class="hud m2-frame m2-tec-img" data-reveal="zoom"><Picture img="modelo-2/scanner" sizes="(min-width:1000px) 42vw, 100vw" /><div class="m2-scan" aria-hidden="true"></div><span class="m2-tag m2-tag-a" aria-hidden="true">Planejamento digital</span></div>
+        <div>
+          <div class="m2-sec-h" style="margin-bottom:1.5rem"><p class="eyebrow" data-reveal>Tecnologia</p><h2 data-reveal>Precisão <em>a cada etapa</em>.</h2><p data-reveal>Recursos que ajudam no diagnóstico, no planejamento e no conforto, indicados caso a caso.</p></div>
+          <ul class="m2-tec-list" data-stagger>
+            {c.tecnologia.map((t) => <li data-reveal><Icon name={t.icone} size={26} /><div><h3>{t.titulo}</h3><p>{t.texto}</p></div></li>)}
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <Timeline clinica={c} titulo="Do diagnóstico à prótese, passo a passo" />
+    <div class="m2-band"><Quiz clinica={c} /></div>
+
+    <section class="sec" id="equipe">
+      <div class="wrap">
+        <div class="m2-sec-h"><p class="eyebrow" data-reveal>Equipe</p><h2 data-reveal>Especialistas <em>no seu caso</em>.</h2></div>
+        <div class="m2-team" data-stagger>
+          {c.equipe.map((d) => (
+            <article class="hud m2-member" data-reveal>
+              <div class="m2-member-img"><Picture img={d.foto} sizes="(min-width:800px) 30vw, 90vw" /></div>
+              <div class="m2-member-b">
+                <h3>{d.titulo} {d.nome}</h3>
+                <p class="esp">{d.especialidade}</p>
+                <p class="cro">{d.cro}</p>
+                <p class="bio">{d.bio}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <div class="m2-band"><Agendamento clinica={c} intro="Defina o motivo, o profissional e o horário. A confirmação é feita pelo WhatsApp, com a equipe." /></div>
+    <Comparador clinica={c} />
+    <div class="m2-band"><Clareamento /></div>
+    <Parcelamento />
+    <AntesDepois />
+
+    <section class="sec m2-band" aria-labelledby="m2-dep-t">
+      <div class="wrap" data-carousel>
+        <div class="m2-car-h">
+          <div class="m2-sec-h" style="margin:0"><p class="eyebrow" data-reveal>Depoimentos</p><h2 id="m2-dep-t" data-reveal>Experiências <em>de atendimento</em>.</h2></div>
+          <div class="m2-car-btns"><button type="button" data-prev aria-label="Depoimentos anteriores"><Icon name="back" size={20} /></button><button type="button" data-next aria-label="Próximos depoimentos"><Icon name="arrow" size={20} /></button></div>
+        </div>
+        <div class="m2-track" data-track tabindex="0" role="region" aria-label="Depoimentos de pacientes">
+          {c.depoimentos.map((d) => (
+            <figure class="m2-dep"><blockquote><p>{d.texto}</p></blockquote><footer><strong>{d.nome}</strong>{d.contexto}</footer></figure>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="sec">
+      <div class="wrap">
+        <div class="m2-sec-h"><p class="eyebrow" data-reveal>Biossegurança e conforto</p><h2 data-reveal>Protocolos <em>claros</em>, atendimento tranquilo.</h2><p data-reveal>Se você tem receio de dentista, avise na agenda: ajustamos o ritmo da consulta.</p></div>
+        <div class="m2-proto" data-stagger>
+          {c.biosseguranca.map((b, i) => <div class="hud" data-reveal><b>PROTOCOLO {pad(i + 1)}</b><h3>{b.titulo}</h3><p>{b.texto}</p></div>)}
+        </div>
+        {flags.mostrarConvenios && c.convenios.length > 0 && (
+          <div style="margin-top:3.5rem" data-reveal>
+            <p class="eyebrow">Convênios aceitos</p>
+            <ul class="m2-chips">{c.convenios.map((v) => <li>{v}</li>)}</ul>
+            <p class="qz-fine">A cobertura depende do seu plano. Confirme com a operadora antes de agendar.</p>
+          </div>
+        )}
+      </div>
+    </section>
+
+    <section class="sec m2-band">
+      <div class="wrap">
+        <div class="m2-sec-h"><p class="eyebrow" data-reveal>Estrutura</p><h2 data-reveal>Conheça <em>o instituto</em>.</h2></div>
+        <div class="m2-tour" data-stagger>
+          {c.tour.map((t) => <figure data-reveal="zoom"><Picture img={t.img} sizes="(min-width:900px) 24vw, 50vw" /><figcaption>{t.legenda}</figcaption></figure>)}
+        </div>
+      </div>
+    </section>
+
+    <section class="sec">
+      <div class="wrap m2-faq">
+        <div class="m2-sec-h"><p class="eyebrow" data-reveal>Dúvidas frequentes</p><h2 data-reveal>Perguntas <em>que ouvimos</em> com frequência.</h2><p data-reveal>Não encontrou o que procurava? Fale com a equipe pelo WhatsApp.</p></div>
+        <Faq itens={c.faq} nome="faq-m2" />
+      </div>
+    </section>
+
+    <section class="sec m2-band" id="localizacao">
+      <div class="wrap m2-loc">
+        <div>
+          <p class="eyebrow" data-reveal>Localização</p>
+          <h2 style="font-size:clamp(2rem,4vw,3rem);line-height:1.06;margin-top:.9rem" data-reveal>Como <em style="font-style:normal;color:var(--accent)">chegar</em>.</h2>
+          <dl data-reveal>
+            <div><dt>Endereço</dt><dd>{enderecoCompleto(c)}</dd><dd style="color:var(--muted);font-size:.9rem;margin-top:.4rem">{c.endereco.referencia}</dd></div>
+            <div><dt>Horários</dt><dd class="m2-hor">{resumoHorarios(c).map((h) => <span><span>{h.dias}</span><span class="mono">{h.horas}</span></span>)}</dd></div>
+          </dl>
+          <a class="btn btn-ghost" href={`https://www.google.com/maps/dir/?api=1&destination=${c.geo.lat},${c.geo.lng}`} target="_blank" rel="noopener" data-reveal>Traçar rota</a>
+        </div>
+        <div class="hud" data-reveal="fade"><Mapa clinica={c} tema="dark" /></div>
+      </div>
+    </section>
+
+    <section class="sec m2-cta">
+      <div class="wrap">
+        <p class="eyebrow" data-reveal>Próximo passo</p>
+        <h2 data-reveal>Vamos planejar <em>o seu caso</em>?</h2>
+        <div class="m2-cta-b" data-reveal>
+          <a class="btn btn-primary" href="#agendar" data-magnetic>Agendar avaliação</a>
+          <a class="btn btn-ghost" href={`https://wa.me/${c.whatsapp}`} target="_blank" rel="noopener">Falar pelo WhatsApp</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Rodape clinica={c} />
+  <Flutuantes clinica={c} />
+</Layout2>

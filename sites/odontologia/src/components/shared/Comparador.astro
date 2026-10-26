@@ -1,0 +1,60 @@
+---
+import type { Clinica } from '../../data/odonto-types';
+import { comparadores, aviso, flags } from '../../data/odonto-config';
+interface Props { clinica: Clinica; id?: string; titulo?: string; intro?: string }
+const { clinica, id = 'comparador', titulo = 'Compare as opções', intro = 'Uma visão geral, lado a lado, para você chegar à avaliação com mais perguntas e menos dúvidas.' } = Astro.props;
+const lista = clinica.comparadores.map((c) => comparadores[c]).filter(Boolean);
+const base = `/${clinica.id}/tratamentos`;
+const oferece = (s?: string) => s && clinica.tratamentos.includes(s);
+---
+
+<section id={id} class="cp sec" aria-labelledby={`${id}-t`}>
+  <div class="wrap">
+    <header class="qz-head" data-reveal>
+      <p class="eyebrow">Comparador</p>
+      <h2 id={`${id}-t`} class="qz-title">{titulo}</h2>
+      <p class="qz-lead">{intro}</p>
+    </header>
+    <div data-tabs class="cp-box" data-reveal>
+      <div role="tablist" aria-label="Comparações" class="tabs">
+        {lista.map((c, i) => <button role="tab" type="button" id={`${id}-tab-${c.id}`} aria-controls={`${id}-p-${c.id}`} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1} class="tab">{c.titulo}</button>)}
+      </div>
+      {lista.map((c) => (
+        <div role="tabpanel" id={`${id}-p-${c.id}`} aria-labelledby={`${id}-tab-${c.id}`} hidden class="cp-panel">
+          <h3 class="cp-q">{c.pergunta}</h3>
+          <div class="cp-grid" style={`--n:${c.itens.length}`}>
+            {c.itens.map((it) => (
+              <article class="cp-col">
+                <h4>{it.nome}</h4>
+                <dl>
+                  {c.criterios.map((cr) => {
+                    const v = it.valores[cr.id];
+                    return (
+                      <div class="cp-row">
+                        <dt>{cr.label}</dt>
+                        <dd>
+                          {cr.nota && v.nota && (
+                            <span class="dots" role="img" aria-label={`Tendência geral: ${v.nota} de 5`}>
+                              {[1, 2, 3, 4, 5].map((n) => <i class:list={[n <= v.nota! && 'on']} />)}
+                            </span>
+                          )}
+                          <span>{v.texto}</span>
+                        </dd>
+                      </div>
+                    );
+                  })}
+                </dl>
+                {oferece(it.slug) && <a class="qz-more" href={`${base}/${it.slug}`}>Saiba mais</a>}
+              </article>
+            ))}
+          </div>
+        </div>
+      ))}
+      <p class="qz-fine">Comparação geral e simplificada, com tendências que variam de caso para caso. {aviso.clinico}{flags.mostrarValores ? '' : ''}</p>
+    </div>
+  </div>
+</section>
+
+<script>
+  import '../../scripts/tabs';
+</script>

@@ -1,0 +1,366 @@
+---
+import Landing from '../layouts/Landing.astro';
+import Foto from '../components/shared/Foto.astro';
+import Icone from '../components/shared/Icone.astro';
+import Simulador from '../components/shared/Simulador.astro';
+import { empresa3 as e } from '../data/empresa-3';
+
+const links = [
+  ['Processo', '#processo'],
+  ['Simulador', '#simulador'],
+  ['Obras', '#obras'],
+  ['Depoimentos', '#depoimentos'],
+  ['Dúvidas', '#faq'],
+];
+const zap = `https://wa.me/${e.whatsapp}?text=${encodeURIComponent(`Olá, ${e.marca}! Quero uma proposta técnica de usina solar.`)}`;
+
+const btn = 'inline-flex min-h-12 items-center justify-center gap-3 px-7 py-3 font-mono text-sm font-semibold uppercase tracking-wider transition-transform duration-200 hover:-translate-y-1 active:translate-y-0';
+const btnLaranja = `${btn} bg-destaque text-sobre`;
+const btnContorno = `${btn} border-2 border-texto text-texto hover:bg-texto hover:text-fundo`;
+const rotulo = 'font-mono text-xs font-semibold uppercase tracking-[.2em]';
+const titulo = 'font-display uppercase leading-[.92] tracking-tight';
+
+const rotuloTipo: Record<string, string> = { residencial: 'Residencial', comercial: 'Comercial / Indústria', rural: 'Rural / Agro' };
+const tiposPresentes = [...new Set(e.portfolio.map((p) => p.tipo))];
+const km = (v: number) => (v >= 1000 ? `${(v / 1000).toLocaleString('pt-BR')} MWp` : `${v.toLocaleString('pt-BR')} kWp`);
+const spans = ['lg:col-span-7', 'lg:col-span-5', 'lg:col-span-4', 'lg:col-span-4', 'lg:col-span-4', 'lg:col-span-5', 'lg:col-span-7'];
+const faixa = e.numeros.map((n) => `${(n.prefixo ?? '') + n.valor.toLocaleString('pt-BR', { minimumFractionDigits: n.casas ?? 0 }) + (n.sufixo ?? '')} ${n.rotulo}`);
+---
+
+<Landing empresa={e}>
+  {/* ================= BARRA UTILITÁRIA + NAVEGAÇÃO ================= */}
+  <div class="bg-destaque text-sobre">
+    <div class={`${rotulo} mx-auto flex max-w-[88rem] items-center justify-between gap-4 px-5 py-2 sm:px-8`}>
+      <span class="whitespace-nowrap">{e.cidade}/{e.uf} · desde {e.fundacao}</span>
+      <a href={`tel:+55${e.telefone.replace(/\D/g, '')}`} class="hidden sm:inline">{e.telefone} · {e.horario}</a>
+      <a href={`tel:+55${e.telefone.replace(/\D/g, '')}`} class="whitespace-nowrap sm:hidden">{e.telefone}</a>
+    </div>
+  </div>
+  <header class="sticky top-0 z-40 border-b-2 border-texto/20 bg-fundo/95 backdrop-blur">
+    <nav class="mx-auto flex max-w-[88rem] items-center justify-between gap-4 px-5 py-3 sm:px-8" aria-label="Principal">
+      <a href="#topo" class="flex items-center gap-3" aria-label={`${e.nome}, início`}>
+        <span class="grid h-10 w-10 place-items-center bg-destaque font-display text-2xl leading-none text-sobre">V</span>
+        <span class="font-display text-2xl uppercase leading-none tracking-wide">{e.marca}<span class="block font-mono text-[10px] font-semibold tracking-[.3em] text-destaque">SOLAR</span></span>
+      </a>
+      <ul class="hidden items-center gap-7 lg:flex">
+        {links.map(([r, h]) => <li><a href={h} class={`${rotulo} py-2 text-suave transition-colors hover:text-destaque`}>{r}</a></li>)}
+      </ul>
+      <div class="flex items-center gap-2">
+        <a href="#simulador" class={`${btnLaranja} !min-h-11 !px-5`}>Simular <span aria-hidden="true">→</span></a>
+        <button type="button" data-menu-botao aria-expanded="false" aria-controls="menu-m3" aria-label="Abrir menu" class="grid h-11 w-11 place-items-center border-2 border-texto lg:hidden">
+          <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 7h18M3 12h18M3 17h18" /></svg>
+        </button>
+      </div>
+    </nav>
+    <div id="menu-m3" class="hidden border-t-2 border-texto/20 bg-fundo px-5 pb-4 lg:hidden">
+      <ul>{links.map(([r, h]) => <li><a href={h} class="flex min-h-12 items-center font-display text-2xl uppercase tracking-wide">{r}</a></li>)}</ul>
+    </div>
+  </header>
+
+  <main id="conteudo">
+    {/* ================= HERO ================= */}
+    <section id="topo" class="relative overflow-hidden bg-fundo">
+      <div class="mx-auto grid max-w-[88rem] gap-8 px-5 pb-14 pt-12 sm:px-8 sm:pt-16 lg:grid-cols-12 lg:gap-10 lg:pb-20">
+        <div class="lg:col-span-8">
+          <p data-reveal class={`${rotulo} flex items-center gap-3 text-destaque`}><span class="h-0.5 w-10 bg-destaque"></span>{e.hero.etiqueta}</p>
+          <h1 data-reveal data-delay="1" class={`${titulo} mt-6 text-[clamp(3.6rem,11.5vw,10.5rem)]`}>
+            {e.hero.titulo}<br /><span class="text-destaque">{e.hero.destaque}</span>
+          </h1>
+          <div class="mt-10 grid gap-8 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end">
+            <p data-reveal data-delay="2" class="max-w-xl text-lg leading-relaxed text-suave sm:text-xl">{e.hero.subtitulo}</p>
+            <div data-reveal data-delay="3" class="flex flex-wrap gap-3">
+              <a href="#simulador" class={btnLaranja}>{e.hero.cta} <span aria-hidden="true">→</span></a>
+              <a href={zap} target="_blank" rel="noopener" class={btnContorno}>{e.hero.ctaSecundario}</a>
+            </div>
+          </div>
+        </div>
+        <div data-reveal="direita" data-delay="2" class="relative lg:col-span-4">
+          <div class="relative aspect-[4/3] overflow-hidden bg-destaque lg:aspect-auto lg:h-full lg:min-h-[28rem]">
+            <div data-paralaxe="0.06" class="absolute -inset-y-6 inset-x-0">
+              <Foto foto={e.hero.foto} prioridade sizes="(min-width:1024px) 30vw, 100vw" class="h-full w-full object-cover mix-blend-multiply grayscale contrast-125" />
+            </div>
+          </div>
+          <p class={`${rotulo} absolute -left-3 bottom-6 hidden origin-bottom-left -rotate-90 bg-fundo py-1 pl-2 pr-3 text-texto lg:block`}>Usinas · Indústria · Agro</p>
+        </div>
+      </div>
+
+      {/* Assinatura 1: faixa de números em movimento contínuo */}
+      <div class="overflow-hidden border-y-2 border-fundo bg-destaque py-3 text-sobre" aria-hidden="true">
+        <div class="ticker flex w-max items-center gap-10 whitespace-nowrap font-display text-2xl uppercase tracking-wide sm:text-3xl">
+          {[0, 1].map(() => faixa.concat(faixa).map((t) => <span class="flex items-center gap-10">{t}<span class="text-xl">■</span></span>))}
+        </div>
+      </div>
+    </section>
+
+    {/* ================= NÚMEROS (assinatura 2: odômetro) ================= */}
+    <section class="bg-superficie text-fundo" aria-label="Números da Vale Verde">
+      <dl class="mx-auto grid max-w-[88rem] grid-cols-2 gap-x-6 gap-y-10 px-5 py-14 sm:px-8 sm:py-20 lg:grid-cols-4">
+        {e.numeros.map((n, i) => (
+          <div data-reveal data-delay={i} class="border-t-4 border-fundo pt-4">
+            <dd class="flex flex-wrap items-baseline font-display text-[clamp(2.6rem,6.4vw,5.6rem)] leading-none">
+              {n.prefixo && <span>{n.prefixo}</span>}
+              <span class="odometro" data-odometro={n.valor} data-casas={n.casas ?? 0}>{n.valor.toLocaleString('pt-BR', { minimumFractionDigits: n.casas ?? 0 })}</span>
+              {n.sufixo && <span class="ml-2 font-mono text-base font-semibold uppercase tracking-wider text-fundo/70 sm:text-lg">{n.sufixo.trim()}</span>}
+            </dd>
+            <dt class={`${rotulo} mt-3 text-fundo/70`}>{n.rotulo}</dt>
+          </div>
+        ))}
+      </dl>
+    </section>
+
+    {/* ================= PROCESSO ================= */}
+    <section id="processo" class="bg-fundo py-20 sm:py-28">
+      <div class="mx-auto max-w-[88rem] px-5 sm:px-8">
+        <div class="grid gap-6 lg:grid-cols-12" data-reveal>
+          <p class={`${rotulo} text-destaque lg:col-span-3`}>Processo de obra</p>
+          <h2 class={`${titulo} text-[clamp(2.6rem,6.4vw,5.6rem)] lg:col-span-9`}>Da fatura ao kWh gerado, em cinco etapas</h2>
+        </div>
+        <ol class="mt-14 border-b-2 border-texto/25">
+          {e.passos.map((p, i) => (
+            <li data-reveal class="group grid gap-x-8 gap-y-3 border-t-2 border-texto/25 py-7 transition-colors hover:bg-white/[.04] sm:px-3 lg:grid-cols-12 lg:items-start">
+              <span class="font-display text-6xl leading-none text-transparent [-webkit-text-stroke:2px_var(--c-destaque)] transition-colors group-hover:text-destaque lg:col-span-2 lg:text-7xl">0{i + 1}</span>
+              <h3 class="font-display text-3xl uppercase leading-none sm:text-4xl lg:col-span-4">{p.titulo}</h3>
+              <p class="leading-relaxed text-suave lg:col-span-4">{p.texto}</p>
+              <p class={`${rotulo} text-destaque lg:col-span-2 lg:text-right`}>{p.prazo}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    {/* ================= SIMULADOR ================= */}
+    <section id="simulador" class="bg-superficie py-20 text-fundo sm:py-28">
+      <div class="mx-auto max-w-[88rem] px-5 sm:px-8">
+        <div class="grid gap-6 lg:grid-cols-12" data-reveal>
+          <p class={`${rotulo} text-fundo/70 lg:col-span-3`}>Dimensionamento</p>
+          <div class="lg:col-span-9">
+            <h2 class={`${titulo} text-[clamp(2.6rem,6.4vw,5.6rem)]`}>{e.simulador.titulo}</h2>
+            <p class="mt-5 max-w-2xl text-lg leading-relaxed text-fundo/75">{e.simulador.texto}</p>
+          </div>
+        </div>
+        <div class="mt-12" data-reveal data-delay="1">
+          <Simulador
+            variante="ficha" id="sim3" empresa={e.nome} cidade={e.cidade} whatsapp={e.whatsapp} uf={e.simulador.ufPadrao} conta={e.simulador.contaPadrao} tipo="comercial"
+            tema={{ fundo: '#e3e0d8', card: '#f4f2ec', borda: '#0d0d0c', texto: '#0d0d0c', textoSuave: '#47443d', destaque: '#ff5a00', destaqueTexto: '#0d0d0c', linhaSem: '#0d0d0c', linhaCom: '#ff5a00', raio: '0', raioBotao: '0', fonteDisplay: 'var(--f-display)', fonteMono: 'var(--f-mono)' }}
+          />
+        </div>
+      </div>
+    </section>
+
+    {/* ================= BENEFÍCIOS ================= */}
+    <section class="bg-fundo py-20 sm:py-28">
+      <div class="mx-auto grid max-w-[88rem] gap-12 px-5 sm:px-8 lg:grid-cols-12">
+        <div class="lg:col-span-5">
+          <div class="lg:sticky lg:top-28" data-reveal>
+            <p class={`${rotulo} text-destaque`}>Por que usina própria</p>
+            <h2 class={`${titulo} mt-4 text-[clamp(2.6rem,6vw,5.2rem)]`}>Energia é custo fixo. Dá para controlar.</h2>
+            <div class="relative mt-10 aspect-[4/5] overflow-hidden">
+              <div data-paralaxe="0.05" class="absolute -inset-y-6 inset-x-0">
+                <Foto foto={e.imagens.usinaFileiras} sizes="(min-width:1024px) 38vw, 100vw" class="h-full w-full object-cover" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <ul class="grid gap-px bg-texto/25 sm:grid-cols-2 lg:col-span-7 lg:grid-cols-1">
+          {e.beneficios.map((b, i) => (
+            <li data-reveal data-delay={i % 2} class="group bg-fundo p-6 transition-colors hover:bg-white/[.04] sm:p-8">
+              <div class="flex items-start justify-between gap-4">
+                <span class="grid h-12 w-12 place-items-center bg-destaque text-sobre"><Icone nome={b.icone} class="h-6 w-6" /></span>
+                {b.destaque && <span class="font-display text-4xl uppercase leading-none text-destaque sm:text-5xl">{b.destaque}</span>}
+              </div>
+              <h3 class="mt-6 font-display text-3xl uppercase leading-none">{b.titulo}</h3>
+              <p class="mt-3 max-w-xl leading-relaxed text-suave">{b.texto}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    {/* ================= PORTFÓLIO ================= */}
+    <section id="obras" class="bg-superficie py-20 text-fundo sm:py-28">
+      <div class="mx-auto max-w-[88rem] px-5 sm:px-8">
+        <div class="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between" data-reveal>
+          <div>
+            <p class={`${rotulo} text-fundo/70`}>Obras entregues</p>
+            <h2 class={`${titulo} mt-3 text-[clamp(2.6rem,6.4vw,5.6rem)]`}>Usinas, galpões e lavouras</h2>
+          </div>
+          <div data-filtros="m3" class="flex flex-wrap gap-2" role="group" aria-label="Filtrar obras por tipo">
+            <button type="button" data-filtro="todos" aria-pressed="true" class={`${rotulo} min-h-11 border-2 border-fundo px-4 aria-pressed:bg-fundo aria-pressed:text-superficie`}>Todas</button>
+            {tiposPresentes.map((t) => (
+              <button type="button" data-filtro={t} aria-pressed="false" class={`${rotulo} min-h-11 border-2 border-fundo px-4 aria-pressed:bg-fundo aria-pressed:text-superficie`}>{rotuloTipo[t]}</button>
+            ))}
+          </div>
+        </div>
+        <ul data-galeria="m3" class="mt-12 grid gap-4 lg:grid-flow-dense lg:grid-cols-12">
+          {e.portfolio.map((p, i) => (
+            <li data-tipo={p.tipo} data-reveal data-delay={i % 3} class={`group relative overflow-hidden bg-fundo ${spans[i % spans.length]}`}>
+              <figure class="relative m-0 h-full">
+                <Foto foto={p.foto} sizes="(min-width:1024px) 45vw, 100vw" class="aspect-[4/3] h-full w-full object-cover transition-transform duration-700 group-hover:scale-105 lg:aspect-auto lg:min-h-[22rem]" />
+                <figcaption class="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 bg-gradient-to-t from-fundo via-fundo/80 to-transparent p-5 pt-16 text-texto">
+                  <div>
+                    <p class={`${rotulo} text-destaque`}>{rotuloTipo[p.tipo]} · {p.local}</p>
+                    <h3 class="mt-1 font-display text-2xl uppercase leading-none sm:text-3xl">{p.titulo}</h3>
+                  </div>
+                  <p class="shrink-0 bg-destaque px-3 py-1 font-mono text-sm font-semibold text-sobre">{km(p.kwp)}</p>
+                </figcaption>
+              </figure>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    {/* ================= PAGAMENTO ================= */}
+    <section class="bg-fundo py-20 sm:py-28">
+      <div class="mx-auto max-w-[88rem] px-5 sm:px-8">
+        <div class="grid gap-6 lg:grid-cols-12" data-reveal>
+          <p class={`${rotulo} text-destaque lg:col-span-3`}>Condições</p>
+          <h2 class={`${titulo} text-[clamp(2.6rem,6.4vw,5.6rem)] lg:col-span-9`}>Financiamento que se paga com a fatura</h2>
+        </div>
+        <ul class="mt-14 border-b-2 border-texto/25">
+          {e.pagamento.map((p, i) => (
+            <li data-reveal data-delay={i} class="grid items-center gap-x-8 gap-y-3 border-t-2 border-texto/25 py-7 transition-colors hover:bg-white/[.04] sm:px-3 lg:grid-cols-12">
+              <span class="grid h-12 w-12 place-items-center border-2 border-destaque text-destaque lg:col-span-1"><Icone nome={p.icone} /></span>
+              <h3 class="font-display text-3xl uppercase leading-none lg:col-span-4">{p.titulo}</h3>
+              <p class="leading-relaxed text-suave lg:col-span-5">{p.texto}</p>
+              <p class={`${rotulo} lg:col-span-2 lg:text-right`}><span class="inline-block bg-destaque px-3 py-1.5 text-sobre">{p.detalhe}</span></p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    {/* ================= DEPOIMENTOS ================= */}
+    <section id="depoimentos" class="bg-superficie py-20 text-fundo sm:py-28">
+      <div class="mx-auto max-w-[88rem] px-5 sm:px-8">
+        <div data-reveal>
+          <p class={`${rotulo} text-fundo/70`}>Quem opera com usina própria</p>
+          <h2 class={`${titulo} mt-3 text-[clamp(2.6rem,6.4vw,5.6rem)]`}>Resultado em campo</h2>
+        </div>
+        <ul class="mt-14 grid gap-x-10 gap-y-12 md:grid-cols-2 lg:grid-cols-3">
+          {e.depoimentos.map((d, i) => (
+            <li data-reveal data-delay={i % 3} class="border-t-4 border-fundo pt-5">
+              <span class="block h-9 font-display text-7xl leading-[.9] text-destaque" aria-hidden="true">“</span>
+              <blockquote class="mt-2 text-lg leading-relaxed">{d.texto}</blockquote>
+              <footer class="mt-5">
+                <p class="font-display text-2xl uppercase leading-none">{d.nome}</p>
+                <p class={`${rotulo} mt-2 text-fundo/70`}>{d.perfil} · {d.cidade}</p>
+                <p class="mt-2 font-mono text-sm font-semibold" role="img" aria-label={`Nota ${d.nota} de 5`}>{'★'.repeat(d.nota)}<span class="opacity-30">{'★'.repeat(5 - d.nota)}</span></p>
+              </footer>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    {/* ================= GARANTIAS ================= */}
+    <section class="bg-fundo py-20 sm:py-28">
+      <div class="mx-auto grid max-w-[88rem] gap-12 px-5 sm:px-8 lg:grid-cols-12">
+        <div class="lg:col-span-7">
+          <div data-reveal>
+            <p class={`${rotulo} text-destaque`}>Garantias</p>
+            <h2 class={`${titulo} mt-3 text-[clamp(2.6rem,6vw,5.2rem)]`}>Tudo que a obra entrega, por escrito</h2>
+          </div>
+          <dl class="mt-12 border-b-2 border-texto/25">
+            {e.garantias.map((g, i) => (
+              <div data-reveal data-delay={i} class="grid gap-x-6 border-t-2 border-texto/25 py-5 sm:grid-cols-[10rem_minmax(0,1fr)] sm:items-center">
+                <dt class="font-display text-5xl uppercase leading-none text-destaque">{g.valor}</dt>
+                <dd>
+                  <p class="font-display text-2xl uppercase leading-none">{g.titulo}</p>
+                  <p class="mt-1 text-suave">{g.texto}</p>
+                </dd>
+              </div>
+            ))}
+          </dl>
+          <ul class="mt-8 grid gap-3 sm:grid-cols-2">
+            {e.certificacoes.map((c) => (
+              <li class={`${rotulo} flex items-start gap-3 !leading-relaxed text-suave`}><span class="mt-1 h-2.5 w-2.5 shrink-0 bg-destaque"></span>{c}</li>
+            ))}
+          </ul>
+        </div>
+        <div class="relative min-h-80 overflow-hidden lg:col-span-5" data-reveal="zoom">
+          <div data-paralaxe="0.05" class="absolute -inset-y-8 inset-x-0">
+            <Foto foto={e.imagens.usinaGramado} sizes="(min-width:1024px) 40vw, 100vw" class="h-full w-full object-cover" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {/* ================= FAQ ================= */}
+    <section id="faq" class="bg-superficie py-20 text-fundo sm:py-28">
+      <div class="mx-auto grid max-w-[88rem] gap-10 px-5 sm:px-8 lg:grid-cols-12">
+        <div class="lg:col-span-4" data-reveal>
+          <div class="lg:sticky lg:top-28">
+            <p class={`${rotulo} text-fundo/70`}>Perguntas frequentes</p>
+            <h2 class={`${titulo} mt-3 text-[clamp(2.6rem,5vw,4.4rem)]`}>Respostas diretas</h2>
+            <a href={zap} target="_blank" rel="noopener" class={`${btn} mt-8 bg-fundo text-texto`}>Falar com engenheiro <span aria-hidden="true">→</span></a>
+          </div>
+        </div>
+        <div class="border-b-2 border-fundo lg:col-span-8">
+          {e.faq.map((f, i) => (
+            <details data-reveal class="group border-t-2 border-fundo">
+              <summary class="flex min-h-[4.5rem] cursor-pointer list-none items-center gap-5 py-4">
+                <span class="font-mono text-sm font-bold text-fundo">{String(i + 1).padStart(2, '0')}</span>
+                <span class="flex-1 font-display text-xl uppercase leading-tight sm:text-2xl">{f.pergunta}</span>
+                <span class="grid h-9 w-9 shrink-0 place-items-center bg-fundo text-texto transition-transform duration-300 group-open:rotate-45" aria-hidden="true"><Icone nome="mais" class="h-5 w-5" /></span>
+              </summary>
+              <p class="pb-6 pl-12 pr-12 text-lg leading-relaxed text-fundo/80">{f.resposta}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    {/* ================= CTA FINAL ================= */}
+    <section class="relative isolate overflow-hidden bg-destaque py-20 text-sobre sm:py-28">
+      <div class="absolute inset-y-0 right-0 -z-10 hidden w-2/5 lg:block">
+        <Foto foto={e.imagens.obra} sizes="40vw" class="h-full w-full object-cover mix-blend-multiply grayscale" />
+      </div>
+      <div class="mx-auto max-w-[88rem] px-5 sm:px-8" data-reveal>
+        <h2 class={`${titulo} max-w-4xl text-[clamp(3rem,8.5vw,8rem)]`}>{e.ctaFinal.titulo}</h2>
+        <p class="mt-6 max-w-xl text-xl leading-relaxed">{e.ctaFinal.texto}</p>
+        <div class="mt-10 flex flex-wrap gap-3">
+          <a href={zap} target="_blank" rel="noopener" class={`${btn} bg-fundo text-destaque`}>{e.ctaFinal.botao} <span aria-hidden="true">→</span></a>
+          <a href="#simulador" class={`${btn} border-2 border-fundo text-sobre hover:bg-fundo hover:text-destaque`}>Refazer a simulação</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  {/* ================= RODAPÉ ================= */}
+  <footer class="bg-fundo">
+    <div class="mx-auto grid max-w-[88rem] gap-10 px-5 py-14 sm:px-8 md:grid-cols-12">
+      <div class="md:col-span-5">
+        <p class="font-display text-4xl uppercase leading-none">{e.nome}</p>
+        <p class="mt-4 max-w-sm leading-relaxed text-suave">{e.slogan}</p>
+      </div>
+      <address class="space-y-2 not-italic text-suave md:col-span-4">
+        <p class={`${rotulo} text-destaque`}>Matriz</p>
+        <p>{e.endereco.rua}, {e.endereco.bairro}<br />{e.cidade}/{e.uf} · CEP {e.endereco.cep}</p>
+        <p><a href={`tel:+55${e.telefone.replace(/\D/g, '')}`} class="hover:text-texto">{e.telefone}</a></p>
+        <p><a href={`mailto:${e.email}`} class="hover:text-texto">{e.email}</a></p>
+        <p>{e.horario}</p>
+      </address>
+      <div class="text-suave md:col-span-3">
+        <p class={`${rotulo} text-destaque`}>Redes</p>
+        <p class="mt-2"><a href={`https://instagram.com/${e.instagram.replace('@', '')}`} target="_blank" rel="noopener" class="inline-flex min-h-11 items-center hover:text-texto">Instagram {e.instagram}</a></p>
+      </div>
+    </div>
+    <p class={`${rotulo} border-t-2 border-texto/20 px-5 py-6 text-center text-suave`}>© <span data-ano>{new Date().getFullYear()}</span> {e.nome}. Todos os direitos reservados.</p>
+  </footer>
+</Landing>
+
+<style is:global>
+  /* Faixa de números: translateX contínuo (só transform) */
+  @keyframes ticker { to { transform: translate3d(-50%, 0, 0); } }
+  .ticker { animation: ticker 60s linear infinite; }
+  .ticker:hover { animation-play-state: paused; }
+
+  /* Odômetro: cada dígito é uma fita 0–9 que rola até o valor */
+  .odometro { display: inline-flex; }
+  .odo-col { position: relative; display: inline-block; height: 1em; overflow: hidden; line-height: 1; }
+  .odo-ref { display: block; height: 1em; visibility: hidden; }
+  .odo-fita { position: absolute; left: 0; top: 0; display: block; will-change: transform; }
+  .odo-fita > span { display: block; height: 1em; }
+  @media (prefers-reduced-motion: reduce) { .ticker { animation: none; } }
+</style>

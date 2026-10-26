@@ -1,0 +1,22 @@
+---
+import { studio } from '../data/studio';
+import { buildWhatsAppLink } from '../lib/whatsapp';
+
+interface Props {
+  businessName: string;
+}
+
+const { businessName } = Astro.props;
+const link = buildWhatsAppLink(
+  studio.whatsapp,
+  `Olá ${studio.name}! Vi o protótipo de site para ${businessName} e quero saber mais.`,
+);
+---
+
+<div class="bg-[var(--color-secondary)] text-white text-sm text-center px-4 py-2">
+  🚧 Este é um protótipo de demonstração para <strong>{businessName}</strong>, não é o site
+  oficial da empresa. Quer um site assim para o seu negócio?
+  <a href={link} target="_blank" rel="noopener noreferrer" class="underline font-semibold">
+    Fale com {studio.name}
+  </a>
+</div>

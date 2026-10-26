@@ -1,0 +1,257 @@
+---
+import Layout1 from '../../layouts/Layout1.astro';
+import Picture from '../../components/shared/Picture.astro';
+import Icon from '../../components/shared/Icon.astro';
+import Quiz from '../../components/shared/Quiz.astro';
+import Agendamento from '../../components/shared/Agendamento.astro';
+import Clareamento from '../../components/shared/Clareamento.astro';
+import Comparador from '../../components/shared/Comparador.astro';
+import Timeline from '../../components/shared/Timeline.astro';
+import AntesDepois from '../../components/shared/AntesDepois.astro';
+import Parcelamento from '../../components/shared/Parcelamento.astro';
+import Faq from '../../components/shared/Faq.astro';
+import Mapa from '../../components/shared/Mapa.astro';
+import Rodape from '../../components/shared/Rodape.astro';
+import Flutuantes from '../../components/shared/Flutuantes.astro';
+import { clinicas, tratamentosDa, resumoHorarios, enderecoCompleto } from '../../lib/clinicas';
+import { schemaDentist, schemaFaq } from '../../lib/schema';
+import { flags } from '../../data/odonto-config';
+
+const c = clinicas['modelo-1'];
+const trats = tratamentosDa(c);
+const pad = (n: number) => String(n).padStart(2, '0');
+const dep1 = c.depoimentos.slice(0, 5);
+const dep2 = c.depoimentos.slice(5);
+const nota = String(c.notaGoogle).replace('.', ',');
+---
+
+<Layout1
+  clinica={c}
+  title={`${c.nome} · Odontologia estética e reabilitadora em ${c.cidade}`}
+  description={c.descricao}
+  og="modelo-1/hero"
+  preload={{ img: "modelo-1/hero", sizes: "100vw" }}
+  schemas={[schemaDentist(c, Astro.url.href, new URL('/img/modelo-1/hero-1280.jpg', Astro.url).href), schemaFaq(c.faq)]}
+>
+  <header class="m1-nav" data-header>
+    <div class="wrap m1-nav-in">
+      <a class="m1-logo" href="/modelo-1/" aria-label={`${c.nome}, página inicial`}>{c.nome}</a>
+      <ul class="m1-links">
+        <li><a href="#tratamentos">Tratamentos</a></li>
+        <li><a href="#equipe">Equipe</a></li>
+        <li><a href="#tecnologia">Tecnologia</a></li>
+        <li><a href="#faq">Dúvidas</a></li>
+        <li><a href="#localizacao">Localização</a></li>
+      </ul>
+      <div class="m1-nav-cta">
+        <a class="btn btn-primary" href="#agendar" data-magnetic>Agendar<span class="m1-hide-sm">&nbsp;avaliação</span></a>
+        <button class="m1-burger" type="button" data-menu-btn aria-expanded="false" aria-controls="m1-menu" aria-label="Abrir menu"><Icon name="menu" size={22} /></button>
+      </div>
+    </div>
+  </header>
+  <nav class="m1-menu" id="m1-menu" data-menu aria-label="Menu principal">
+    <a href="#tratamentos">Tratamentos</a><a href="#equipe">Equipe</a><a href="#tecnologia">Tecnologia</a><a href="#faq">Dúvidas</a><a href="#localizacao">Localização</a><a href="#agendar">Agendar avaliação</a>
+  </nav>
+
+  <main id="topo">
+    <!-- Hero -->
+    <section class="m1-hero" aria-labelledby="m1-h1">
+      <div class="m1-hero-img">
+        <Picture img="modelo-1/hero" eager sizes="100vw" />
+        <div class="m1-sweep" aria-hidden="true"></div>
+      </div>
+      <div class="wrap m1-hero-in">
+        <p class="eyebrow" data-hero="fade">Odontologia estética e reabilitadora</p>
+        <h1 id="m1-h1" data-hero>Um sorriso <em>planejado</em> com tempo e escuta.</h1>
+        <p class="m1-hero-lead" data-hero style="--d:.15s">No {c.endereco.bairro}, em {c.cidade}, cada tratamento começa por uma conversa e por um planejamento individual, com técnicas conservadoras sempre que possível.</p>
+        <div class="m1-hero-cta" data-hero style="--d:.3s">
+          <a class="btn btn-primary" href="#agendar" data-magnetic>Agendar avaliação</a>
+          <a class="btn btn-ghost" href="#quiz">Descobrir meu tratamento</a>
+        </div>
+        <p class="m1-hero-rt" data-hero="fade" style="--d:.6s">{c.responsavelTecnico.titulo} {c.responsavelTecnico.nome} · {c.responsavelTecnico.cro}</p>
+      </div>
+      <span class="m1-scroll" aria-hidden="true">role</span>
+    </section>
+
+    <!-- Números -->
+    <section class="m1-stats" aria-label="A clínica em números">
+      <div class="wrap m1-stats-g">
+        <div class="m1-stat" data-reveal><p class="m1-stat-n"><span data-count={c.anos}>{c.anos}</span></p><p class="m1-stat-l">anos de clínica</p></div>
+        <div class="m1-stat" data-reveal style="--d:.1s"><p class="m1-stat-n"><span data-count={c.pacientes}>{c.pacientes}</span></p><p class="m1-stat-l">pacientes atendidos</p></div>
+        <div class="m1-stat" data-reveal style="--d:.2s"><p class="m1-stat-n"><span data-count={c.notaGoogle} data-dec="1">{nota}</span></p><p class="m1-stars" aria-label={`Nota ${nota} de 5 no Google`}>★★★★★</p><p class="m1-stat-l">no Google · {c.avaliacoes} avaliações</p></div>
+        <div class="m1-stat" data-reveal style="--d:.3s"><p class="m1-stat-n"><span data-count={c.equipe.length}>{c.equipe.length}</span></p><p class="m1-stat-l">especialistas</p></div>
+      </div>
+    </section>
+
+    <!-- Sobre -->
+    <section class="sec" id="sobre">
+      <div class="wrap m1-sobre">
+        <div class="m1-sobre-img" data-reveal="zoom"><Picture img="modelo-1/sobre" sizes="(min-width:900px) 40vw, 100vw" decorativa style="" class="" /></div>
+        <div>
+          <p class="eyebrow" data-reveal>A clínica</p>
+          <h2 data-reveal>Estética que respeita <em>a naturalidade</em>.</h2>
+          <p data-reveal>Na {c.nome}, cada atendimento parte do que importa para você. Avaliamos saúde, função e estética em conjunto e só depois discutimos caminhos, sem pressa e sem obrigação de decidir na primeira consulta.</p>
+          <ul class="m1-princ" data-stagger>
+            <li data-reveal><b>01</b><div><strong>Escuta</strong><span>A primeira consulta é uma conversa sobre seus objetivos e preocupações.</span></div></li>
+            <li data-reveal><b>02</b><div><strong>Planejamento</strong><span>Fotografias, escaneamento e simulações ajudam a visualizar possibilidades antes de qualquer procedimento.</span></div></li>
+            <li data-reveal><b>03</b><div><strong>Conservação</strong><span>Priorizamos técnicas conservadoras e o cuidado com a saúde da gengiva.</span></div></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Especialidades -->
+    <section class="sec" id="tratamentos" style="padding-top:0">
+      <div class="wrap m1-esp">
+        <div class="m1-esp-h">
+          <p class="eyebrow" data-reveal>Especialidades</p>
+          <h2 data-reveal>Tratamentos <em>individualizados</em>.</h2>
+          <p data-reveal>Conheça como cada tratamento funciona, para quem costuma ser indicado e quais são as etapas.</p>
+          <ul class="m1-esp-list" data-stagger>
+            {trats.map((t, i) => (
+              <li data-reveal>
+                <a href={`/modelo-1/tratamentos/${t.slug}`}>
+                  <span class="m1-esp-n">{pad(i + 1)}</span>
+                  <span><span class="m1-esp-t">{t.nome}</span><span class="m1-esp-d">{c.chamadas[t.slug]}</span></span>
+                  <Icon name="arrow" size={22} />
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div class="m1-esp-prev" aria-hidden="true">
+          {trats.map((t) => <Picture img={c.imagens[t.slug]} sizes="(min-width:1000px) 36vw, 0px" decorativa />)}
+        </div>
+      </div>
+    </section>
+
+    <div class="m1-band"><Quiz clinica={c} /></div>
+
+    <!-- Tecnologia -->
+    <section class="sec" id="tecnologia">
+      <div class="wrap">
+        <div class="m1-sec-h"><p class="eyebrow" data-reveal>Estrutura</p><h2 data-reveal>Tecnologia a serviço <em>do cuidado</em>.</h2><p data-reveal>Recursos que ajudam no diagnóstico, no planejamento e no conforto, sempre indicados caso a caso.</p></div>
+        <div class="m1-tec" data-stagger>
+          {c.tecnologia.map((t) => <div data-reveal><Icon name={t.icone} size={34} sw={1.2} /><h3>{t.titulo}</h3><p>{t.texto}</p></div>)}
+        </div>
+      </div>
+    </section>
+
+    <!-- Equipe -->
+    <section class="sec m1-band" id="equipe">
+      <div class="wrap">
+        <div class="m1-sec-h"><p class="eyebrow" data-reveal>Equipe</p><h2 data-reveal>Quem cuida <em>de você</em>.</h2></div>
+        <div class="m1-team" data-stagger>
+          {c.equipe.map((d) => (
+            <article class="m1-member" data-reveal>
+              <div class="m1-member-img"><Picture img={d.foto} sizes="(min-width:800px) 30vw, 90vw" /></div>
+              <h3>{d.titulo} {d.nome}</h3>
+              <p class="esp">{d.especialidade}</p>
+              <p class="cro">{d.cro}</p>
+              <p class="bio">{d.bio}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <Agendamento clinica={c} intro="Escolha o motivo, o profissional e o melhor horário. A confirmação é feita pelo WhatsApp, com a equipe." />
+
+    <!-- Simuladores -->
+    <div class="m1-band">
+      <Clareamento />
+      <Comparador clinica={c} />
+      <Timeline clinica={c} />
+    </div>
+    <Parcelamento />
+    <AntesDepois />
+
+    <!-- Depoimentos -->
+    <section class="sec m1-band" aria-labelledby="m1-dep-t">
+      <div class="wrap m1-sec-h"><p class="eyebrow" data-reveal>Depoimentos</p><h2 id="m1-dep-t" data-reveal>O que dizem <em>nossos pacientes</em>.</h2></div>
+      <div class="m1-dep-rows">
+        {[dep1, dep2].map((lista, r) => (
+          <div class="marquee" style={`--mq:${r ? 70 : 55}s`}>
+            <div class="marquee-track">
+              {[0, 1].map((k) => lista.map((d) => (
+                <figure class="m1-dep" aria-hidden={k ? 'true' : undefined} inert={k ? true : undefined}>
+                  <blockquote><q>{d.texto}</q></blockquote>
+                  <footer><strong>{d.nome}</strong>{d.contexto}</footer>
+                </figure>
+              )))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Biossegurança -->
+    <section class="sec">
+      <div class="wrap">
+        <div class="m1-sec-h"><p class="eyebrow" data-reveal>Biossegurança e conforto</p><h2 data-reveal>Para quem <em>tem receio</em> de dentista.</h2><p data-reveal>Cuidamos do ambiente e do ritmo. Você pode pausar a consulta a qualquer momento.</p></div>
+        <div class="m1-bio" data-stagger>
+          {c.biosseguranca.map((b, i) => <div data-reveal><b>{pad(i + 1)}</b><h3>{b.titulo}</h3><p>{b.texto}</p></div>)}
+        </div>
+      </div>
+    </section>
+
+    {flags.mostrarConvenios && c.convenios.length > 0 && (
+      <section class="sec m1-conv" style="padding-top:0" aria-labelledby="m1-conv-t">
+        <div class="wrap">
+          <p class="eyebrow" data-reveal id="m1-conv-t">Convênios aceitos</p>
+          <ul data-reveal>{c.convenios.map((v) => <li>{v}</li>)}</ul>
+          <p data-reveal>Para os demais planos, emitimos a documentação necessária para solicitação de reembolso. Confirme a cobertura do seu plano antes da consulta.</p>
+        </div>
+      </section>
+    )}
+
+    <!-- Tour -->
+    <section class="sec" style="padding-top:0">
+      <div class="wrap">
+        <div class="m1-sec-h"><p class="eyebrow" data-reveal>Conheça a clínica</p><h2 data-reveal>Um ambiente <em>pensado para você</em>.</h2></div>
+        <div class="m1-tour" data-stagger>
+          {c.tour.map((t) => <figure data-reveal="zoom"><Picture img={t.img} sizes="(min-width:900px) 40vw, 50vw" /><figcaption>{t.legenda}</figcaption></figure>)}
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="sec m1-band">
+      <div class="wrap m1-faq">
+        <div class="m1-sec-h"><p class="eyebrow" data-reveal>Dúvidas frequentes</p><h2 data-reveal>Perguntas <em>que ouvimos</em> com frequência.</h2><p data-reveal>Não encontrou o que procurava? Fale com a equipe pelo WhatsApp.</p></div>
+        <Faq itens={c.faq} nome="faq-m1" />
+      </div>
+    </section>
+
+    <!-- Local -->
+    <section class="sec" id="localizacao">
+      <div class="wrap m1-loc">
+        <div>
+          <p class="eyebrow" data-reveal>Localização</p>
+          <h2 style="font-size:clamp(2.2rem,4.4vw,3.6rem);line-height:1.05;font-weight:300;margin-top:1rem" data-reveal>Venha nos <em>conhecer</em>.</h2>
+          <dl data-reveal>
+            <div><dt>Endereço</dt><dd>{enderecoCompleto(c)}</dd><dd style="color:var(--muted);font-size:.9rem;margin-top:.4rem">{c.endereco.referencia}</dd></div>
+            <div><dt>Horários</dt><dd>{resumoHorarios(c).map((h) => <span><b style="font-weight:400">{h.dias}</b><b style="font-weight:400">{h.horas}</b></span>)}</dd></div>
+          </dl>
+          <a class="btn btn-ghost" href={`https://www.google.com/maps/dir/?api=1&destination=${c.geo.lat},${c.geo.lng}`} target="_blank" rel="noopener" data-reveal>Como chegar</a>
+        </div>
+        <div data-reveal="fade"><Mapa clinica={c} tema="dark" /></div>
+      </div>
+    </section>
+
+    <!-- CTA final -->
+    <section class="sec m1-band m1-cta">
+      <div class="wrap">
+        <p class="eyebrow" data-reveal>Próximo passo</p>
+        <h2 data-reveal>Vamos conversar sobre <em>o seu sorriso</em>?</h2>
+        <div class="m1-cta-b" data-reveal>
+          <a class="btn btn-primary" href="#agendar" data-magnetic>Agendar avaliação</a>
+          <a class="btn btn-ghost" href={`https://wa.me/${c.whatsapp}`} target="_blank" rel="noopener">Falar pelo WhatsApp</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Rodape clinica={c} />
+  <Flutuantes clinica={c} />
+</Layout1>

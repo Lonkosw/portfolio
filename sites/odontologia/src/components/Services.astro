@@ -1,0 +1,27 @@
+---
+import type { ClientData } from '../data/types';
+
+interface Props {
+  client: ClientData;
+}
+
+const { client } = Astro.props;
+---
+
+<section class="bg-[var(--color-primary)]/5 px-4 py-16">
+  <div class="mx-auto max-w-5xl">
+    <h2 class="text-center text-2xl font-bold text-[var(--color-secondary)] sm:text-3xl">
+      Nossos serviços
+    </h2>
+    <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        client.services.map((service) => (
+          <div class="rounded-xl bg-white p-6 shadow-sm">
+            <h3 class="text-lg font-semibold text-[var(--color-primary)]">{service.title}</h3>
+            <p class="mt-2 text-sm text-[var(--color-text)]/80">{service.description}</p>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
