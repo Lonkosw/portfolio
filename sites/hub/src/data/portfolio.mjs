@@ -13,7 +13,7 @@ export const niches = [
     slug: 'odontologia',
     name: 'Odontologia',
     blurb: 'Clínicas e consultórios: confiança, agendamento e tratamentos claros.',
-    accent: '#a78bfa',
+    accent: '#9a85d4',
     base: 'https://portfolio-odontologia.pages.dev',
     projects: [
       { id: 'modelo-2', title: 'Modelo 2', featured: true },
@@ -25,7 +25,7 @@ export const niches = [
     slug: 'marmorarias',
     name: 'Marmorarias',
     blurb: 'Pedras, projetos e orçamento: o catálogo vira venda.',
-    accent: '#a78bfa',
+    accent: '#9a85d4',
     base: 'https://portfolio-marmorarias.pages.dev',
     projects: [
       { id: 'modelo-3', title: 'Modelo 3', featured: true },
@@ -37,7 +37,7 @@ export const niches = [
     slug: 'solar',
     name: 'Energia solar',
     blurb: 'Simulador de economia e prova social para fechar instalações.',
-    accent: '#a78bfa',
+    accent: '#9a85d4',
     base: 'https://portfolio-solar.pages.dev',
     projects: [
       { id: 'modelo-1', title: 'Modelo 1', featured: true },

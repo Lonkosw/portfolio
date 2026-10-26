@@ -25,9 +25,9 @@ const pad = (n: number) => String(n).padStart(2, '0');
               <span class="wbtns" aria-hidden="true"><b>_</b><b>□</b><b>×</b></span>
             </div>
             <div class="body">
-              <a class="shot" href={projectUrl(niche, p)} target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
+              <div class="shot">
                 <img src={`/thumbs/${thumbFile(niche, p)}.webp`} alt="" width="1000" height="563" loading={i === 0 ? 'eager' : 'lazy'} decoding="async" />
-              </a>
+              </div>
               <div class="info">
                 <p class="label">{p.featured ? `${pad(i + 1)} · destaque` : pad(i + 1)}</p>
                 <h3>{p.title}</h3>

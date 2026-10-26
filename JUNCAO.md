@@ -97,3 +97,7 @@ Feedback: poluído e infantil. Ajustes no hub: paleta roxo profundo sobre preto 
 ## 9. Hub: sistema tipográfico e hierarquia — 2026-10-26
 
 Feedback: confuso, fontes sem homogeneidade. Reescrita do CSS do hub com sistema fixo: Space Mono em três níveis (texto .875rem, rótulo .72rem caixa alta, botão .8rem) e Chakra Petch 700 só no nome e nos títulos (grupo e modelo). Estrelas e órbita removidas (fundo preto com um halo roxo no topo), tagline numa linha só (some no celular), seções numeradas "01 / 03 — nicho" com filete fino, janelas com barra roxa sóbria, hover com borda e brilho roxos, flutuação dos cards bem sutil (±5px, sem rotação), favorito grande e os outros dois discretos. Boot mantido.
+
+## 10. Hub: roxo nebulosa, cards em evidência, clique só no botão — 2026-10-26
+
+Roxo mais escuro e fumacento (acento `#9a85d4`, botões `#4b3787`, fundo com três manchas de nebulosa estáticas). Cards com borda e halo roxos mais fortes (favorito mais ainda), miniatura com vinheta, botão "Abrir site" maior. A miniatura deixou de ser link: só os botões "Abrir site" e "Pedir este modelo" levam adiante, para evitar clique sem querer.
