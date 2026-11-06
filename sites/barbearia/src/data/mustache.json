@@ -3,7 +3,7 @@
   "tema": "vintage",
   "fluxo": "barbeiro-primeiro",
   "provisorio": true,
-  "rascunho": true,
+  "emBreve": ["servicos", "horarios", "endereco", "whatsapp", "galeria"],
   "nome": "Mustache Fratello Barbearia",
   "nomeCurto": "Mustache Fratello",
   "tagline": "Aqui não existe corte comum.",

@@ -10,7 +10,7 @@ const D = JSON.parse($('#dados').textContent || '{}') as {
   servicos: { grupo: string; itens: Servico[] }[];
 };
 const brl = (n: number) => `R$ ${n.toLocaleString('pt-BR')}`;
-const preco = (n: number | null) => (n == null ? 'a confirmar' : brl(n));
+const preco = (n: number | null) => (n == null ? 'a definir' : brl(n));
 const todos = D.servicos.flatMap((g) => g.itens);
 const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
 const temHorarios = D.horarios.length > 0;
@@ -119,8 +119,8 @@ const temSemPreco = () => escolhidos().some((t) => t.preco == null);
 const totalTxt = () => {
   const itens = escolhidos();
   if (!itens.length) return 'R$ 0';
-  if (itens.every((t) => t.preco == null)) return 'a confirmar';
-  return temSemPreco() ? `${brl(total())} + a confirmar` : brl(total());
+  if (itens.every((t) => t.preco == null)) return 'a definir';
+  return temSemPreco() ? `${brl(total())} + a definir` : brl(total());
 };
 
 function mensagem() {
@@ -144,10 +144,10 @@ function atualizar() {
   $('[data-total]', raiz).textContent = totalTxt();
   const enviar = $('[data-enviar]', raiz) as HTMLAnchorElement;
   enviar.setAttribute('aria-disabled', String(!pronto));
-  enviar.textContent = semZap ? 'WhatsApp a definir' : 'Enviar pelo WhatsApp';
+  enviar.textContent = semZap ? 'WhatsApp em breve' : 'Enviar pelo WhatsApp';
   enviar.href = pronto ? `https://wa.me/${D.whatsapp}?text=${encodeURIComponent(mensagem())}` : '#';
   $('[data-falta]', raiz).textContent = semZap
-    ? 'O número do WhatsApp da barbearia ainda será definido.'
+    ? 'O número do WhatsApp da barbearia será definido em breve.'
     : pronto
       ? 'Você vai para o WhatsApp da barbearia com o pedido pronto. Eles confirmam o horário.'
       : `Falta escolher: ${falta.join(' e ')}.`;

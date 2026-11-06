@@ -31,7 +31,9 @@ const barbeiros = equipe.length ? equipe.map((e: any) => ({ nome: e.nome, foto: 
 const todosServ = b.servicos.flatMap((g: any) => g.itens);
 let principais = todosServ.filter((s: any) => s.principal);
 if (!principais.length) principais = todosServ.slice(0, 6);
-const brl = (n: number | null) => (n == null ? 'a confirmar' : `R$ ${n.toLocaleString('pt-BR', { minimumFractionDigits: 0 })}`);
+const emBreve: string[] = b.emBreve ?? [];
+const breve = (k: string) => emBreve.includes(k);
+const brl = (n: number | null) => (n == null ? 'a definir' : `R$ ${n.toLocaleString('pt-BR', { minimumFractionDigits: 0 })}`);
 const hh = (t: string) => t.replace(':00', 'h');
 const img = (nome: string) => `/img/${b.slug}/${nome}.webp`;
 const wa = (txt: string) => (b.whatsapp ? `https://wa.me/${b.whatsapp}?text=${encodeURIComponent(txt)}` : '#');
@@ -43,7 +45,7 @@ const nav = [
   ['#servicos', 'Preços', todosServ.length > 0],
   ['#combos', 'Combos', combos.length > 0],
   ['#equipe', 'Time', equipe.length > 0],
-  ['#galeria', 'Cortes', galeria.length > 0],
+  ['#galeria', 'Cortes', galeria.length > 0 || breve('galeria')],
   ['#onde', 'Onde estamos', true],
 ].filter((x) => x[2]);
 const dados = { slug: b.slug, nome: b.nome, whatsapp: b.whatsapp ?? null, horarios, barbeiros, servicos: b.servicos };
@@ -113,7 +115,7 @@ const logoClaro = b.logoClaro ?? b.logo;
 
       {todosServ.length > 0 && (
         <section id="servicos" class="sec">
-          <div class="cab" data-rv><p class="rot">Tabela</p><h2>Serviços e preços</h2>{b.provisorio && <p class="sub">Lista inicial. Os valores ainda serão confirmados com a barbearia.</p>}</div>
+          <div class="cab" data-rv><p class="rot">Tabela</p><h2>Serviços e preços</h2>{breve('servicos') && <p class="breve">Em breve</p>}{breve('servicos') && <p class="sub">A tabela de valores será publicada em breve.</p>}</div>
           <ul class="princ" data-rv>
             {principais.map((s: any) => (
               <li><button type="button" class="srv" data-add={s.id}><span class="nm">{s.nome}</span><span class={`pr${s.preco == null ? ' nulo' : ''}`}>{brl(s.preco)}</span></button></li>
@@ -179,6 +181,13 @@ const logoClaro = b.logoClaro ?? b.logo;
         </section>
       )}
 
+      {galeria.length === 0 && breve('galeria') && (
+        <section id="galeria" class="sec">
+          <div class="cab" data-rv><p class="rot">Trabalhos</p><h2>Cortes da casa</h2><p class="breve">Em breve</p><p class="sub">As fotos dos cortes e do espaço serão publicadas em breve.</p></div>
+          <ul class="galeria vazia" aria-hidden="true">{[0, 1, 2, 3].map(() => <li data-rv></li>)}</ul>
+        </section>
+      )}
+
       {galeria.length > 0 && (
         <section id="galeria" class="sec">
           <div class="cab" data-rv><p class="rot">Trabalhos</p><h2>Cortes da casa</h2></div>
@@ -195,7 +204,7 @@ const logoClaro = b.logoClaro ?? b.logo;
       )}
 
       <section id="agendar" class="sec escuro">
-        <div class="cab" data-rv><p class="rot">Agendamento</p><h2>Peça o seu horário</h2><p class="sub">Escolha, confira o total e envie pelo WhatsApp.</p></div>
+        <div class="cab" data-rv><p class="rot">Agendamento</p><h2>Peça o seu horário</h2>{breve('whatsapp') && <p class="breve">Em breve</p>}<p class="sub">{breve('whatsapp') ? 'O envio pelo WhatsApp abre assim que o número da barbearia for definido. Já dá para ver como vai funcionar.' : 'Escolha, confira o total e envie pelo WhatsApp.'}</p></div>
         <div class="agenda" data-agenda data-rv>
           {barbeiroPrimeiro && (
             <div class="bloco">
@@ -243,8 +252,9 @@ const logoClaro = b.logoClaro ?? b.logo;
         <div class="onde">
           <div data-rv>
             <p class="rot">Onde estamos</p>
-            <h2>{b.endereco ?? `${b.cidade}, ${b.uf}`}</h2>
-            {b.endereco ? <p class="sub">{b.complemento ? `${b.complemento} · ` : ''}{b.cidade}, {b.uf}</p> : <p class="sub">Endereço e horário de atendimento a confirmar.</p>}
+            <h2>{b.endereco ?? 'Endereço a definir'}</h2>
+            {breve('endereco') && <p class="breve">Em breve</p>}
+            {b.endereco ? <p class="sub">{b.complemento ? `${b.complemento} · ` : ''}{b.cidade}, {b.uf}</p> : <p class="sub">{b.cidade}, {b.uf}. Endereço e horário de atendimento serão publicados em breve.</p>}
             {horarios.length > 0 && (
               <ul class="horas-lista">
                 {horarios.map((h: any) => <li><span>{h.dias}</span><b>{hh(h.abre)} às {hh(h.fecha)}</b></li>)}
@@ -260,7 +270,7 @@ const logoClaro = b.logoClaro ?? b.logo;
       </section>
     </main>
 
-    <footer class="rodape"><img src={logoClaro} alt="" width={b.logoW ?? 80} height={b.logoH ?? 65} loading="lazy" /><p>{b.nome}{b.endereco ? ` · ${b.endereco}, ${b.cidade}-${b.uf}` : ` · ${b.cidade}-${b.uf}`}</p><p class="peq">Prévia de site criada por {b.preview.autor}.{b.provisorio ? ' Alguns dados ainda serão confirmados com a barbearia.' : ' Preços e horários conforme as artes divulgadas pela barbearia.'}</p></footer>
+    <footer class="rodape"><img src={logoClaro} alt="" width={b.logoW ?? 80} height={b.logoH ?? 65} loading="lazy" /><p>{b.nome}{b.endereco ? ` · ${b.endereco}, ${b.cidade}-${b.uf}` : ` · ${b.cidade}-${b.uf}`}</p><p class="peq">Prévia de site criada por {b.preview.autor}.{b.provisorio ? ' Alguns dados ainda serão definidos com a barbearia.' : ' Preços e horários conforme as artes divulgadas pela barbearia.'}</p></footer>
 
     <script type="application/json" id="dados" set:html={JSON.stringify(dados)} />
     <script>

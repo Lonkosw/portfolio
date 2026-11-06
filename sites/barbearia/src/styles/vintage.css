@@ -79,3 +79,7 @@
 [data-tema='vintage'] .rodape img { width: 52px; height: auto; }
 @media (max-width: 640px) { [data-tema='vintage'] .retratos li.r0, [data-tema='vintage'] .retratos li.r2 { transform: translate3d(0, 8px, 0) rotate(0); } [data-tema='vintage'] .retratos { margin-top: 32px; } }
 @media (prefers-reduced-motion: reduce) { [data-tema='vintage'] .hero-v > * { animation: none; } }
+
+[data-tema='vintage'] .breve { border-color: var(--ouro-esc); color: var(--ouro-esc); font: 600 0.78rem/1 var(--body); letter-spacing: 0.26em; }
+[data-tema='vintage'] .sec.escuro .breve { border-color: #c9a043; color: #e3c070; }
+[data-tema='vintage'] .galeria.vazia li { background: repeating-linear-gradient(45deg, #f6efdf, #f6efdf 10px, #ece1c8 10px, #ece1c8 20px); border-color: var(--filete); }
