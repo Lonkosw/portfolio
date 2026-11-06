@@ -109,3 +109,9 @@ Decisão da entrevista: miniaturas escurecidas e dessaturadas (sem tingir de rox
 ## 12. Hub: ondas de névoa no fundo — 2026-10-26
 
 Três camadas largas de gradiente roxo (`.wave`, em `Base.astro`/`global.css`) deslizando em ciclos de 52 a 90 s, só `transform`. Pausam com a aba oculta (`visibilitychange`) e ficam paradas em `prefers-reduced-motion`. Medido no hub (rolagem completa): 60 fps antes, 57–60 depois, sem tarefas longas. Ficaram de fora, por ora, o grão de filme, o pulso do halo do favorito e o brilho que segue o mouse (sugestões 2 e 3).
+
+## 13. Barbearia: modelo reutilizável e prévia da Palhares — 2026-11-06
+
+`sites/barbearia` (projeto Pages `portfolio-barbearia`, noindex). Cada arquivo `src/data/<slug>.json` vira uma página `/<slug>/` com a mesma estrutura: hero com letreiro e faixas de fotos, tabela de preços, combos mensais, galeria, agendamento em 5 etapas que termina numa mensagem de WhatsApp, avaliações, local e horário. Imagens em `public/img/<slug>/`. A primeira página é a da Barbearia Palhares (Maringá): https://portfolio-barbearia.pages.dev/palhares/
+
+Decisões da entrevista: preto e dourado da marca; ação principal = agendar pelo WhatsApp; entram tabela, combos e galeria (Palhares Kids ficou só como "Corte infantil" na tabela); avaliações do Google sem nome do cliente; barbeiros genéricos ("Barbeiro 1, 2 e 3"); fotos recortadas dos prints do Instagram (qualidade de prévia, trocar pelas originais). WhatsApp da prévia: 5544999283034, assumindo DDD 44 para o "999283034" informado. Preços, horários e combos vêm das artes da barbearia; nada foi inventado (sem nota média, sem nomes de equipe). A agenda não consulta horários reais: o pedido é enviado e a barbearia confirma. Faixa no topo e rodapé deixam claro que é uma prévia.

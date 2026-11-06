@@ -1,0 +1,241 @@
+{
+  "slug": "palhares",
+  "nome": "Barbearia Palhares",
+  "nomeCurto": "Palhares",
+  "desde": 2015,
+  "tagline": "Seu estilo. Nossa arte.",
+  "cidade": "Maringá",
+  "uf": "PR",
+  "endereco": "Av. Franklin Delano Roosevelt, 4961",
+  "complemento": "Conjunto Requião",
+  "mapsBusca": "Barbearia Palhares Av. Franklin Delano Roosevelt 4961 Maringá PR",
+  "whatsapp": "5544999283034",
+  "instagram": "barbeariapalhares_",
+  "horarios": [
+    {
+      "dias": "Segunda a sexta",
+      "weekdays": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "abre": "09:00",
+      "fecha": "20:00"
+    },
+    {
+      "dias": "Sábado",
+      "weekdays": [
+        6
+      ],
+      "abre": "08:00",
+      "fecha": "19:00"
+    }
+  ],
+  "logo": "/img/palhares/logo.png",
+  "hero": [
+    "/img/palhares/hero-1.webp",
+    "/img/palhares/hero-2.webp",
+    "/img/palhares/hero-3.webp"
+  ],
+  "galeria": [
+    "corte-01",
+    "corte-02",
+    "corte-03",
+    "corte-04",
+    "corte-05",
+    "corte-06",
+    "corte-07",
+    "corte-08",
+    "corte-09",
+    "corte-10",
+    "corte-11",
+    "corte-12"
+  ],
+  "ambiente": [
+    "/img/palhares/ambiente-1.webp",
+    "/img/palhares/ambiente-2.webp"
+  ],
+  "servicos": [
+    {
+      "grupo": "Cortes",
+      "itens": [
+        {
+          "id": "degrade",
+          "nome": "Corte degradê",
+          "preco": 40
+        },
+        {
+          "id": "social",
+          "nome": "Corte social",
+          "preco": 35
+        },
+        {
+          "id": "infantil",
+          "nome": "Corte infantil",
+          "preco": 40
+        },
+        {
+          "id": "raspado",
+          "nome": "Corte raspado",
+          "preco": 30
+        }
+      ]
+    },
+    {
+      "grupo": "Barba",
+      "itens": [
+        {
+          "id": "barba-maquina",
+          "nome": "Barba simples, só máquina",
+          "preco": 30
+        },
+        {
+          "id": "barba-detalhada",
+          "nome": "Barba detalhada",
+          "preco": 40
+        }
+      ]
+    },
+    {
+      "grupo": "Combinações",
+      "itens": [
+        {
+          "id": "cab-sobr",
+          "nome": "Cabelo e sobrancelha",
+          "preco": 50
+        },
+        {
+          "id": "cab-barba",
+          "nome": "Cabelo e barba",
+          "preco": 70
+        },
+        {
+          "id": "cab-barba-sobr",
+          "nome": "Cabelo, barba e sobrancelha",
+          "preco": 80
+        },
+        {
+          "id": "completo",
+          "nome": "Cabelo, barba, sobrancelha e limpeza nasal",
+          "preco": 90
+        }
+      ]
+    },
+    {
+      "grupo": "Acabamentos e cuidados",
+      "itens": [
+        {
+          "id": "pezinho",
+          "nome": "Pezinho",
+          "preco": 15
+        },
+        {
+          "id": "sobrancelha",
+          "nome": "Sobrancelha",
+          "preco": 15
+        },
+        {
+          "id": "nasal",
+          "nome": "Limpeza nasal",
+          "preco": 10
+        },
+        {
+          "id": "pele",
+          "nome": "Limpeza de pele",
+          "preco": 50
+        }
+      ]
+    },
+    {
+      "grupo": "Química",
+      "itens": [
+        {
+          "id": "alisamento",
+          "nome": "Alisamento",
+          "preco": 40
+        },
+        {
+          "id": "luzes",
+          "nome": "Luzes + corte",
+          "preco": 160
+        },
+        {
+          "id": "platinado",
+          "nome": "Platinado + corte",
+          "preco": 160
+        }
+      ]
+    }
+  ],
+  "combos": [
+    {
+      "id": "combo-1",
+      "nome": "Combo 1",
+      "itens": [
+        "4 cortes"
+      ],
+      "preco": 120
+    },
+    {
+      "id": "combo-2",
+      "nome": "Combo 2",
+      "itens": [
+        "4 cortes",
+        "2 sobrancelhas"
+      ],
+      "preco": 130
+    },
+    {
+      "id": "combo-3",
+      "nome": "Combo 3",
+      "itens": [
+        "2 cortes",
+        "4 barbas",
+        "2 sobrancelhas"
+      ],
+      "preco": 170
+    },
+    {
+      "id": "combo-4",
+      "nome": "Combo 4",
+      "itens": [
+        "4 cortes",
+        "4 barbas",
+        "4 sobrancelhas"
+      ],
+      "preco": 200,
+      "novo": true
+    }
+  ],
+  "regrasCombos": [
+    "O valor do pacote é pago no ato da aquisição.",
+    "Falta sem aviso conta como serviço feito. Avisando com pelo menos 2 dias de antecedência, o serviço é feito na mesma semana.",
+    "O pacote mensal é intransferível: não dá para colocar outra pessoa no seu lugar.",
+    "O pacote deve ser consumido em até 30 dias."
+  ],
+  "barbeiros": [
+    "Barbeiro 1",
+    "Barbeiro 2",
+    "Barbeiro 3"
+  ],
+  "avaliacoes": [
+    {
+      "texto": "Atendimento cordial, profissionais qualificados, preço muito bom, ambiente climatizado, limpo, bem iluminado, conveniência e ótima localização, recomendo.",
+      "quando": "há 2 anos"
+    },
+    {
+      "texto": "Ótimos profissionais, meu filho amou cortar o cabelo aqui, só trago meus filhos aqui.",
+      "quando": "há 2 anos"
+    },
+    {
+      "texto": "Atendimento show, estrutura boa […] estão de parabéns. Indico.",
+      "quando": "há 4 meses"
+    }
+  ],
+  "preview": {
+    "autor": "Theo",
+    "whatsapp": "5544991342674"
+  }
+}
