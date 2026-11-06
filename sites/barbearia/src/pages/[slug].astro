@@ -5,6 +5,8 @@ import '@fontsource/manrope/latin-400';
 import '@fontsource/manrope/latin-600';
 import '@fontsource/sacramento/latin-400';
 import '../styles/barbearia.css';
+import fonteDisplay from '@fontsource/big-shoulders-display/files/big-shoulders-display-latin-800-normal.woff2?url';
+import fonteCorpo from '@fontsource/manrope/files/manrope-latin-400-normal.woff2?url';
 
 // Cada arquivo em src/data/*.json vira uma página /<slug>/ com a mesma estrutura.
 export function getStaticPaths() {
@@ -30,13 +32,15 @@ const dados = { slug: b.slug, nome: b.nome, whatsapp: b.whatsapp, horarios: b.ho
     <title>{b.nome} · {b.cidade}</title>
     <meta name="description" content={`${b.nome}, ${b.cidade}-${b.uf}. Tabela de preços, combos mensais e agendamento pelo WhatsApp.`} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preload" as="font" type="font/woff2" href={fonteDisplay} crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href={fonteCorpo} crossorigin />
     <link rel="preload" as="image" href={b.hero[1]} />
   </head>
   <body>
     <p class="aviso">Prévia de site criada para a {b.nome} <a href={waPreview} target="_blank" rel="noopener">Falar com o {b.preview.autor}</a></p>
 
     <header class="topo" data-topo>
-      <a class="marca" href="#inicio" aria-label={`${b.nome}, início`}><img src={b.logo} alt="" width="46" height="38" /><span>{b.nomeCurto}</span></a>
+      <a class="marca" href="#inicio" aria-label={`${b.nome}, início`}><img src={b.logo} alt="" width="46" height="37" /><span>{b.nomeCurto}</span></a>
       <nav aria-label="Principal">
         <a href="#servicos">Preços</a><a href="#combos">Combos</a><a href="#galeria">Cortes</a><a href="#onde">Onde estamos</a>
       </nav>

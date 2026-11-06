@@ -1,4 +1,4 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 
-export default defineConfig({ trailingSlash: 'always' });
+export default defineConfig({ trailingSlash: 'always', build: { inlineStylesheets: 'always' } });

@@ -26,7 +26,7 @@ else {
 const topo = $('[data-topo]');
 const tick = () => topo.classList.toggle('solido', scrollY > 40);
 addEventListener('scroll', tick, { passive: true });
-tick();
+requestAnimationFrame(tick);
 
 /* agendamento numa tela só: o cliente monta o pedido e envia pelo WhatsApp; a barbearia confirma o horário */
 const sel = new Set<string>();
@@ -140,6 +140,7 @@ $('[data-enviar]', raiz).addEventListener('click', (e) => {
 /* tabela de preços: tocar num serviço adiciona ao pedido e leva à agenda */
 $$('[data-add]').forEach((b) =>
   b.addEventListener('click', () => {
+    garantir();
     sel.add(b.dataset.add!);
     desenharServicos();
     atualizar();
@@ -149,8 +150,21 @@ $$('[data-add]').forEach((b) =>
   }),
 );
 
-desenharServicos();
-desenharBarbeiros();
-desenharDias();
-desenharHoras();
-atualizar();
+/* monta o agendamento fora do caminho crítico: quando o navegador estiver ocioso ou a seção se aproximar */
+let montado = false;
+function garantir() {
+  if (montado) return;
+  montado = true;
+  desenharServicos();
+  desenharBarbeiros();
+  desenharDias();
+  desenharHoras();
+  atualizar();
+}
+const ocioso = (window as any).requestIdleCallback as undefined | ((f: () => void, o?: object) => void);
+if (ocioso) ocioso(garantir, { timeout: 2500 });
+else setTimeout(garantir, 1200);
+if ('IntersectionObserver' in window) {
+  const ioA = new IntersectionObserver((es) => { if (es.some((e) => e.isIntersecting)) { garantir(); ioA.disconnect(); } }, { rootMargin: '800px 0px' });
+  ioA.observe(raiz);
+}
