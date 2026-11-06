@@ -122,9 +122,11 @@ h2::after { content: ''; position: absolute; left: 0; bottom: 0; width: 72px; he
 @media (min-width: 820px) { .ambiente { grid-template-columns: 1fr 1fr 1.2fr; } .amb-txt { grid-column: auto; } }
 
 /* ── agendamento (uma tela só) ── */
-.agenda { display: grid; gap: 0; max-width: 760px; background: var(--surf); border: 1px solid var(--line); border-radius: 4px; }
+.agenda { counter-reset: bl; display: grid; gap: 0; max-width: 760px; background: var(--surf); border: 1px solid var(--line); border-radius: 4px; }
 .bloco { padding: 22px 22px 24px; border-bottom: 1px solid var(--line); }
 .bloco h3 { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; font: 800 1.15rem/1 var(--display); letter-spacing: 0.14em; text-transform: uppercase; }
+.bloco { counter-increment: bl; }
+.bloco h3 span::before { content: counter(bl); }
 .bloco h3 span { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--ouro2); color: #17110a; font-size: 0.95rem; letter-spacing: 0; }
 .chips { display: flex; flex-wrap: wrap; gap: 8px; }
 .chip input, .opc input { position: absolute; opacity: 0; pointer-events: none; }
@@ -178,3 +180,21 @@ h2::after { content: ''; position: absolute; left: 0; bottom: 0; width: 72px; he
   [data-rv] { opacity: 1; transform: none; transition: none; }
   h2::after { transform: scaleX(1); transition: none; }
 }
+
+/* ── valores a confirmar, equipe, barbeiros com foto ── */
+.pr.nulo, .chip b.nulo { font: 600 0.8rem/1 var(--body); letter-spacing: 0.02em; color: var(--mute); text-transform: none; }
+.equipe { display: grid; gap: 22px; grid-template-columns: repeat(auto-fit, minmax(188px, 1fr)); }
+.membro { display: grid; gap: 14px; align-content: start; }
+.membro .foto { overflow: hidden; aspect-ratio: 3 / 4; background: var(--surf); }
+.membro .foto img { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; transition: transform 0.8s var(--ease); }
+.membro:hover .foto img { transform: scale(1.04); }
+.membro h3 { font: 800 1.7rem/1 var(--display); letter-spacing: 0.04em; text-transform: uppercase; }
+.papel { font-size: 0.74rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ouro); margin-top: 6px; }
+.bio { color: var(--mute); font-size: 0.92rem; margin-top: 10px; }
+.espec { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0 16px; }
+.espec li { font-size: 0.74rem; padding: 4px 10px; border: 1px solid var(--line); border-radius: 999px; color: var(--mute); }
+.membro .btn { justify-self: start; }
+.escolhas.barb.com-foto { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+.opc span:has(img) { flex-direction: row; justify-content: flex-start; gap: 10px; padding: 6px 10px 6px 6px; text-align: left; }
+.opc span img { width: 44px; height: 44px; flex: none; border-radius: 50%; object-fit: cover; object-position: center 22%; }
+.opc span em { font-style: normal; line-height: 1.2; }

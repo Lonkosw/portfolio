@@ -1,0 +1,49 @@
+{
+  "slug": "mustache",
+  "tema": "vintage",
+  "fluxo": "barbeiro-primeiro",
+  "provisorio": true,
+  "rascunho": true,
+  "nome": "Mustache Fratello Barbearia",
+  "nomeCurto": "Mustache Fratello",
+  "tagline": "Aqui não existe corte comum.",
+  "subtagline": "Aqui se cria presença, estilo e respeito.",
+  "cidade": "Maringá",
+  "uf": "PR",
+  "endereco": null,
+  "whatsapp": null,
+  "instagram": "mustachefratellobarbearia",
+  "horarios": [],
+  "logo": "/img/mustache/logo-escuro.webp",
+  "logoClaro": "/img/mustache/logo-claro.webp",
+  "logoW": 30,
+  "logoH": 44,
+  "equipeSub": "Cinco barbeiros, cada um com a sua especialidade. Escolha com quem você quer cortar.",
+  "equipe": [
+    {
+      "id": "thiago", "nome": "Thiago Calixto", "papel": "Barbeiro", "foto": "/img/mustache/thiago.webp",
+      "bio": "Mais de 10 anos dedicados à barbearia. A missão é elevar a autoestima de cada cliente com um corte bem feito e um atendimento de qualidade.",
+      "especialidades": ["Cortes masculinos modernos e clássicos", "Degradê (fade) e acabamento preciso", "Design e alinhamento de barba", "Estilo personalizado"]
+    },
+    {
+      "id": "joao", "nome": "João Vitor Paiva", "papel": "Barbeiro", "foto": "/img/mustache/joao.webp",
+      "bio": "Barbeiro especializado em cortes modernos e degradê, com atenção aos detalhes e acabamento de alta qualidade.",
+      "especialidades": ["Cortes modernos", "Degradê"]
+    },
+    {
+      "id": "thalis", "nome": "Thális Marques", "papel": "Barbeiro", "foto": "/img/mustache/thalis.webp",
+      "bio": "Barbeiro há 21 anos, especialista em cortes na tesoura e acabamento de alta precisão.",
+      "especialidades": ["Corte na tesoura", "Acabamento de alta precisão"]
+    },
+    { "id": "renato", "nome": "Renato", "papel": "Barbeiro", "foto": "/img/mustache/renato.webp" },
+    { "id": "alan", "nome": "Alan", "papel": "Barbeiro", "foto": "/img/mustache/alan.webp" }
+  ],
+  "servicos": [
+    { "grupo": "Serviços", "itens": [
+      { "id": "corte", "nome": "Corte masculino", "preco": null },
+      { "id": "degrade", "nome": "Degradê (fade)", "preco": null },
+      { "id": "barba", "nome": "Design e alinhamento de barba", "preco": null }
+    ]}
+  ],
+  "preview": { "autor": "Theo", "whatsapp": "5544991342674" }
+}

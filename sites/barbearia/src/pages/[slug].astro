@@ -1,140 +1,224 @@
 ---
 import '@fontsource/big-shoulders-display/latin-700';
 import '@fontsource/big-shoulders-display/latin-800';
+import '@fontsource/abril-fatface/latin-400';
 import '@fontsource/manrope/latin-400';
 import '@fontsource/manrope/latin-600';
 import '@fontsource/sacramento/latin-400';
 import '../styles/barbearia.css';
-import fonteDisplay from '@fontsource/big-shoulders-display/files/big-shoulders-display-latin-800-normal.woff2?url';
+import '../styles/vintage.css';
+import fonteOuro from '@fontsource/big-shoulders-display/files/big-shoulders-display-latin-800-normal.woff2?url';
+import fonteVintage from '@fontsource/abril-fatface/files/abril-fatface-latin-400-normal.woff2?url';
 import fonteCorpo from '@fontsource/manrope/files/manrope-latin-400-normal.woff2?url';
 
 // Cada arquivo em src/data/*.json vira uma página /<slug>/ com a mesma estrutura.
+// Campos opcionais (combos, galeria, equipe, horários, endereço, WhatsApp, avaliações): a seção só aparece se o dado existir.
 export function getStaticPaths() {
   const todos = import.meta.glob('../data/*.json', { eager: true }) as Record<string, { default: any }>;
-  return Object.values(todos).map((m) => ({ params: { slug: m.default.slug }, props: { b: m.default } }));
+  // Páginas com "rascunho": true só entram no build local com INCLUIR_RASCUNHOS=1 (nunca vão ao ar sem os dados reais).
+  return Object.values(todos).filter((m) => !m.default.rascunho || process.env.INCLUIR_RASCUNHOS).map((m) => ({ params: { slug: m.default.slug }, props: { b: m.default } }));
 }
 const { b } = Astro.props;
-const principais = b.servicos.flatMap((g: any) => g.itens).filter((s: any) => s.principal);
-const brl = (n: number) => `R$ ${n.toLocaleString('pt-BR', { minimumFractionDigits: 0 })}`;
+const vintage = b.tema === 'vintage';
+const barbeiroPrimeiro = b.fluxo === 'barbeiro-primeiro';
+const equipe: any[] = b.equipe ?? [];
+const horarios: any[] = b.horarios ?? [];
+const combos: any[] = b.combos ?? [];
+const galeria: string[] = b.galeria ?? [];
+const ambiente: string[] = b.ambiente ?? [];
+const avaliacoes: any[] = b.avaliacoes ?? [];
+const barbeiros = equipe.length ? equipe.map((e: any) => ({ nome: e.nome, foto: e.foto })) : (b.barbeiros ?? []).map((n: string) => ({ nome: n }));
+const todosServ = b.servicos.flatMap((g: any) => g.itens);
+let principais = todosServ.filter((s: any) => s.principal);
+if (!principais.length) principais = todosServ.slice(0, 6);
+const brl = (n: number | null) => (n == null ? 'a confirmar' : `R$ ${n.toLocaleString('pt-BR', { minimumFractionDigits: 0 })}`);
+const hh = (t: string) => t.replace(':00', 'h');
 const img = (nome: string) => `/img/${b.slug}/${nome}.webp`;
-const wa = (txt: string) => `https://wa.me/${b.whatsapp}?text=${encodeURIComponent(txt)}`;
+const wa = (txt: string) => (b.whatsapp ? `https://wa.me/${b.whatsapp}?text=${encodeURIComponent(txt)}` : '#');
 const waPreview = `https://wa.me/${b.preview.whatsapp}?text=${encodeURIComponent(`Oi, ${b.preview.autor}! Vi a prévia do site da ${b.nome} e quero conversar.`)}`;
-const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(b.mapsBusca)}`;
-const dados = { slug: b.slug, nome: b.nome, whatsapp: b.whatsapp, horarios: b.horarios, barbeiros: b.barbeiros, servicos: b.servicos, combos: b.combos };
+const mapsUrl = b.endereco ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(b.mapsBusca ?? `${b.nome} ${b.endereco} ${b.cidade}`)}` : '';
+const primeiroNome = (n: string) => n.split(' ')[0];
+const heroImgs: string[] = b.hero ?? equipe.slice(0, 3).map((e: any) => e.foto);
+const nav = [
+  ['#servicos', 'Preços', todosServ.length > 0],
+  ['#combos', 'Combos', combos.length > 0],
+  ['#equipe', 'Time', equipe.length > 0],
+  ['#galeria', 'Cortes', galeria.length > 0],
+  ['#onde', 'Onde estamos', true],
+].filter((x) => x[2]);
+const dados = { slug: b.slug, nome: b.nome, whatsapp: b.whatsapp ?? null, horarios, barbeiros, servicos: b.servicos };
+const logoClaro = b.logoClaro ?? b.logo;
 ---
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-tema={vintage ? 'vintage' : 'ouro'}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex, nofollow" />
-    <meta name="theme-color" content="#0a0a0a" />
+    <meta name="theme-color" content={vintage ? '#efe5d0' : '#0a0a0a'} />
     <title>{b.nome} · {b.cidade}</title>
-    <meta name="description" content={`${b.nome}, ${b.cidade}-${b.uf}. Tabela de preços, combos mensais e agendamento pelo WhatsApp.`} />
+    <meta name="description" content={`${b.nome}, ${b.cidade}-${b.uf}. ${b.tagline}`} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="preload" as="font" type="font/woff2" href={fonteDisplay} crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href={vintage ? fonteVintage : fonteOuro} crossorigin />
     <link rel="preload" as="font" type="font/woff2" href={fonteCorpo} crossorigin />
-    <link rel="preload" as="image" href={b.hero[1]} />
+    {!vintage && heroImgs[1] && <link rel="preload" as="image" href={heroImgs[1]} />}
   </head>
   <body>
     <p class="aviso">Prévia de site criada para a {b.nome} <a href={waPreview} target="_blank" rel="noopener">Falar com o {b.preview.autor}</a></p>
 
     <header class="topo" data-topo>
-      <a class="marca" href="#inicio" aria-label={`${b.nome}, início`}><img src={b.logo} alt="" width="46" height="37" /><span>{b.nomeCurto}</span></a>
-      <nav aria-label="Principal">
-        <a href="#servicos">Preços</a><a href="#combos">Combos</a><a href="#galeria">Cortes</a><a href="#onde">Onde estamos</a>
-      </nav>
+      <a class="marca" href="#inicio" aria-label={`${b.nome}, início`}><img src={b.logo} alt="" width={b.logoW ?? 46} height={b.logoH ?? 37} /><span>{b.nomeCurto}</span></a>
+      <nav aria-label="Principal">{nav.map((n) => <a href={n[0] as string}>{n[1]}</a>)}</nav>
       <a class="btn ouro sm" href="#agendar">Agendar</a>
     </header>
 
     <main id="inicio">
-      <section class="hero" aria-label="Apresentação">
-        <div class="faixas" aria-hidden="true">
-          {b.hero.map((src: string, i: number) => <div class={`faixa f${i}`}><img src={src} alt="" width="355" height="470" decoding="async" fetchpriority={i === 1 ? 'high' : 'auto'} /></div>)}
-        </div>
-        <div class="hero-txt">
-          <p class="selo">Barbearia · desde {b.desde}</p>
-          <h1 class="letreiro">{b.nomeCurto.toUpperCase()}</h1>
+      {vintage ? (
+        <section class="hero-v" aria-label="Apresentação">
+          <img class="hero-v-logo" src={b.logo} alt="" width={b.logoW ?? 46} height={b.logoH ?? 37} />
+          <p class="selo">Barbearia · {b.cidade}</p>
+          <h1 class="titulo-v">{b.nomeCurto}</h1>
           <p class="script">{b.tagline}</p>
+          {b.subtagline && <p class="sub-v">{b.subtagline}</p>}
           <div class="hero-acoes">
             <a class="btn ouro" href="#agendar">Agendar horário</a>
-            <a class="btn linha" href="#combos">Ver combos mensais</a>
+            {equipe.length > 0 && <a class="btn linha" href="#equipe">Conhecer o time</a>}
           </div>
-        </div>
-        <ul class="hero-info" aria-label="Horário e endereço">
-          {b.horarios.map((h: any) => <li><b>{h.dias}</b> {h.abre.replace(':00', 'h')} às {h.fecha.replace(':00', 'h')}</li>)}
-          <li><b>{b.cidade}</b> {b.endereco}, {b.complemento}</li>
-        </ul>
-      </section>
+          {heroImgs.length > 0 && (
+            <ul class="retratos" aria-hidden="true">
+              {heroImgs.slice(0, 3).map((src: string, i: number) => <li class={`r${i}`}><img src={src} alt="" width="600" height="800" decoding="async" fetchpriority={i === 1 ? 'high' : 'auto'} /></li>)}
+            </ul>
+          )}
+        </section>
+      ) : (
+        <section class="hero" aria-label="Apresentação">
+          <div class="faixas" aria-hidden="true">
+            {heroImgs.map((src: string, i: number) => <div class={`faixa f${i}`}><img src={src} alt="" width="355" height="470" decoding="async" fetchpriority={i === 1 ? 'high' : 'auto'} /></div>)}
+          </div>
+          <div class="hero-txt">
+            <p class="selo">Barbearia{b.desde ? ` · desde ${b.desde}` : ''}</p>
+            <h1 class="letreiro">{b.nomeCurto.toUpperCase()}</h1>
+            <p class="script">{b.tagline}</p>
+            <div class="hero-acoes">
+              <a class="btn ouro" href="#agendar">Agendar horário</a>
+              {combos.length > 0 && <a class="btn linha" href="#combos">Ver combos mensais</a>}
+            </div>
+          </div>
+          <ul class="hero-info" aria-label="Horário e endereço">
+            {horarios.map((h: any) => <li><b>{h.dias}</b> {hh(h.abre)} às {hh(h.fecha)}</li>)}
+            {b.endereco && <li><b>{b.cidade}</b> {b.endereco}{b.complemento ? `, ${b.complemento}` : ''}</li>}
+          </ul>
+        </section>
+      )}
 
-      <section id="servicos" class="sec">
-        <div class="cab" data-rv><p class="rot">Tabela</p><h2>Serviços e preços</h2></div>
-        <ul class="princ" data-rv>
-          {principais.map((s: any) => (
-            <li><button type="button" class="srv" data-add={s.id}><span class="nm">{s.nome}</span><span class="pr">{brl(s.preco)}</span></button></li>
-          ))}
-        </ul>
-        <details class="completa" data-rv>
-          <summary>Ver tabela completa</summary>
-          <div class="grupos">
-            {b.servicos.map((g: any) => (
-              <div class="grupo">
-                <h3>{g.grupo}</h3>
-                <ul>{g.itens.map((s: any) => <li><button type="button" class="srv" data-add={s.id}><span class="nm">{s.nome}</span><span class="pr">{brl(s.preco)}</span></button></li>)}</ul>
+      {todosServ.length > 0 && (
+        <section id="servicos" class="sec">
+          <div class="cab" data-rv><p class="rot">Tabela</p><h2>Serviços e preços</h2>{b.provisorio && <p class="sub">Lista inicial. Os valores ainda serão confirmados com a barbearia.</p>}</div>
+          <ul class="princ" data-rv>
+            {principais.map((s: any) => (
+              <li><button type="button" class="srv" data-add={s.id}><span class="nm">{s.nome}</span><span class={`pr${s.preco == null ? ' nulo' : ''}`}>{brl(s.preco)}</span></button></li>
+            ))}
+          </ul>
+          {todosServ.length > principais.length && (
+            <details class="completa" data-rv>
+              <summary>Ver tabela completa</summary>
+              <div class="grupos">
+                {b.servicos.map((g: any) => (
+                  <div class="grupo">
+                    <h3>{g.grupo}</h3>
+                    <ul>{g.itens.map((s: any) => <li><button type="button" class="srv" data-add={s.id}><span class="nm">{s.nome}</span><span class={`pr${s.preco == null ? ' nulo' : ''}`}>{brl(s.preco)}</span></button></li>)}</ul>
+                  </div>
+                ))}
               </div>
+            </details>
+          )}
+          <p class="dica" data-rv>Toque em um serviço para adicionar ao seu pedido.</p>
+        </section>
+      )}
+
+      {combos.length > 0 && (
+        <section id="combos" class="sec escuro">
+          <div class="cab" data-rv><p class="rot">Pacotes mensais</p><h2>Combos</h2><p class="sub">Pague uma vez e use ao longo do mês.</p></div>
+          <div class="combos">
+            {combos.map((c: any) => (
+              <article class="combo" data-rv>
+                {c.novo && <span class="novo">Novo</span>}
+                <h3>{c.nome}</h3>
+                <ul>{c.itens.map((i: string) => <li>{i}</li>)}</ul>
+                <p class="preco">{brl(c.preco)}</p>
+                <a class="btn ouro sm" target="_blank" rel="noopener" href={wa(`Olá, ${b.nome}! Quero o ${c.nome} (${c.itens.join(', ')}) por ${brl(c.preco)}.`)}>Quero este combo</a>
+              </article>
             ))}
           </div>
-        </details>
-        <p class="dica" data-rv>Toque em um serviço para adicionar ao seu pedido.</p>
-      </section>
+          {(b.regrasCombos ?? []).length > 0 && (
+            <details class="regras" data-rv>
+              <summary>Regras do pacote</summary>
+              <ul>{b.regrasCombos.map((r: string) => <li>{r}</li>)}</ul>
+            </details>
+          )}
+        </section>
+      )}
 
-      <section id="combos" class="sec escuro">
-        <div class="cab" data-rv><p class="rot">Pacotes mensais</p><h2>Combos</h2><p class="sub">Pague uma vez e use ao longo do mês.</p></div>
-        <div class="combos">
-          {b.combos.map((c: any) => (
-            <article class="combo" data-rv>
-              {c.novo && <span class="novo">Novo</span>}
-              <h3>{c.nome}</h3>
-              <ul>{c.itens.map((i: string) => <li>{i}</li>)}</ul>
-              <p class="preco">{brl(c.preco)}</p>
-              <a class="btn ouro sm" target="_blank" rel="noopener" href={wa(`Olá, ${b.nome}! Quero o ${c.nome} (${c.itens.join(', ')}) por ${brl(c.preco)}.`)}>Quero este combo</a>
-            </article>
-          ))}
-        </div>
-        <details class="regras" data-rv>
-          <summary>Regras do pacote</summary>
-          <ul>{b.regrasCombos.map((r: string) => <li>{r}</li>)}</ul>
-        </details>
-      </section>
+      {equipe.length > 0 && (
+        <section id="equipe" class={`sec${vintage ? ' escuro' : ''}`}>
+          <div class="cab" data-rv><p class="rot">O time</p><h2>Quem cuida de você</h2>{b.equipeSub && <p class="sub">{b.equipeSub}</p>}</div>
+          <ul class="equipe">
+            {equipe.map((e: any) => (
+              <li class="membro" data-rv>
+                <div class="foto"><img src={e.foto} alt={`${e.nome}, barbeiro`} width="600" height="800" loading="lazy" decoding="async" /></div>
+                <div class="membro-txt">
+                  <h3>{e.nome}</h3>
+                  <p class="papel">{e.papel ?? 'Barbeiro'}</p>
+                  {e.bio && <p class="bio">{e.bio}</p>}
+                  {(e.especialidades ?? []).length > 0 && <ul class="espec">{e.especialidades.map((s: string) => <li>{s}</li>)}</ul>}
+                  <button type="button" class="btn linha sm" data-barbeiro={e.nome}>Agendar com {primeiroNome(e.nome)}</button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
-      <section id="galeria" class="sec">
-        <div class="cab" data-rv><p class="rot">Trabalhos</p><h2>Cortes da casa</h2></div>
-        <ul class="galeria">
-          {b.galeria.map((n: string, i: number) => <li data-rv><img src={img(n)} alt="Corte feito na barbearia" width="357" height="470" loading="lazy" decoding="async" /></li>)}
-        </ul>
-        <div class="ambiente">
-          {b.ambiente.map((src: string) => <img src={src} alt="Ambiente da barbearia" width="355" height="408" loading="lazy" decoding="async" />)}
-          <div class="amb-txt"><p class="script">Venha conhecer.</p><p>Ambiente climatizado, com cadeiras para a espera e atendimento de segunda a sábado.</p></div>
-        </div>
-      </section>
+      {galeria.length > 0 && (
+        <section id="galeria" class="sec">
+          <div class="cab" data-rv><p class="rot">Trabalhos</p><h2>Cortes da casa</h2></div>
+          <ul class="galeria">
+            {galeria.map((n: string) => <li data-rv><img src={img(n)} alt="Corte feito na barbearia" width="357" height="470" loading="lazy" decoding="async" /></li>)}
+          </ul>
+          {ambiente.length > 0 && (
+            <div class="ambiente">
+              {ambiente.map((src: string) => <img src={src} alt="Ambiente da barbearia" width="355" height="408" loading="lazy" decoding="async" />)}
+              {b.ambienteTexto && <div class="amb-txt"><p class="script">Venha conhecer.</p><p>{b.ambienteTexto}</p></div>}
+            </div>
+          )}
+        </section>
+      )}
 
       <section id="agendar" class="sec escuro">
         <div class="cab" data-rv><p class="rot">Agendamento</p><h2>Peça o seu horário</h2><p class="sub">Escolha, confira o total e envie pelo WhatsApp.</p></div>
         <div class="agenda" data-agenda data-rv>
+          {barbeiroPrimeiro && (
+            <div class="bloco">
+              <h3><span></span> Barbeiro</h3>
+              <div class="escolhas barb com-foto" data-lista-barbeiros></div>
+            </div>
+          )}
           <div class="bloco">
-            <h3><span>1</span> Serviços</h3>
+            <h3><span></span> Serviços</h3>
             <div class="chips" data-lista-principais></div>
             <details class="mais"><summary>Mais serviços</summary><div data-lista-outros></div></details>
           </div>
+          {horarios.length > 0 && (
+            <div class="bloco">
+              <h3><span></span> Dia e horário</h3>
+              <div class="escolhas dias" data-lista-dias></div>
+              <div class="escolhas horas" data-lista-horas></div>
+              <p class="nota" data-nota-hora>Escolha o dia para ver os horários.</p>
+            </div>
+          )}
           <div class="bloco">
-            <h3><span>2</span> Dia e horário</h3>
-            <div class="escolhas dias" data-lista-dias></div>
-            <div class="escolhas horas" data-lista-horas></div>
-            <p class="nota" data-nota-hora>Escolha o dia para ver os horários.</p>
-          </div>
-          <div class="bloco">
-            <h3><span>3</span> Barbeiro e nome</h3>
-            <div class="escolhas barb" data-lista-barbeiros></div>
+            <h3><span></span> {barbeiroPrimeiro ? 'Seu nome' : 'Barbeiro e nome'}</h3>
+            {!barbeiroPrimeiro && <div class="escolhas barb" data-lista-barbeiros></div>}
             <label class="campo" for="nome-cliente">Seu nome</label>
             <input id="nome-cliente" type="text" autocomplete="given-name" maxlength="40" placeholder="Como podemos te chamar?" />
           </div>
@@ -146,25 +230,29 @@ const dados = { slug: b.slug, nome: b.nome, whatsapp: b.whatsapp, horarios: b.ho
         </div>
       </section>
 
-      <section class="sec" aria-label="Avaliações">
-        <div class="cab" data-rv><p class="rot">Avaliações no Google</p><h2>Quem já cortou aqui</h2></div>
-        <ul class="aval">
-          {b.avaliacoes.map((a: any) => <li data-rv><blockquote><p>“{a.texto}”</p></blockquote><footer>Cliente · {a.quando}</footer></li>)}
-        </ul>
-      </section>
+      {avaliacoes.length > 0 && (
+        <section class="sec" aria-label="Avaliações">
+          <div class="cab" data-rv><p class="rot">Avaliações no Google</p><h2>Quem já cortou aqui</h2></div>
+          <ul class="aval">
+            {avaliacoes.map((a: any) => <li data-rv><blockquote><p>“{a.texto}”</p></blockquote><footer>Cliente · {a.quando}</footer></li>)}
+          </ul>
+        </section>
+      )}
 
       <section id="onde" class="sec escuro">
         <div class="onde">
           <div data-rv>
             <p class="rot">Onde estamos</p>
-            <h2>{b.endereco}</h2>
-            <p class="sub">{b.complemento} · {b.cidade}, {b.uf}</p>
-            <ul class="horas-lista">
-              {b.horarios.map((h: any) => <li><span>{h.dias}</span><b>{h.abre.replace(':00', 'h')} às {h.fecha.replace(':00', 'h')}</b></li>)}
-            </ul>
+            <h2>{b.endereco ?? `${b.cidade}, ${b.uf}`}</h2>
+            {b.endereco ? <p class="sub">{b.complemento ? `${b.complemento} · ` : ''}{b.cidade}, {b.uf}</p> : <p class="sub">Endereço e horário de atendimento a confirmar.</p>}
+            {horarios.length > 0 && (
+              <ul class="horas-lista">
+                {horarios.map((h: any) => <li><span>{h.dias}</span><b>{hh(h.abre)} às {hh(h.fecha)}</b></li>)}
+              </ul>
+            )}
             <div class="hero-acoes">
-              <a class="btn ouro" href={mapsUrl} target="_blank" rel="noopener">Abrir no mapa</a>
-              <a class="btn linha" href={wa(`Olá, ${b.nome}!`)} target="_blank" rel="noopener">Chamar no WhatsApp</a>
+              {mapsUrl && <a class="btn ouro" href={mapsUrl} target="_blank" rel="noopener">Abrir no mapa</a>}
+              {b.whatsapp && <a class="btn linha" href={wa(`Olá, ${b.nome}!`)} target="_blank" rel="noopener">Chamar no WhatsApp</a>}
               <a class="btn linha" href={`https://www.instagram.com/${b.instagram}/`} target="_blank" rel="noopener">Instagram</a>
             </div>
           </div>
@@ -172,7 +260,7 @@ const dados = { slug: b.slug, nome: b.nome, whatsapp: b.whatsapp, horarios: b.ho
       </section>
     </main>
 
-    <footer class="rodape"><img src={b.logo} alt="" width="80" height="65" loading="lazy" /><p>{b.nome} · {b.endereco}, {b.cidade}-{b.uf}</p><p class="peq">Prévia de site criada por {b.preview.autor}. Preços e horários conforme as artes divulgadas pela barbearia.</p></footer>
+    <footer class="rodape"><img src={logoClaro} alt="" width={b.logoW ?? 80} height={b.logoH ?? 65} loading="lazy" /><p>{b.nome}{b.endereco ? ` · ${b.endereco}, ${b.cidade}-${b.uf}` : ` · ${b.cidade}-${b.uf}`}</p><p class="peq">Prévia de site criada por {b.preview.autor}.{b.provisorio ? ' Alguns dados ainda serão confirmados com a barbearia.' : ' Preços e horários conforme as artes divulgadas pela barbearia.'}</p></footer>
 
     <script type="application/json" id="dados" set:html={JSON.stringify(dados)} />
     <script>
