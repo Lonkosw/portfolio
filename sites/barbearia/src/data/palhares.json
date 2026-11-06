@@ -64,17 +64,20 @@
         {
           "id": "degrade",
           "nome": "Corte degradê",
-          "preco": 40
+          "preco": 40,
+          "principal": true
         },
         {
           "id": "social",
           "nome": "Corte social",
-          "preco": 35
+          "preco": 35,
+          "principal": true
         },
         {
           "id": "infantil",
           "nome": "Corte infantil",
-          "preco": 40
+          "preco": 40,
+          "principal": true
         },
         {
           "id": "raspado",
@@ -94,7 +97,8 @@
         {
           "id": "barba-detalhada",
           "nome": "Barba detalhada",
-          "preco": 40
+          "preco": 40,
+          "principal": true
         }
       ]
     },
@@ -109,12 +113,14 @@
         {
           "id": "cab-barba",
           "nome": "Cabelo e barba",
-          "preco": 70
+          "preco": 70,
+          "principal": true
         },
         {
           "id": "cab-barba-sobr",
           "nome": "Cabelo, barba e sobrancelha",
-          "preco": 80
+          "preco": 80,
+          "principal": true
         },
         {
           "id": "completo",

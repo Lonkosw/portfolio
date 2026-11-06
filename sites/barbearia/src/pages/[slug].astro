@@ -12,6 +12,7 @@ export function getStaticPaths() {
   return Object.values(todos).map((m) => ({ params: { slug: m.default.slug }, props: { b: m.default } }));
 }
 const { b } = Astro.props;
+const principais = b.servicos.flatMap((g: any) => g.itens).filter((s: any) => s.principal);
 const brl = (n: number) => `R$ ${n.toLocaleString('pt-BR', { minimumFractionDigits: 0 })}`;
 const img = (nome: string) => `/img/${b.slug}/${nome}.webp`;
 const wa = (txt: string) => `https://wa.me/${b.whatsapp}?text=${encodeURIComponent(txt)}`;
@@ -63,19 +64,24 @@ const dados = { slug: b.slug, nome: b.nome, whatsapp: b.whatsapp, horarios: b.ho
       </section>
 
       <section id="servicos" class="sec">
-        <div class="cab" data-rv><p class="rot">Tabela</p><h2>Serviços e preços</h2><p class="sub">Toque em um serviço para já montar o seu horário.</p></div>
-        <div class="grupos">
-          {b.servicos.map((g: any) => (
-            <div class="grupo" data-rv>
-              <h3>{g.grupo}</h3>
-              <ul>
-                {g.itens.map((s: any) => (
-                  <li><button type="button" class="srv" data-add={s.id}><span class="nm">{s.nome}</span><span class="pt" aria-hidden="true"></span><span class="pr">{brl(s.preco)}</span></button></li>
-                ))}
-              </ul>
-            </div>
+        <div class="cab" data-rv><p class="rot">Tabela</p><h2>Serviços e preços</h2></div>
+        <ul class="princ" data-rv>
+          {principais.map((s: any) => (
+            <li><button type="button" class="srv" data-add={s.id}><span class="nm">{s.nome}</span><span class="pr">{brl(s.preco)}</span></button></li>
           ))}
-        </div>
+        </ul>
+        <details class="completa" data-rv>
+          <summary>Ver tabela completa</summary>
+          <div class="grupos">
+            {b.servicos.map((g: any) => (
+              <div class="grupo">
+                <h3>{g.grupo}</h3>
+                <ul>{g.itens.map((s: any) => <li><button type="button" class="srv" data-add={s.id}><span class="nm">{s.nome}</span><span class="pr">{brl(s.preco)}</span></button></li>)}</ul>
+              </div>
+            ))}
+          </div>
+        </details>
+        <p class="dica" data-rv>Toque em um serviço para adicionar ao seu pedido.</p>
       </section>
 
       <section id="combos" class="sec escuro">
@@ -109,24 +115,29 @@ const dados = { slug: b.slug, nome: b.nome, whatsapp: b.whatsapp, horarios: b.ho
       </section>
 
       <section id="agendar" class="sec escuro">
-        <div class="cab" data-rv><p class="rot">Agendamento</p><h2>Peça o seu horário</h2><p class="sub">Monte o pedido aqui e envie pelo WhatsApp. A barbearia confirma o horário com você.</p></div>
+        <div class="cab" data-rv><p class="rot">Agendamento</p><h2>Peça o seu horário</h2><p class="sub">Escolha, confira o total e envie pelo WhatsApp.</p></div>
         <div class="agenda" data-agenda data-rv>
-          <ol class="passos" data-passos aria-label="Etapas">
-            <li data-p="0" class="on">Serviços</li><li data-p="1">Barbeiro</li><li data-p="2">Dia</li><li data-p="3">Horário</li><li data-p="4">Seus dados</li>
-          </ol>
-          <div class="painel" data-painel="0"><div data-lista-servicos></div></div>
-          <div class="painel" data-painel="1" hidden><div class="escolhas" data-lista-barbeiros></div></div>
-          <div class="painel" data-painel="2" hidden><div class="escolhas dias" data-lista-dias></div></div>
-          <div class="painel" data-painel="3" hidden><div class="escolhas horas" data-lista-horas></div><p class="nota" data-nota-hora></p></div>
-          <div class="painel" data-painel="4" hidden>
+          <div class="bloco">
+            <h3><span>1</span> Serviços</h3>
+            <div class="chips" data-lista-principais></div>
+            <details class="mais"><summary>Mais serviços</summary><div data-lista-outros></div></details>
+          </div>
+          <div class="bloco">
+            <h3><span>2</span> Dia e horário</h3>
+            <div class="escolhas dias" data-lista-dias></div>
+            <div class="escolhas horas" data-lista-horas></div>
+            <p class="nota" data-nota-hora>Escolha o dia para ver os horários.</p>
+          </div>
+          <div class="bloco">
+            <h3><span>3</span> Barbeiro e nome</h3>
+            <div class="escolhas barb" data-lista-barbeiros></div>
             <label class="campo" for="nome-cliente">Seu nome</label>
             <input id="nome-cliente" type="text" autocomplete="given-name" maxlength="40" placeholder="Como podemos te chamar?" />
           </div>
-          <aside class="resumo" aria-live="polite"><h3>Seu pedido</h3><ul data-resumo-itens><li class="vazio">Escolha ao menos um serviço.</li></ul><p class="total">Total <b data-total>R$ 0</b></p></aside>
-          <div class="nav">
-            <button type="button" class="btn linha" data-voltar hidden>Voltar</button>
-            <button type="button" class="btn ouro" data-seguir disabled>Continuar</button>
-            <a class="btn ouro" data-enviar target="_blank" rel="noopener" href="#" hidden>Enviar pelo WhatsApp</a>
+          <div class="barra" data-barra>
+            <div class="barra-info"><p class="barra-res" data-res>Escolha ao menos um serviço</p><p class="barra-tot" data-total>R$ 0</p></div>
+            <a class="btn ouro" data-enviar aria-disabled="true" target="_blank" rel="noopener" href="#">Enviar pelo WhatsApp</a>
+            <p class="barra-nota" data-falta>Você vai para o WhatsApp da barbearia com o pedido pronto. Eles confirmam o horário.</p>
           </div>
         </div>
       </section>

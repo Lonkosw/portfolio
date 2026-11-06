@@ -1,10 +1,11 @@
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const $ = <T extends HTMLElement = HTMLElement>(s: string, r: ParentNode = document) => r.querySelector<T>(s)!;
 const $$ = <T extends HTMLElement = HTMLElement>(s: string, r: ParentNode = document) => Array.from(r.querySelectorAll<T>(s));
+type Servico = { id: string; nome: string; preco: number; principal?: boolean };
 const D = JSON.parse($('#dados').textContent || '{}') as {
   nome: string; whatsapp: string; barbeiros: string[];
   horarios: { dias: string; weekdays: number[]; abre: string; fecha: string }[];
-  servicos: { grupo: string; itens: { id: string; nome: string; preco: number }[] }[];
+  servicos: { grupo: string; itens: Servico[] }[];
 };
 const brl = (n: number) => `R$ ${n.toLocaleString('pt-BR')}`;
 const todos = D.servicos.flatMap((g) => g.itens);
@@ -27,50 +28,45 @@ const tick = () => topo.classList.toggle('solido', scrollY > 40);
 addEventListener('scroll', tick, { passive: true });
 tick();
 
-/* agendamento: o cliente monta o pedido e envia pelo WhatsApp; a barbearia confirma o horário */
+/* agendamento numa tela só: o cliente monta o pedido e envia pelo WhatsApp; a barbearia confirma o horário */
 const sel = new Set<string>();
 let barbeiro = 'Qualquer barbeiro';
 let dia = '';
 let hora = '';
-let passo = 0;
 const raiz = $('[data-agenda]');
 const abertos = new Set(D.horarios.flatMap((h) => h.weekdays));
 const horarioDo = (d: Date) => D.horarios.find((h) => h.weekdays.includes(d.getDay()));
 const iso = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 const dias: Date[] = [];
-for (let i = 0; dias.length < 10 && i < 21; i++) {
+for (let i = 0; dias.length < 7 && i < 14; i++) {
   const d = new Date();
   d.setHours(0, 0, 0, 0);
   d.setDate(d.getDate() + i);
   if (abertos.has(d.getDay())) dias.push(d);
 }
 const nomeDia = (d: Date) => (iso(d) === iso(new Date()) ? 'Hoje' : d.toLocaleDateString('pt-BR', { weekday: 'short' }).replace('.', ''));
+const chip = (s: Servico) =>
+  `<label class="chip"><input type="checkbox" value="${s.id}" ${sel.has(s.id) ? 'checked' : ''}><span>${esc(s.nome)} <b>${brl(s.preco)}</b></span></label>`;
 
 function desenharServicos() {
-  $('[data-lista-servicos]', raiz).innerHTML = D.servicos
-    .map(
-      (g) =>
-        `<fieldset class="g-srv"><legend>${esc(g.grupo)}</legend>${g.itens
-          .map(
-            (s) =>
-              `<label class="chk"><input type="checkbox" value="${s.id}" ${sel.has(s.id) ? 'checked' : ''}><span class="cx"></span><span class="nm">${esc(s.nome)}</span><span class="pr">${brl(s.preco)}</span></label>`,
-          )
-          .join('')}</fieldset>`,
-    )
+  const principais = todos.filter((s) => s.principal);
+  const idsP = new Set(principais.map((s) => s.id));
+  $('[data-lista-principais]', raiz).innerHTML = principais.map(chip).join('');
+  $('[data-lista-outros]', raiz).innerHTML = D.servicos
+    .map((g) => ({ g: g.grupo, itens: g.itens.filter((s) => !idsP.has(s.id)) }))
+    .filter((x) => x.itens.length)
+    .map((x) => `<fieldset class="g-srv"><legend>${esc(x.g)}</legend><div class="chips">${x.itens.map(chip).join('')}</div></fieldset>`)
     .join('');
+  if ([...sel].some((id) => !idsP.has(id))) ($('details.mais', raiz) as HTMLDetailsElement).open = true;
 }
 function desenharBarbeiros() {
-  const opts = ['Qualquer barbeiro', ...D.barbeiros];
-  $('[data-lista-barbeiros]', raiz).innerHTML = opts
+  $('[data-lista-barbeiros]', raiz).innerHTML = ['Qualquer barbeiro', ...D.barbeiros]
     .map((b) => `<label class="opc"><input type="radio" name="barbeiro" value="${esc(b)}" ${b === barbeiro ? 'checked' : ''}><span>${esc(b)}</span></label>`)
     .join('');
 }
 function desenharDias() {
   $('[data-lista-dias]', raiz).innerHTML = dias
-    .map(
-      (d) =>
-        `<label class="opc dia"><input type="radio" name="dia" value="${iso(d)}" ${iso(d) === dia ? 'checked' : ''}><span><small>${nomeDia(d)}</small><b>${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}</b></span></label>`,
-    )
+    .map((d) => `<label class="opc dia"><input type="radio" name="dia" value="${iso(d)}" ${iso(d) === dia ? 'checked' : ''}><span><small>${nomeDia(d)}</small><b>${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}</b></span></label>`)
     .join('');
 }
 function desenharHoras() {
@@ -79,7 +75,7 @@ function desenharHoras() {
   const nota = $('[data-nota-hora]', raiz);
   if (!alvo) {
     lista.innerHTML = '';
-    nota.textContent = 'Escolha o dia primeiro.';
+    nota.textContent = 'Escolha o dia para ver os horários.';
     return;
   }
   const h = horarioDo(alvo)!;
@@ -92,55 +88,33 @@ function desenharHoras() {
     t.setHours(Math.floor(m / 60), m % 60, 0, 0);
     if (t.getTime() > limite) slots.push(`${String(Math.floor(m / 60)).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`);
   }
-  lista.innerHTML = slots
-    .map((t) => `<label class="opc hr"><input type="radio" name="hora" value="${t}" ${t === hora ? 'checked' : ''}><span>${t}</span></label>`)
-    .join('');
-  nota.textContent = slots.length ? 'O horário é confirmado pela barbearia pelo WhatsApp.' : 'Sem horários restantes neste dia. Escolha outro dia.';
+  lista.innerHTML = slots.map((t) => `<label class="opc hr"><input type="radio" name="hora" value="${t}" ${t === hora ? 'checked' : ''}><span>${t}</span></label>`).join('');
+  nota.textContent = slots.length ? 'A barbearia confirma o horário pelo WhatsApp.' : 'Sem horários restantes neste dia. Escolha outro dia.';
 }
 const diaTxt = () => {
   const d = dias.find((x) => iso(x) === dia);
   return d ? d.toLocaleDateString('pt-BR', { weekday: 'long', day: '2-digit', month: '2-digit' }) : '';
 };
-const total = () => [...sel].reduce((s, id) => s + (todos.find((t) => t.id === id)?.preco || 0), 0);
+const escolhidos = () => [...sel].map((id) => todos.find((t) => t.id === id)!);
+const total = () => escolhidos().reduce((s, t) => s + t.preco, 0);
 
 function mensagem() {
   const nome = ($('#nome-cliente') as HTMLInputElement).value.trim();
-  const itens = [...sel].map((id) => todos.find((t) => t.id === id)!).map((s) => `• ${s.nome} (${brl(s.preco)})`);
-  const linhas = [`Olá, ${D.nome}! Quero agendar:`, '', ...itens, '', `Total: ${brl(total())}`, `Barbeiro: ${barbeiro}`, `Dia: ${diaTxt()}`, `Horário: ${hora}`];
+  const linhas = [`Olá, ${D.nome}! Quero agendar:`, '', ...escolhidos().map((s) => `• ${s.nome} (${brl(s.preco)})`), '', `Total: ${brl(total())}`, `Barbeiro: ${barbeiro}`, `Dia: ${diaTxt()}`, `Horário: ${hora}`];
   if (nome) linhas.push(`Meu nome: ${nome}`);
   return linhas.join('\n');
 }
 
-function resumo() {
-  const ul = $('[data-resumo-itens]', raiz);
-  const itens = [...sel].map((id) => todos.find((t) => t.id === id)!);
-  let html = itens.length ? itens.map((s) => `<li><span>${esc(s.nome)}</span><b>${brl(s.preco)}</b></li>`).join('') : '<li class="vazio">Escolha ao menos um serviço.</li>';
-  if (itens.length && passo >= 1) html += `<li class="det"><span>Barbeiro</span><b>${esc(barbeiro)}</b></li>`;
-  if (dia) html += `<li class="det"><span>Dia</span><b>${esc(diaTxt())}</b></li>`;
-  if (hora) html += `<li class="det"><span>Horário</span><b>${hora}</b></li>`;
-  ul.innerHTML = html;
+function atualizar() {
+  const n = sel.size;
+  const falta = [!n && 'um serviço', !dia && 'o dia', dia && !hora && 'o horário'].filter(Boolean) as string[];
+  const pronto = falta.length === 0;
+  $('[data-res]', raiz).textContent = n ? `${n} ${n > 1 ? 'serviços' : 'serviço'}${dia ? ` · ${diaTxt()}` : ''}${hora ? ` às ${hora}` : ''}` : 'Escolha ao menos um serviço';
   $('[data-total]', raiz).textContent = brl(total());
-}
-
-const validar = () => (passo === 0 ? sel.size > 0 : passo === 1 ? !!barbeiro : passo === 2 ? !!dia : passo === 3 ? !!hora : true);
-
-function mostrar() {
-  $$('[data-painel]', raiz).forEach((p) => (p.hidden = Number(p.dataset.painel) !== passo));
-  $$('[data-passos] li', raiz).forEach((li) => {
-    const n = Number(li.dataset.p);
-    li.classList.toggle('on', n === passo);
-    li.classList.toggle('ok', n < passo);
-  });
-  const ultimo = passo === 4;
-  ($('[data-voltar]', raiz) as HTMLElement).hidden = passo === 0;
-  const seguir = $('[data-seguir]', raiz) as HTMLButtonElement;
-  seguir.hidden = ultimo;
-  seguir.disabled = !validar();
   const enviar = $('[data-enviar]', raiz) as HTMLAnchorElement;
-  enviar.hidden = !ultimo;
-  if (ultimo) enviar.href = `https://wa.me/${D.whatsapp}?text=${encodeURIComponent(mensagem())}`;
-  if (passo === 3) desenharHoras();
-  resumo();
+  enviar.setAttribute('aria-disabled', String(!pronto));
+  enviar.href = pronto ? `https://wa.me/${D.whatsapp}?text=${encodeURIComponent(mensagem())}` : '#';
+  $('[data-falta]', raiz).textContent = pronto ? 'Você vai para o WhatsApp da barbearia com o pedido pronto. Eles confirmam o horário.' : `Falta escolher: ${falta.join(' e ')}.`;
 }
 
 raiz.addEventListener('change', (e) => {
@@ -152,21 +126,15 @@ raiz.addEventListener('change', (e) => {
   else if (t.name === 'dia') {
     dia = t.value;
     hora = '';
+    desenharHoras();
   } else if (t.name === 'hora') hora = t.value;
-  mostrar();
+  atualizar();
 });
 raiz.addEventListener('input', (e) => {
-  if ((e.target as HTMLElement).id === 'nome-cliente') mostrar();
+  if ((e.target as HTMLElement).id === 'nome-cliente') atualizar();
 });
-$('[data-seguir]', raiz).addEventListener('click', () => {
-  if (validar()) {
-    passo++;
-    mostrar();
-  }
-});
-$('[data-voltar]', raiz).addEventListener('click', () => {
-  passo--;
-  mostrar();
+$('[data-enviar]', raiz).addEventListener('click', (e) => {
+  if ((e.currentTarget as HTMLElement).getAttribute('aria-disabled') === 'true') e.preventDefault();
 });
 
 /* tabela de preços: tocar num serviço adiciona ao pedido e leva à agenda */
@@ -174,8 +142,7 @@ $$('[data-add]').forEach((b) =>
   b.addEventListener('click', () => {
     sel.add(b.dataset.add!);
     desenharServicos();
-    passo = 0;
-    mostrar();
+    atualizar();
     b.classList.add('add');
     setTimeout(() => b.classList.remove('add'), 900);
     document.getElementById('agendar')!.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
@@ -185,4 +152,5 @@ $$('[data-add]').forEach((b) =>
 desenharServicos();
 desenharBarbeiros();
 desenharDias();
-mostrar();
+desenharHoras();
+atualizar();
