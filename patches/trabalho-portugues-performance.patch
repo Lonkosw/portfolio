@@ -1,0 +1,56 @@
+diff --git a/src/scene/Scene3D.tsx b/src/scene/Scene3D.tsx
+index 9ad73d1..179bf7e 100644
+--- a/src/scene/Scene3D.tsx
++++ b/src/scene/Scene3D.tsx
+@@ -335,7 +335,7 @@ function Lights({ theme }: { theme: Theme }) {
+         decay={1.4}
+         distance={30}
+         castShadow
+-        shadow-mapSize={[1024, 1024]}
++        shadow-mapSize={[512, 512]}
+         shadow-bias={-0.0004}
+       />
+       <directionalLight ref={fill} position={[6, 5, 2]} castShadow={false} />
+@@ -357,6 +357,26 @@ function ReadySignal({ texturesReady, onReady }: { texturesReady: boolean; onRea
+   return null;
+ }
+ 
++/**
++ * Na leitura o 3D fica desfocado atrás do livro HTML: não precisa de 60 fps.
++ * Com frameloop "demand", só redesenhamos (~10 fps) por um instante quando o
++ * tema muda, para a transição de cor terminar; depois a GPU descansa.
++ */
++function ReadingRefresh({ active, theme }: { active: boolean; theme: Theme }) {
++  const invalidate = useThree((s) => s.invalidate);
++  useEffect(() => {
++    if (!active) return;
++    invalidate();
++    const id = setInterval(invalidate, 100);
++    const stop = setTimeout(() => clearInterval(id), 2200);
++    return () => {
++      clearInterval(id);
++      clearTimeout(stop);
++    };
++  }, [active, theme, invalidate]);
++  return null;
++}
++
+ export default function Scene3D(props: Props) {
+   const [texturesReady, setTexturesReady] = useState(false);
+   const onTexturesReady = useMemo(() => () => setTexturesReady(true), []);
+@@ -364,6 +384,7 @@ export default function Scene3D(props: Props) {
+     <Canvas
+       className="scene3d"
+       shadows
++      frameloop={props.phase === 'reading' ? 'demand' : 'always'}
+       dpr={[1, 1.5]}
+       camera={{ position: CAM_CLOSED.toArray(), fov: 40, near: 0.1, far: 100 }}
+       gl={{ antialias: true, powerPreference: 'high-performance' }}
+@@ -386,6 +407,7 @@ export default function Scene3D(props: Props) {
+       {props.particles && !props.reducedMotion && (
+         <Sparkles count={70} scale={[9, 3.5, 7]} position={[0, 1.8, 0]} size={2.2} speed={0.25} opacity={0.55} color="#f5e3c0" />
+       )}
++      <ReadingRefresh active={props.phase === 'reading'} theme={props.theme} />
+       <ReadySignal texturesReady={texturesReady} onReady={props.onReady} />
+     </Canvas>
+   );
