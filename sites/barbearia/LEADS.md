@@ -6,7 +6,7 @@ Fonte única da lista. Dados de diretórios e buscas: podem estar desatualizados
 | Lead | Link | Estado | Falta |
 |---|---|---|---|
 | Palhares | https://portfolio-barbearia.pages.dev/palhares/ | publicado | confirmar WhatsApp (44) 99928-3034 |
-| Mustache Fratello | https://portfolio-barbearia.pages.dev/mustache/ | publicado, tudo "Em breve" | preços, horário, endereço, WhatsApp, fotos |
+| Mustache Fratello | https://portfolio-barbearia.pages.dev/mustache/ | publicado, com hero em vídeo, WhatsApp (44) 3305-2139 e endereço Av. Herval, 999 | preços, horário, fotos de cortes; testar o WhatsApp (8 dígitos) |
 | Paparazzi | https://portfolio-barbearia.pages.dev/paparazzi/ | publicado | preços, horário, confirmar WhatsApp (44) 99705-2040 |
 | Saint Patrick's | https://portfolio-barbearia.pages.dev/saintpatricks/ | publicado | WhatsApp, preços, horário, planos, equipe, fotos |
 

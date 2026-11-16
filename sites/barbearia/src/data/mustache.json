@@ -6,8 +6,6 @@
   "emBreve": [
     "servicos",
     "horarios",
-    "endereco",
-    "whatsapp",
     "galeria"
   ],
   "nome": "Mustache Fratello Barbearia",
@@ -16,8 +14,8 @@
   "subtagline": "Aqui se cria presença, estilo e respeito.",
   "cidade": "Maringá",
   "uf": "PR",
-  "endereco": null,
-  "whatsapp": null,
+  "endereco": "Av. Herval, 999",
+  "whatsapp": "554433052139",
   "instagram": "mustachefratellobarbearia",
   "horarios": [],
   "logo": "/img/mustache/logo-escuro.webp",
@@ -105,5 +103,7 @@
     "posterSm": "/img/mustache/hero-poster-sm.webp",
     "mp4": "/video/mustache-hero.mp4",
     "webm": "/video/mustache-hero.webm"
-  }
+  },
+  "complemento": "Zona 07",
+  "mapsBusca": "Barbearia Mustache Fratello Av. Herval 999 Maringá PR"
 }
