@@ -245,11 +245,32 @@ if (video) {
   const lento = !!conn && (conn.saveData === true || /(^|slow-)2g|3g/.test(conn.effectiveType ?? ''));
   if (!reduce && !lento) {
     const iniciar = () => {
-      // H.264 primeiro: decodificação por hardware em praticamente todo celular (60 fps mais fluido); webm só como reserva.
-      const mp4 = video.canPlayType('video/mp4; codecs="avc1.640028"');
-      video.src = (mp4 && video.dataset.mp4) || video.dataset.webm || video.dataset.mp4 || '';
-      video.addEventListener('playing', () => video.classList.add('on'), { once: true });
-      video.play().catch(() => video.removeAttribute('src'));
+      // Fontes em ordem: H.264 primeiro (decodificação por hardware, 60 fps mais fluido); webm só como reserva.
+      const fontes = [video.dataset.mp4, video.dataset.webm].filter(Boolean) as string[];
+      if (!video.canPlayType('video/mp4; codecs="avc1.640028"') && fontes.length > 1) fontes.reverse();
+      let k = 0;
+      let rodando = false;
+      let espera = 0;
+      const aoTocar = () => {
+        rodando = true;
+        clearTimeout(espera);
+        video.classList.add('on');
+      };
+      video.addEventListener('playing', aoTocar, { once: true });
+      const tentar = () => {
+        if (k >= fontes.length) return; // sem fonte que toque: fica só o poster, sem botão quebrado
+        video.src = fontes[k++];
+        clearTimeout(espera);
+        // se não começar a tocar em 6 s, tenta a próxima fonte
+        espera = window.setTimeout(() => { if (!rodando && video.paused) tentar(); }, 6000);
+        video.play().catch(() => {});
+      };
+      // erro de decodificação/formato: tenta a próxima fonte
+      video.addEventListener('error', () => { if (!rodando) tentar(); });
+      tentar();
+      // autoplay recusado (economia de bateria/dados): tenta de novo no primeiro toque, rolagem ou tecla
+      const gesto = () => { if (video.paused && !document.hidden) video.play().catch(() => {}); };
+      ['touchstart', 'pointerdown', 'scroll', 'keydown'].forEach((ev) => addEventListener(ev, gesto, { passive: true, once: true }));
       const media = video.closest<HTMLElement>('.hs-media');
       if (media && 'IntersectionObserver' in window)
         new IntersectionObserver((es) => es.forEach((e) => (e.isIntersecting ? video.play().catch(() => {}) : video.pause())), { threshold: 0.1 }).observe(media);
