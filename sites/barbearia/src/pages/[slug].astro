@@ -2,13 +2,17 @@
 import '@fontsource/big-shoulders-display/latin-700';
 import '@fontsource/big-shoulders-display/latin-800';
 import '@fontsource/abril-fatface/latin-400';
+import '@fontsource/cormorant-garamond/latin-500';
+import '@fontsource/cormorant-garamond/latin-600';
 import '@fontsource/manrope/latin-400';
 import '@fontsource/manrope/latin-600';
 import '@fontsource/sacramento/latin-400';
 import '../styles/barbearia.css';
 import '../styles/vintage.css';
+import '../styles/moderno.css';
 import fonteOuro from '@fontsource/big-shoulders-display/files/big-shoulders-display-latin-800-normal.woff2?url';
 import fonteVintage from '@fontsource/abril-fatface/files/abril-fatface-latin-400-normal.woff2?url';
+import fonteModerno from '@fontsource/cormorant-garamond/files/cormorant-garamond-latin-600-normal.woff2?url';
 import fonteCorpo from '@fontsource/manrope/files/manrope-latin-400-normal.woff2?url';
 
 // Cada arquivo em src/data/*.json vira uma página /<slug>/ com a mesma estrutura.
@@ -19,7 +23,8 @@ export function getStaticPaths() {
   return Object.values(todos).filter((m) => !m.default.rascunho || process.env.INCLUIR_RASCUNHOS).map((m) => ({ params: { slug: m.default.slug }, props: { b: m.default } }));
 }
 const { b } = Astro.props;
-const vintage = b.tema === 'vintage';
+const vintage = b.tema === 'vintage' || b.tema === 'moderno';
+const moderno = b.tema === 'moderno';
 const barbeiroPrimeiro = b.fluxo === 'barbeiro-primeiro';
 const equipe: any[] = b.equipe ?? [];
 const horarios: any[] = b.horarios ?? [];
@@ -27,7 +32,7 @@ const combos: any[] = b.combos ?? [];
 const galeria: string[] = b.galeria ?? [];
 const ambiente: string[] = b.ambiente ?? [];
 const avaliacoes: any[] = b.avaliacoes ?? [];
-const barbeiros = equipe.length ? equipe.map((e: any) => ({ nome: e.nome, foto: e.foto })) : (b.barbeiros ?? []).map((n: string) => ({ nome: n }));
+const barbeiros: { nome: string; foto?: string }[] = equipe.length ? equipe.map((e: any) => ({ nome: e.nome, foto: e.foto })) : (b.barbeiros ?? []).map((n: string) => ({ nome: n }));
 const todosServ = b.servicos.flatMap((g: any) => g.itens);
 let principais = todosServ.filter((s: any) => s.principal);
 if (!principais.length) principais = todosServ.slice(0, 6);
@@ -52,16 +57,16 @@ const dados = { slug: b.slug, nome: b.nome, whatsapp: b.whatsapp ?? null, horari
 const logoClaro = b.logoClaro ?? b.logo;
 ---
 <!doctype html>
-<html lang="pt-BR" data-tema={vintage ? 'vintage' : 'ouro'}>
+<html lang="pt-BR" data-tema={b.tema ?? 'ouro'}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex, nofollow" />
-    <meta name="theme-color" content={vintage ? '#efe5d0' : '#0a0a0a'} />
+    <meta name="theme-color" content={moderno ? '#f5f1ea' : vintage ? '#efe5d0' : '#0a0a0a'} />
     <title>{b.nome} · {b.cidade}</title>
     <meta name="description" content={`${b.nome}, ${b.cidade}-${b.uf}. ${b.tagline}`} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="preload" as="font" type="font/woff2" href={vintage ? fonteVintage : fonteOuro} crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href={moderno ? fonteModerno : vintage ? fonteVintage : fonteOuro} crossorigin />
     <link rel="preload" as="font" type="font/woff2" href={fonteCorpo} crossorigin />
     {!vintage && heroImgs[1] && <link rel="preload" as="image" href={heroImgs[1]} />}
   </head>
@@ -77,10 +82,10 @@ const logoClaro = b.logoClaro ?? b.logo;
     <main id="inicio">
       {vintage ? (
         <section class="hero-v" aria-label="Apresentação">
-          <img class="hero-v-logo" src={b.logo} alt="" width={b.logoW ?? 46} height={b.logoH ?? 37} />
+          {!moderno && <img class="hero-v-logo" src={b.logo} alt="" width={b.logoW ?? 46} height={b.logoH ?? 37} />}
           <p class="selo">Barbearia · {b.cidade}</p>
           <h1 class="titulo-v">{b.nomeCurto}</h1>
-          <p class="script">{b.tagline}</p>
+          <p class={moderno ? 'tag' : 'script'}>{b.tagline}</p>
           {b.subtagline && <p class="sub-v">{b.subtagline}</p>}
           <div class="hero-acoes">
             <a class="btn ouro" href="#agendar">Agendar horário</a>
@@ -206,7 +211,7 @@ const logoClaro = b.logoClaro ?? b.logo;
       <section id="agendar" class="sec escuro">
         <div class="cab" data-rv><p class="rot">Agendamento</p><h2>Peça o seu horário</h2>{breve('whatsapp') && <p class="breve">Em breve</p>}<p class="sub">{breve('whatsapp') ? 'O envio pelo WhatsApp abre assim que o número da barbearia for definido. Já dá para ver como vai funcionar.' : 'Escolha, confira o total e envie pelo WhatsApp.'}</p></div>
         <div class="agenda" data-agenda data-rv>
-          {barbeiroPrimeiro && (
+          {barbeiroPrimeiro && barbeiros.length > 0 && (
             <div class="bloco">
               <h3><span></span> Barbeiro</h3>
               <div class="escolhas barb com-foto" data-lista-barbeiros></div>
@@ -226,8 +231,8 @@ const logoClaro = b.logoClaro ?? b.logo;
             </div>
           )}
           <div class="bloco">
-            <h3><span></span> {barbeiroPrimeiro ? 'Seu nome' : 'Barbeiro e nome'}</h3>
-            {!barbeiroPrimeiro && <div class="escolhas barb" data-lista-barbeiros></div>}
+            <h3><span></span> {barbeiroPrimeiro || !barbeiros.length ? 'Seu nome' : 'Barbeiro e nome'}</h3>
+            {!barbeiroPrimeiro && barbeiros.length > 0 && <div class="escolhas barb" data-lista-barbeiros></div>}
             <label class="campo" for="nome-cliente">Seu nome</label>
             <input id="nome-cliente" type="text" autocomplete="given-name" maxlength="40" placeholder="Como podemos te chamar?" />
           </div>
@@ -255,6 +260,7 @@ const logoClaro = b.logoClaro ?? b.logo;
             <h2>{b.endereco ?? 'Endereço a definir'}</h2>
             {breve('endereco') && <p class="breve">Em breve</p>}
             {b.endereco ? <p class="sub">{b.complemento ? `${b.complemento} · ` : ''}{b.cidade}, {b.uf}</p> : <p class="sub">{b.cidade}, {b.uf}. Endereço e horário de atendimento serão publicados em breve.</p>}
+            {horarios.length === 0 && breve('horarios') && <p class="breve">Horário em breve</p>}
             {horarios.length > 0 && (
               <ul class="horas-lista">
                 {horarios.map((h: any) => <li><span>{h.dias}</span><b>{hh(h.abre)} às {hh(h.fecha)}</b></li>)}
@@ -263,6 +269,7 @@ const logoClaro = b.logoClaro ?? b.logo;
             <div class="hero-acoes">
               {mapsUrl && <a class="btn ouro" href={mapsUrl} target="_blank" rel="noopener">Abrir no mapa</a>}
               {b.whatsapp && <a class="btn linha" href={wa(`Olá, ${b.nome}!`)} target="_blank" rel="noopener">Chamar no WhatsApp</a>}
+              {b.telefone && <a class="btn linha" href={`tel:+55${b.telefone.replace(/\D/g, '')}`}>Ligar {b.telefone}</a>}
               <a class="btn linha" href={`https://www.instagram.com/${b.instagram}/`} target="_blank" rel="noopener">Instagram</a>
             </div>
           </div>

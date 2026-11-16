@@ -71,6 +71,7 @@ function desenharServicos() {
 }
 function desenharBarbeiros() {
   const lista = $('[data-lista-barbeiros]', raiz);
+  if (!lista) return;
   const opts = [{ nome: 'Qualquer barbeiro' } as { nome: string; foto?: string }, ...D.barbeiros];
   lista.innerHTML = opts
     .map((b) => {
@@ -127,7 +128,8 @@ function mensagem() {
   const nome = ($('#nome-cliente') as HTMLInputElement).value.trim();
   const linhas = [`Olá, ${D.nome}! Quero agendar:`, ''];
   escolhidos().forEach((s) => linhas.push(`• ${s.nome}${s.preco == null ? '' : ` (${brl(s.preco)})`}`));
-  linhas.push('', `Total: ${totalTxt()}`, `Barbeiro: ${barbeiro}`);
+  linhas.push('', `Total: ${totalTxt()}`);
+  if (D.barbeiros.length) linhas.push(`Barbeiro: ${barbeiro}`);
   if (temHorarios) linhas.push(`Dia: ${diaTxt()}`, `Horário: ${hora}`);
   else linhas.push('Horário: a combinar pelo WhatsApp');
   if (nome) linhas.push(`Meu nome: ${nome}`);

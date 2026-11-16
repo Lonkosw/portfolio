@@ -1,0 +1,37 @@
+{
+  "slug": "paparazzi",
+  "tema": "moderno",
+  "fluxo": "servico-primeiro",
+  "provisorio": true,
+  "rascunho": true,
+  "emBreve": ["servicos", "horarios"],
+  "nome": "Paparazzi International Barber",
+  "nomeCurto": "Paparazzi",
+  "tagline": "Cortes e barba para adultos e crianças.",
+  "subtagline": "International Barber",
+  "cidade": "Maringá",
+  "uf": "PR",
+  "endereco": "Av. João Paulino Vieira Filho, 282",
+  "complemento": "Zona 7",
+  "mapsBusca": "Paparazzi International Barber Av. João Paulino Vieira Filho 282 Maringá PR",
+  "whatsapp": "5544997052040",
+  "telefone": "(44) 3222-2040",
+  "instagram": "paparazzibarberoficial",
+  "_confirmar": ["WhatsApp (44) 99705-2040 veio de diretório, confirmar com o dono", "Telefone fixo (44) 3222-2040 veio de diretório"],
+  "horarios": [],
+  "logo": "/img/paparazzi/logo-escuro.webp",
+  "logoClaro": "/img/paparazzi/logo-claro.webp",
+  "logoW": 120,
+  "logoH": 30,
+  "hero": ["/img/paparazzi/hero-1.webp", "/img/paparazzi/hero-2.webp", "/img/paparazzi/hero-3.webp"],
+  "galeria": ["corte-01", "corte-02", "corte-03", "corte-04", "corte-05", "corte-06", "corte-07", "corte-08", "corte-09", "corte-10", "corte-11", "corte-12"],
+  "ambiente": ["/img/paparazzi/ambiente-1.webp", "/img/paparazzi/ambiente-2.webp"],
+  "servicos": [
+    { "grupo": "Serviços", "itens": [
+      { "id": "corte", "nome": "Corte masculino", "preco": null },
+      { "id": "barba", "nome": "Barba", "preco": null },
+      { "id": "infantil", "nome": "Corte infantil", "preco": null }
+    ]}
+  ],
+  "preview": { "autor": "Theo", "whatsapp": "5544991342674" }
+}
