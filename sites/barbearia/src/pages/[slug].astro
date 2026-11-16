@@ -4,15 +4,18 @@ import '@fontsource/big-shoulders-display/latin-800';
 import '@fontsource/abril-fatface/latin-400';
 import '@fontsource/cormorant-garamond/latin-500';
 import '@fontsource/cormorant-garamond/latin-600';
+import '@fontsource/playfair-display/latin-700';
 import '@fontsource/manrope/latin-400';
 import '@fontsource/manrope/latin-600';
 import '@fontsource/sacramento/latin-400';
 import '../styles/barbearia.css';
 import '../styles/vintage.css';
 import '../styles/moderno.css';
+import '../styles/verde.css';
 import fonteOuro from '@fontsource/big-shoulders-display/files/big-shoulders-display-latin-800-normal.woff2?url';
 import fonteVintage from '@fontsource/abril-fatface/files/abril-fatface-latin-400-normal.woff2?url';
 import fonteModerno from '@fontsource/cormorant-garamond/files/cormorant-garamond-latin-600-normal.woff2?url';
+import fonteVerde from '@fontsource/playfair-display/files/playfair-display-latin-700-normal.woff2?url';
 import fonteCorpo from '@fontsource/manrope/files/manrope-latin-400-normal.woff2?url';
 
 // Cada arquivo em src/data/*.json vira uma página /<slug>/ com a mesma estrutura.
@@ -25,6 +28,10 @@ export function getStaticPaths() {
 const { b } = Astro.props;
 const vintage = b.tema === 'vintage' || b.tema === 'moderno';
 const moderno = b.tema === 'moderno';
+const verde = b.tema === 'verde';
+const heroVideo = b.heroVideo ?? null;
+const unidades: { nome: string; endereco: string; mapsBusca?: string }[] = b.unidades ?? [];
+const planos: any[] = b.planos ?? [];
 const barbeiroPrimeiro = b.fluxo === 'barbeiro-primeiro';
 const equipe: any[] = b.equipe ?? [];
 const horarios: any[] = b.horarios ?? [];
@@ -43,17 +50,19 @@ const hh = (t: string) => t.replace(':00', 'h');
 const img = (nome: string) => `/img/${b.slug}/${nome}.webp`;
 const wa = (txt: string) => (b.whatsapp ? `https://wa.me/${b.whatsapp}?text=${encodeURIComponent(txt)}` : '#');
 const waPreview = `https://wa.me/${b.preview.whatsapp}?text=${encodeURIComponent(`Oi, ${b.preview.autor}! Vi a prévia do site da ${b.nome} e quero conversar.`)}`;
+const mapsDe = (u: { endereco: string; mapsBusca?: string }) => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(u.mapsBusca ?? `${b.nome} ${u.endereco} ${b.cidade}`)}`;
 const mapsUrl = b.endereco ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(b.mapsBusca ?? `${b.nome} ${b.endereco} ${b.cidade}`)}` : '';
 const primeiroNome = (n: string) => n.split(' ')[0];
 const heroImgs: string[] = b.hero ?? equipe.slice(0, 3).map((e: any) => e.foto);
 const nav = [
   ['#servicos', 'Preços', todosServ.length > 0],
   ['#combos', 'Combos', combos.length > 0],
+  ['#planos', 'Planos', planos.length > 0],
   ['#equipe', 'Time', equipe.length > 0],
   ['#galeria', 'Cortes', galeria.length > 0 || breve('galeria')],
   ['#onde', 'Onde estamos', true],
 ].filter((x) => x[2]);
-const dados = { slug: b.slug, nome: b.nome, whatsapp: b.whatsapp ?? null, horarios, barbeiros, servicos: b.servicos };
+const dados = { slug: b.slug, nome: b.nome, whatsapp: b.whatsapp ?? null, horarios, barbeiros, servicos: b.servicos, unidades };
 const logoClaro = b.logoClaro ?? b.logo;
 ---
 <!doctype html>
@@ -62,13 +71,14 @@ const logoClaro = b.logoClaro ?? b.logo;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex, nofollow" />
-    <meta name="theme-color" content={moderno ? '#f5f1ea' : vintage ? '#efe5d0' : '#0a0a0a'} />
+    <meta name="theme-color" content={verde ? '#07130d' : moderno ? '#f5f1ea' : vintage ? '#efe5d0' : '#0a0a0a'} />
     <title>{b.nome} · {b.cidade}</title>
     <meta name="description" content={`${b.nome}, ${b.cidade}-${b.uf}. ${b.tagline}`} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="preload" as="font" type="font/woff2" href={moderno ? fonteModerno : vintage ? fonteVintage : fonteOuro} crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href={verde ? fonteVerde : moderno ? fonteModerno : vintage ? fonteVintage : fonteOuro} crossorigin />
     <link rel="preload" as="font" type="font/woff2" href={fonteCorpo} crossorigin />
-    {!vintage && heroImgs[1] && <link rel="preload" as="image" href={heroImgs[1]} />}
+    {!vintage && !heroVideo && heroImgs[1] && <link rel="preload" as="image" href={heroImgs[1]} />}
+    {heroVideo && <link rel="preload" as="image" href={heroVideo.poster} imagesrcset={`${heroVideo.posterSm} 405w, ${heroVideo.poster} 720w`} imagesizes="(min-width: 900px) 380px, 100vw" fetchpriority="high" />}
   </head>
   <body>
     <p class="aviso">Prévia de site criada para a {b.nome} <a href={waPreview} target="_blank" rel="noopener">Falar com o {b.preview.autor}</a></p>
@@ -80,7 +90,25 @@ const logoClaro = b.logoClaro ?? b.logo;
     </header>
 
     <main id="inicio">
-      {vintage ? (
+      {heroVideo ? (
+        <section class="hero-s" aria-label="Apresentação">
+          <div class="hs-fundo" aria-hidden="true"></div>
+          <div class="hs-media">
+            <img class="hs-poster" src={heroVideo.poster} srcset={`${heroVideo.posterSm} 405w, ${heroVideo.poster} 720w`} sizes="(min-width: 900px) 380px, 100vw" alt="" width="720" height="1280" fetchpriority="high" decoding="async" />
+            <video class="hs-video" data-video data-mp4={heroVideo.mp4} data-webm={heroVideo.webm} muted loop playsinline preload="none" aria-hidden="true" tabindex="-1" width="720" height="1280"></video>
+            <div class="hs-veu" aria-hidden="true"></div>
+          </div>
+          <div class="hs-txt">
+            <p class="selo">Barbearia · {b.cidade}{unidades.length > 1 ? ` · ${unidades.length} unidades` : ''}</p>
+            <h1 class="hs-logo"><img src={heroVideo.logo} alt={b.nome} width="658" height="194" /></h1>
+            <p class="hs-tag">{b.tagline}</p>
+            <div class="hero-acoes">
+              <a class="btn ouro" href="#agendar">Agendar horário</a>
+              {planos.length > 0 && <a class="btn linha" href="#planos">Conhecer os planos</a>}
+            </div>
+          </div>
+        </section>
+      ) : vintage ? (
         <section class="hero-v" aria-label="Apresentação">
           {!moderno && <img class="hero-v-logo" src={b.logo} alt="" width={b.logoW ?? 46} height={b.logoH ?? 37} />}
           <p class="selo">Barbearia · {b.cidade}</p>
@@ -166,6 +194,28 @@ const logoClaro = b.logoClaro ?? b.logo;
         </section>
       )}
 
+      {planos.length > 0 && (
+        <section id="planos" class="sec escuro">
+          <div class="cab" data-rv><p class="rot">Assinatura</p><h2>Planos</h2>{breve('planos') && <p class="breve">Em breve</p>}<p class="sub">{b.planosSub ?? 'Assine e venha quantas vezes quiser.'}{breve('planos') ? ' Valores e condições serão confirmados com a barbearia.' : ''}</p></div>
+          <div class="combos planos">
+            {planos.map((c: any) => (
+              <article class="combo" data-rv>
+                <h3>{c.nome}</h3>
+                <p class="plano-txt">{c.descricao}</p>
+                <p class="preco">{brl(c.preco ?? null)}</p>
+                {b.whatsapp ? <a class="btn ouro sm" target="_blank" rel="noopener" href={wa(`Olá, ${b.nome}! Quero saber mais sobre o ${c.nome}.`)}>Quero este plano</a> : <span class="btn linha sm" aria-disabled="true">Em breve</span>}
+              </article>
+            ))}
+          </div>
+          {(b.beneficiosPlanos ?? []).length > 0 && (
+            <div class="beneficios" data-rv>
+              <h3>Outros benefícios dos planos</h3>
+              <ul>{b.beneficiosPlanos.map((x: string) => <li>{x}</li>)}</ul>
+            </div>
+          )}
+        </section>
+      )}
+
       {equipe.length > 0 && (
         <section id="equipe" class={`sec${vintage ? ' escuro' : ''}`}>
           <div class="cab" data-rv><p class="rot">O time</p><h2>Quem cuida de você</h2>{b.equipeSub && <p class="sub">{b.equipeSub}</p>}</div>
@@ -211,6 +261,12 @@ const logoClaro = b.logoClaro ?? b.logo;
       <section id="agendar" class="sec escuro">
         <div class="cab" data-rv><p class="rot">Agendamento</p><h2>Peça o seu horário</h2>{breve('whatsapp') && <p class="breve">Em breve</p>}<p class="sub">{breve('whatsapp') ? 'O envio pelo WhatsApp abre assim que o número da barbearia for definido. Já dá para ver como vai funcionar.' : 'Escolha, confira o total e envie pelo WhatsApp.'}</p></div>
         <div class="agenda" data-agenda data-rv>
+          {unidades.length > 1 && (
+            <div class="bloco">
+              <h3><span></span> Unidade</h3>
+              <div class="escolhas unid" data-lista-unidades></div>
+            </div>
+          )}
           {barbeiroPrimeiro && barbeiros.length > 0 && (
             <div class="bloco">
               <h3><span></span> Barbeiro</h3>
@@ -257,9 +313,16 @@ const logoClaro = b.logoClaro ?? b.logo;
         <div class="onde">
           <div data-rv>
             <p class="rot">Onde estamos</p>
-            <h2>{b.endereco ?? 'Endereço a definir'}</h2>
+            <h2>{unidades.length ? (unidades.length > 1 ? 'Duas unidades em Maringá' : unidades[0].endereco) : (b.endereco ?? 'Endereço a definir')}</h2>
             {breve('endereco') && <p class="breve">Em breve</p>}
-            {b.endereco ? <p class="sub">{b.complemento ? `${b.complemento} · ` : ''}{b.cidade}, {b.uf}</p> : <p class="sub">{b.cidade}, {b.uf}. Endereço e horário de atendimento serão publicados em breve.</p>}
+            {unidades.length > 0 && (
+              <ul class="unidades">
+                {unidades.map((u) => (
+                  <li><div><b>{u.nome}</b><span>{u.endereco}, {b.cidade}-{b.uf}</span></div><a class="btn ouro sm" href={mapsDe(u)} target="_blank" rel="noopener">Abrir no mapa</a></li>
+                ))}
+              </ul>
+            )}
+            {unidades.length > 0 ? null : b.endereco ? <p class="sub">{b.complemento ? `${b.complemento} · ` : ''}{b.cidade}, {b.uf}</p> : <p class="sub">{b.cidade}, {b.uf}. Endereço e horário de atendimento serão publicados em breve.</p>}
             {horarios.length === 0 && breve('horarios') && <p class="breve">Horário em breve</p>}
             {horarios.length > 0 && (
               <ul class="horas-lista">
@@ -267,7 +330,7 @@ const logoClaro = b.logoClaro ?? b.logo;
               </ul>
             )}
             <div class="hero-acoes">
-              {mapsUrl && <a class="btn ouro" href={mapsUrl} target="_blank" rel="noopener">Abrir no mapa</a>}
+              {mapsUrl && unidades.length === 0 && <a class="btn ouro" href={mapsUrl} target="_blank" rel="noopener">Abrir no mapa</a>}
               {b.whatsapp && <a class="btn linha" href={wa(`Olá, ${b.nome}!`)} target="_blank" rel="noopener">Chamar no WhatsApp</a>}
               {b.telefone && <a class="btn linha" href={`tel:+55${b.telefone.replace(/\D/g, '')}`}>Ligar {b.telefone}</a>}
               <a class="btn linha" href={`https://www.instagram.com/${b.instagram}/`} target="_blank" rel="noopener">Instagram</a>
@@ -277,7 +340,7 @@ const logoClaro = b.logoClaro ?? b.logo;
       </section>
     </main>
 
-    <footer class="rodape"><img src={logoClaro} alt="" width={b.logoW ?? 80} height={b.logoH ?? 65} loading="lazy" /><p>{b.nome}{b.endereco ? ` · ${b.endereco}, ${b.cidade}-${b.uf}` : ` · ${b.cidade}-${b.uf}`}</p><p class="peq">Prévia de site criada por {b.preview.autor}.{b.provisorio ? ' Alguns dados ainda serão definidos com a barbearia.' : ' Preços e horários conforme as artes divulgadas pela barbearia.'}</p></footer>
+    <footer class="rodape"><img src={logoClaro} alt="" width={b.logoW ?? 80} height={b.logoH ?? 65} loading="lazy" /><p>{b.nome}{unidades.length ? ` · ${unidades.map((u) => u.endereco).join(' e ')}, ${b.cidade}-${b.uf}` : b.endereco ? ` · ${b.endereco}, ${b.cidade}-${b.uf}` : ` · ${b.cidade}-${b.uf}`}</p><p class="peq">Prévia de site criada por {b.preview.autor}.{b.provisorio ? ' Alguns dados ainda serão definidos com a barbearia.' : ' Preços e horários conforme as artes divulgadas pela barbearia.'}</p></footer>
 
     <script type="application/json" id="dados" set:html={JSON.stringify(dados)} />
     <script>

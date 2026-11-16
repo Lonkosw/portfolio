@@ -8,6 +8,7 @@ const D = JSON.parse($('#dados').textContent || '{}') as {
   barbeiros: { nome: string; foto?: string }[];
   horarios: { dias: string; weekdays: number[]; abre: string; fecha: string }[];
   servicos: { grupo: string; itens: Servico[] }[];
+  unidades?: { nome: string; endereco: string }[];
 };
 const brl = (n: number) => `R$ ${n.toLocaleString('pt-BR')}`;
 const preco = (n: number | null) => (n == null ? 'a definir' : brl(n));
@@ -35,6 +36,9 @@ requestAnimationFrame(tick);
 /* agendamento numa tela só: o cliente monta o pedido e envia pelo WhatsApp; a barbearia confirma o horário */
 const sel = new Set<string>();
 let barbeiro = 'Qualquer barbeiro';
+let unidade = '';
+const unidades = D.unidades ?? [];
+const temUnidades = unidades.length > 1;
 let dia = '';
 let hora = '';
 const raiz = $('[data-agenda]');
@@ -78,6 +82,13 @@ function desenharBarbeiros() {
       const foto = b.foto ? `<img src="${esc(b.foto)}" alt="" width="44" height="44" loading="lazy" decoding="async">` : '';
       return `<label class="opc"><input type="radio" name="barbeiro" value="${esc(b.nome)}" ${b.nome === barbeiro ? 'checked' : ''}><span>${foto}<em>${esc(b.nome)}</em></span></label>`;
     })
+    .join('');
+}
+function desenharUnidades() {
+  const el = $('[data-lista-unidades]', raiz);
+  if (!el) return;
+  el.innerHTML = unidades
+    .map((u) => `<label class="opc un"><input type="radio" name="unidade" value="${esc(u.nome)}" ${u.nome === unidade ? 'checked' : ''}><span><b>${esc(u.nome)}</b><small>${esc(u.endereco)}</small></span></label>`)
     .join('');
 }
 function desenharDias() {
@@ -129,6 +140,10 @@ function mensagem() {
   const linhas = [`Olá, ${D.nome}! Quero agendar:`, ''];
   escolhidos().forEach((s) => linhas.push(`• ${s.nome}${s.preco == null ? '' : ` (${brl(s.preco)})`}`));
   linhas.push('', `Total: ${totalTxt()}`);
+  if (temUnidades) {
+    const u = unidades.find((x) => x.nome === unidade);
+    linhas.push(`Unidade: ${unidade}${u ? ` (${u.endereco})` : ''}`);
+  }
   if (D.barbeiros.length) linhas.push(`Barbeiro: ${barbeiro}`);
   if (temHorarios) linhas.push(`Dia: ${diaTxt()}`, `Horário: ${hora}`);
   else linhas.push('Horário: a combinar pelo WhatsApp');
@@ -138,11 +153,11 @@ function mensagem() {
 
 function atualizar() {
   const n = sel.size;
-  const falta = [!n && 'um serviço', temHorarios && !dia && 'o dia', temHorarios && dia && !hora && 'o horário'].filter(Boolean) as string[];
+  const falta = [temUnidades && !unidade && 'a unidade', !n && 'um serviço', temHorarios && !dia && 'o dia', temHorarios && dia && !hora && 'o horário'].filter(Boolean) as string[];
   const semZap = !D.whatsapp;
   const pronto = falta.length === 0 && !semZap;
   const quando = temHorarios ? `${dia ? ` · ${diaTxt()}` : ''}${hora ? ` às ${hora}` : ''}` : '';
-  $('[data-res]', raiz).textContent = n ? `${n} ${n > 1 ? 'serviços' : 'serviço'}${barbeiro !== 'Qualquer barbeiro' ? ` · ${barbeiro.split(' ')[0]}` : ''}${quando}` : 'Escolha ao menos um serviço';
+  $('[data-res]', raiz).textContent = n ? `${n} ${n > 1 ? 'serviços' : 'serviço'}${temUnidades && unidade ? ` · ${unidade}` : ''}${barbeiro !== 'Qualquer barbeiro' ? ` · ${barbeiro.split(' ')[0]}` : ''}${quando}` : 'Escolha ao menos um serviço';
   $('[data-total]', raiz).textContent = totalTxt();
   const enviar = $('[data-enviar]', raiz) as HTMLAnchorElement;
   enviar.setAttribute('aria-disabled', String(!pronto));
@@ -161,6 +176,7 @@ raiz.addEventListener('change', (e) => {
     if (t.checked) sel.add(t.value);
     else sel.delete(t.value);
   } else if (t.name === 'barbeiro') barbeiro = t.value;
+  else if (t.name === 'unidade') unidade = t.value;
   else if (t.name === 'dia') {
     dia = t.value;
     hora = '';
@@ -206,6 +222,7 @@ let montado = false;
 function garantir() {
   if (montado) return;
   montado = true;
+  desenharUnidades();
   desenharServicos();
   desenharBarbeiros();
   desenharDias();
@@ -218,4 +235,27 @@ else setTimeout(garantir, 1200);
 if ('IntersectionObserver' in window) {
   const ioA = new IntersectionObserver((es) => { if (es.some((e) => e.isIntersecting)) { garantir(); ioA.disconnect(); } }, { rootMargin: '800px 0px' });
   ioA.observe(raiz);
+}
+
+/* hero em vídeo: o poster é a imagem real do LCP; o vídeo só entra depois do load, sem movimento reduzido,
+   sem economia de dados e fora de conexões lentas. Pausa quando sai da tela ou a aba fica oculta. */
+const video = document.querySelector<HTMLVideoElement>('[data-video]');
+if (video) {
+  const conn = (navigator as any).connection as undefined | { saveData?: boolean; effectiveType?: string };
+  const lento = !!conn && (conn.saveData === true || /(^|slow-)2g|3g/.test(conn.effectiveType ?? ''));
+  if (!reduce && !lento) {
+    const iniciar = () => {
+      const webm = video.canPlayType('video/webm; codecs="vp9"');
+      video.src = (webm && video.dataset.webm) || video.dataset.mp4 || '';
+      video.addEventListener('playing', () => video.classList.add('on'), { once: true });
+      video.play().catch(() => video.removeAttribute('src'));
+      const media = video.closest<HTMLElement>('.hs-media');
+      if (media && 'IntersectionObserver' in window)
+        new IntersectionObserver((es) => es.forEach((e) => (e.isIntersecting ? video.play().catch(() => {}) : video.pause())), { threshold: 0.1 }).observe(media);
+      document.addEventListener('visibilitychange', () => (document.hidden ? video.pause() : video.play().catch(() => {})));
+    };
+    const depois = () => (ocioso ? ocioso(iniciar, { timeout: 3000 }) : setTimeout(iniciar, 1500));
+    if (document.readyState === 'complete') depois();
+    else addEventListener('load', depois, { once: true });
+  }
 }
