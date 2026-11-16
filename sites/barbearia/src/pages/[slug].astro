@@ -66,12 +66,12 @@ const dados = { slug: b.slug, nome: b.nome, whatsapp: b.whatsapp ?? null, horari
 const logoClaro = b.logoClaro ?? b.logo;
 ---
 <!doctype html>
-<html lang="pt-BR" data-tema={b.tema ?? 'ouro'}>
+<html lang="pt-BR" data-tema={b.tema ?? 'ouro'} data-hero={heroVideo ? 'video' : undefined}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex, nofollow" />
-    <meta name="theme-color" content={verde ? '#07130d' : moderno ? '#f5f1ea' : vintage ? '#efe5d0' : '#0a0a0a'} />
+    <meta name="theme-color" content={heroVideo && vintage && !moderno ? '#0b0907' : verde ? '#07130d' : moderno ? '#f5f1ea' : vintage ? '#efe5d0' : '#0a0a0a'} />
     <title>{b.nome} · {b.cidade}</title>
     <meta name="description" content={`${b.nome}, ${b.cidade}-${b.uf}. ${b.tagline}`} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
@@ -92,7 +92,7 @@ const logoClaro = b.logoClaro ?? b.logo;
     <main id="inicio">
       {heroVideo ? (
         <section class="hero-s" aria-label="Apresentação">
-          <div class="hs-fundo" aria-hidden="true"></div>
+          <div class="hs-fundo" aria-hidden="true" style={`--poster:url(${heroVideo.poster})`}></div>
           <div class="hs-media">
             <img class="hs-poster" src={heroVideo.poster} srcset={`${heroVideo.posterSm} 405w, ${heroVideo.poster} 720w`} sizes="(min-width: 900px) 380px, 100vw" alt="" width="720" height="1280" fetchpriority="high" decoding="async" />
             <video class="hs-video" data-video data-mp4={heroVideo.mp4} data-webm={heroVideo.webm} muted loop playsinline preload="none" aria-hidden="true" tabindex="-1" width="720" height="1280"></video>
@@ -100,8 +100,8 @@ const logoClaro = b.logoClaro ?? b.logo;
           </div>
           <div class="hs-txt">
             <p class="selo">Barbearia · {b.cidade}{unidades.length > 1 ? ` · ${unidades.length} unidades` : ''}</p>
-            <h1 class="hs-logo"><img src={heroVideo.logo} alt={b.nome} width="658" height="194" /></h1>
-            <p class="hs-tag">{b.tagline}</p>
+            {heroVideo.logo ? <h1 class="hs-logo"><img src={heroVideo.logo} alt={b.nome} width="658" height="194" /></h1> : (<><img class="hs-mark" src={logoClaro} alt="" width={b.logoW ?? 46} height={b.logoH ?? 37} /><h1 class="hs-titulo">{b.nomeCurto}</h1></>)}
+            <p class="hs-tag">{b.tagline}</p>{!heroVideo.logo && b.subtagline && <p class="hs-sub">{b.subtagline}</p>}
             <div class="hero-acoes">
               <a class="btn ouro" href="#agendar">Agendar horário</a>
               {planos.length > 0 && <a class="btn linha" href="#planos">Conhecer os planos</a>}
