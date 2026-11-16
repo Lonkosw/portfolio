@@ -245,8 +245,9 @@ if (video) {
   const lento = !!conn && (conn.saveData === true || /(^|slow-)2g|3g/.test(conn.effectiveType ?? ''));
   if (!reduce && !lento) {
     const iniciar = () => {
-      const webm = video.canPlayType('video/webm; codecs="vp9"');
-      video.src = (webm && video.dataset.webm) || video.dataset.mp4 || '';
+      // H.264 primeiro: decodificação por hardware em praticamente todo celular (60 fps mais fluido); webm só como reserva.
+      const mp4 = video.canPlayType('video/mp4; codecs="avc1.640028"');
+      video.src = (mp4 && video.dataset.mp4) || video.dataset.webm || video.dataset.mp4 || '';
       video.addEventListener('playing', () => video.classList.add('on'), { once: true });
       video.play().catch(() => video.removeAttribute('src'));
       const media = video.closest<HTMLElement>('.hs-media');
