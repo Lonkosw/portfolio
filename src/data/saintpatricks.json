@@ -1,0 +1,122 @@
+{
+  "slug": "saintpatricks",
+  "tema": "verde",
+  "fluxo": "servico-primeiro",
+  "provisorio": true,
+  "emBreve": [
+    "servicos",
+    "horarios",
+    "whatsapp",
+    "planos"
+  ],
+  "nome": "Saint Patricks Barber Club",
+  "nomeCurto": "Saint Patricks",
+  "tagline": "Cortes, barba e cuidado masculino em duas unidades de Maringá.",
+  "cidade": "Maringá",
+  "uf": "PR",
+  "instagram": "barberstpatricks",
+  "_confirmar": [
+    "WhatsApp: não temos número",
+    "Preços, horários e condições dos planos (o story dos planos é de 2022)",
+    "Unidades vistas num story de março de 2025: Rua Santos Dumont, 3054 e Av. Horácio Raccanello, 5545"
+  ],
+  "horarios": [],
+  "logo": "/img/saintpatricks/logo.webp",
+  "logoClaro": "/img/saintpatricks/logo.webp",
+  "logoW": 118,
+  "logoH": 35,
+  "heroVideo": {
+    "poster": "/img/saintpatricks/hero-poster.webp",
+    "posterSm": "/img/saintpatricks/hero-poster-sm.webp",
+    "mp4": "/video/saint-hero2.mp4",
+    "webm": "/video/saint-hero2.webm",
+    "logo": "/img/saintpatricks/logo-hero.webp"
+  },
+  "unidades": [
+    {
+      "nome": "Unidade Santos Dumont",
+      "endereco": "Rua Santos Dumont, 3054",
+      "mapsBusca": "Saint Patricks Barber Club Rua Santos Dumont 3054 Maringá PR"
+    },
+    {
+      "nome": "Unidade Horácio Raccanello",
+      "endereco": "Av. Horácio Raccanello, 5545",
+      "mapsBusca": "Saint Patricks Barber Club Avenida Horácio Raccanello 5545 Maringá PR"
+    }
+  ],
+  "planos": [
+    {
+      "nome": "Plano Corte Infinito",
+      "descricao": "Venha cortar o cabelo quantas vezes quiser.",
+      "preco": null
+    },
+    {
+      "nome": "Plano Barba Infinita",
+      "descricao": "Venha fazer a barba quantas vezes quiser.",
+      "preco": null
+    },
+    {
+      "nome": "Plano Corte e Barba Infinitos",
+      "descricao": "Corte e barba quantas vezes quiser.",
+      "preco": null
+    }
+  ],
+  "planosSub": "Assine e venha quantas vezes quiser, sem letras miúdas.",
+  "beneficiosPlanos": [
+    "Entre 10% e 15% de desconto em produtos",
+    "Entre 10% e 15% de desconto em outros serviços (barber e massoterapia)",
+    "Benefícios com empresas e marcas parceiras",
+    "Presentes exclusivos"
+  ],
+  "galeria": [
+    "corte-01",
+    "corte-02",
+    "corte-03",
+    "corte-04",
+    "corte-05",
+    "corte-06",
+    "corte-07",
+    "corte-08"
+  ],
+  "ambiente": [
+    "/img/saintpatricks/ambiente-1.webp",
+    "/img/saintpatricks/ambiente-2.webp"
+  ],
+  "ambienteTexto": "Duas unidades em Maringá, com atendimento de cortes, barba, corte infantil e massoterapia.",
+  "servicos": [
+    {
+      "grupo": "Serviços",
+      "itens": [
+        {
+          "id": "corte",
+          "nome": "Corte",
+          "preco": null
+        },
+        {
+          "id": "barba",
+          "nome": "Barba",
+          "preco": null
+        },
+        {
+          "id": "corte-barba",
+          "nome": "Corte e barba",
+          "preco": null
+        },
+        {
+          "id": "infantil",
+          "nome": "Corte infantil",
+          "preco": null
+        },
+        {
+          "id": "massoterapia",
+          "nome": "Massoterapia",
+          "preco": null
+        }
+      ]
+    }
+  ],
+  "preview": {
+    "autor": "Theo",
+    "whatsapp": "5544991342674"
+  }
+}

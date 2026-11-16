@@ -1,0 +1,103 @@
+/* Tema vintage (creme e preto): seções claras em creme com texto preto, seções escuras em preto com texto creme e dourado. */
+[data-tema='moderno'] {
+  --creme: #f5f1ea; --creme2: #fbf8f2; --tinta: #16120e; --tinta2: #6b6358; --filete: #d6cdbd;
+  --ouro: #b4622e; --ouro2: #d98a52; --ouro-esc: #8f4a21;
+  --display: 'Cormorant Garamond', 'Cormorant', Georgia, serif;
+  --bg: #f5f1ea; --bg2: #121110; --surf: #fbf8f2; --surf2: #ebe5d9; --line: #d6cdbd; --fg: #16120e; --mute: #6b6358;
+}
+[data-tema='moderno'] body { background: var(--creme); color: var(--tinta); }
+[data-tema='moderno'] .aviso { background: #16120e; color: #f0c9a0; border-color: #4a3322; }
+/* cabeçalho */
+[data-tema='moderno'] .topo { background: linear-gradient(#f5f1eacc, #f5f1ea00); color: var(--tinta); }
+[data-tema='moderno'] .topo.solido { background: #f5f1eaf2; border-bottom-color: var(--filete); }
+[data-tema='moderno'] .topo nav a { color: var(--tinta2); } [data-tema='moderno'] .topo nav a:hover { color: var(--ouro-esc); }
+[data-tema='moderno'] .marca { font-family: var(--display); font-weight: 400; letter-spacing: 0.04em; font-size: 1.25rem; }
+[data-tema='moderno'] .marca img { width: 30px; height: auto; }
+/* botões */
+[data-tema='moderno'] .btn { font-family: var(--body); font-weight: 600; letter-spacing: 0.12em; font-size: 0.82rem; border-radius: 2px; }
+[data-tema='moderno'] .btn.ouro { background: var(--tinta); color: #f4efe6; border-color: var(--tinta); }
+[data-tema='moderno'] .btn.ouro:hover { background: #2a2216; }
+[data-tema='moderno'] .btn.linha { border-color: var(--tinta); color: var(--tinta); }
+[data-tema='moderno'] .btn.linha:hover { background: #16120e12; }
+/* hero */
+[data-tema='moderno'] .hero-v { display: grid; justify-items: center; text-align: center; padding: 56px max(16px, env(safe-area-inset-left)) 0; margin-top: -62px; padding-top: 118px; overflow: hidden; background: radial-gradient(70% 60% at 50% 0%, #fdfbf6, transparent 70%), var(--creme); }
+[data-tema='moderno'] .hero-v-logo { width: 54px; height: auto; margin-bottom: 14px; }
+[data-tema='moderno'] .selo { color: var(--ouro-esc); }
+[data-tema='moderno'] .titulo-v { font: 400 clamp(3.4rem, 12vw, 8.2rem)/0.92 var(--display); letter-spacing: 0.005em; text-transform: none; margin: 6px 0 4px; text-wrap: balance; }
+[data-tema='moderno'] .script { color: var(--ouro-esc); font-size: clamp(2.2rem, 6vw, 3.4rem); margin: 4px 0 6px; }
+[data-tema='moderno'] .sub-v { font-size: 0.82rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--tinta2); margin-bottom: 26px; max-width: 40ch; }
+[data-tema='moderno'] .hero-v > * { animation: sobe 0.9s var(--ease) both; }
+[data-tema='moderno'] .hero-v > :nth-child(2) { animation-delay: 0.05s; } [data-tema='moderno'] .hero-v > :nth-child(3) { animation-delay: 0.12s; } [data-tema='moderno'] .hero-v > :nth-child(4) { animation-delay: 0.2s; } [data-tema='moderno'] .hero-v > :nth-child(5) { animation-delay: 0.28s; } [data-tema='moderno'] .hero-v > :nth-child(6) { animation-delay: 0.36s; }
+[data-tema='moderno'] .retratos { display: flex; justify-content: center; align-items: flex-end; gap: clamp(8px, 2vw, 22px); margin-top: 46px; width: min(920px, 100%); }
+[data-tema='moderno'] .retratos li { flex: 1; max-width: 270px; aspect-ratio: 3 / 4; padding: 7px; background: #fdfbf6; border: 1px solid #16120e; box-shadow: 0 18px 40px -22px #16120e99; }
+[data-tema='moderno'] .retratos li.r0 { transform: translate3d(0, 14px, 0) rotate(-2deg); } [data-tema='moderno'] .retratos li.r1 { transform: translate3d(0, -10px, 0); } [data-tema='moderno'] .retratos li.r2 { transform: translate3d(0, 14px, 0) rotate(2deg); }
+[data-tema='moderno'] .retratos img { width: 100%; height: 100%; object-fit: cover; object-position: center 18%; filter: sepia(0.35) contrast(1.05); }
+/* seções */
+[data-tema='moderno'] .sec { background: var(--creme); color: var(--tinta); }
+[data-tema='moderno'] .sec.escuro { background: #121110; color: #f4efe6; border-color: #2e2a26; --mute: #b5aca0; --line: #34302b; --surf: #1a1816; --surf2: #242120; --ouro: #d98a52; --fg: #f4efe6; }
+[data-tema='moderno'] .sec.escuro .btn.ouro { background: linear-gradient(180deg, #eaa874, #d98a52); color: #17110a; border-color: transparent; }
+[data-tema='moderno'] .sec.escuro .btn.linha { border-color: #d98a52; color: #eaa874; }
+[data-tema='moderno'] .sec.escuro .btn.linha:hover { background: #ffffff0d; }
+[data-tema='moderno'] h2 { font: 400 clamp(2.4rem, 6.5vw, 4.2rem)/1 var(--display); letter-spacing: 0; text-transform: none; }
+[data-tema='moderno'] h2::after { background: var(--ouro); height: 2px; }
+[data-tema='moderno'] .rot { color: var(--ouro-esc); } [data-tema='moderno'] .sec.escuro .rot { color: #d98a52; }
+[data-tema='moderno'] .sub { color: var(--tinta2); } [data-tema='moderno'] .sec.escuro .sub { color: #b5aca0; }
+/* preços */
+[data-tema='moderno'] .srv { border-bottom-color: var(--filete); color: var(--tinta); }
+[data-tema='moderno'] .srv .pr { font-family: var(--display); font-weight: 400; color: var(--ouro-esc); font-size: 1.25rem; }
+[data-tema='moderno'] .srv:hover, [data-tema='moderno'] .srv.add { color: var(--ouro-esc); }
+[data-tema='moderno'] .completa summary, [data-tema='moderno'] .mais summary { color: var(--ouro-esc); font-family: var(--body); letter-spacing: 0.14em; font-size: 0.8rem; }
+[data-tema='moderno'] .grupo h3 { color: var(--ouro-esc); border-bottom-color: var(--filete); }
+[data-tema='moderno'] .dica { color: var(--tinta2); }
+/* equipe (seção escura) */
+[data-tema='moderno'] .membro .foto { background: #1a1816; border: 1px solid #34302b; }
+[data-tema='moderno'] .membro .foto img { filter: sepia(0.25) contrast(1.04); }
+[data-tema='moderno'] .membro h3 { font: 400 1.9rem/1 var(--display); letter-spacing: 0.01em; text-transform: none; color: #fbf8f2; }
+[data-tema='moderno'] .papel { color: #d98a52; }
+[data-tema='moderno'] .bio { color: #b5aca0; }
+[data-tema='moderno'] .espec li { border-color: #403a33; color: #cfc6b8; }
+/* galeria, avaliações */
+[data-tema='moderno'] .galeria li, [data-tema='moderno'] .amb-txt { background: var(--surf2); }
+[data-tema='moderno'] .galeria img, [data-tema='moderno'] .ambiente img { filter: sepia(0.3); }
+[data-tema='moderno'] .aval li { background: var(--surf); border-color: var(--filete); }
+[data-tema='moderno'] .aval blockquote p::first-line { color: var(--ouro-esc); }
+/* agendamento (seção escura) */
+[data-tema='moderno'] .agenda { background: #1a1816; border-color: #34302b; }
+[data-tema='moderno'] .bloco { border-bottom-color: #34302b; }
+[data-tema='moderno'] .bloco h3 { font-family: var(--display); font-weight: 400; letter-spacing: 0.03em; font-size: 1.35rem; text-transform: none; }
+[data-tema='moderno'] .bloco h3 span { background: #d98a52; color: #17110a; font-family: var(--body); font-weight: 600; font-size: 0.85rem; }
+[data-tema='moderno'] .chip span, [data-tema='moderno'] .opc span { border-color: #403a33; }
+[data-tema='moderno'] .chip b { font-family: var(--body); font-weight: 600; font-size: 0.85rem; color: #eaa874; }
+[data-tema='moderno'] .chip input:checked + span, [data-tema='moderno'] .opc input:checked + span { background: #eaa874; border-color: #eaa874; color: #17110a; }
+[data-tema='moderno'] .chip input:checked + span b { color: #17110a; }
+[data-tema='moderno'] .opc.dia b { font-family: var(--display); font-weight: 400; }
+[data-tema='moderno'] #nome-cliente { background: #121110; border-color: #403a33; color: #f4efe6; }
+[data-tema='moderno'] .barra { background: #121110f5; border-top-color: #8f4a21; }
+[data-tema='moderno'] .barra-tot { font-family: var(--display); font-weight: 400; color: #eaa874; font-size: 1.8rem; }
+/* rodapé */
+[data-tema='moderno'] .rodape { background: #121110; color: #b5aca0; }
+[data-tema='moderno'] .rodape img { width: 52px; height: auto; }
+@media (max-width: 640px) { [data-tema='moderno'] .retratos li.r0, [data-tema='moderno'] .retratos li.r2 { transform: translate3d(0, 8px, 0) rotate(0); } [data-tema='moderno'] .retratos { margin-top: 32px; } }
+@media (prefers-reduced-motion: reduce) { [data-tema='moderno'] .hero-v > * { animation: none; } }
+
+[data-tema='moderno'] .breve { border-color: var(--ouro-esc); color: var(--ouro-esc); font: 600 0.78rem/1 var(--body); letter-spacing: 0.26em; }
+[data-tema='moderno'] .sec.escuro .breve { border-color: #d98a52; color: #eaa874; }
+[data-tema='moderno'] .galeria.vazia li { background: repeating-linear-gradient(45deg, #fbf8f2, #fbf8f2 10px, #ebe5d9 10px, #ebe5d9 20px); border-color: var(--filete); }
+
+/* ajustes do moderno: serifa de versalete, wordmark no cabeçalho, retratos limpos */
+[data-tema='moderno'] .marca span { display: none; }
+[data-tema='moderno'] .marca img { width: 132px; height: auto; }
+[data-tema='moderno'] .rodape img { width: 170px; height: auto; }
+[data-tema='moderno'] .titulo-v { font: 600 clamp(3.6rem, 13vw, 8.6rem)/0.9 var(--display); font-variant: small-caps; letter-spacing: 0.02em; }
+[data-tema='moderno'] h2 { font-weight: 600; font-variant: small-caps; letter-spacing: 0.02em; font-size: clamp(2.6rem, 6.8vw, 4.4rem); }
+[data-tema='moderno'] .bloco h3 { font-weight: 600; font-variant: small-caps; font-size: 1.5rem; }
+[data-tema='moderno'] .sub-v { letter-spacing: 0.4em; }
+[data-tema='moderno'] .tag { font: 500 italic clamp(1.5rem, 3.6vw, 2.1rem)/1.2 var(--display); color: var(--ouro-esc); margin: 8px 0 6px; }
+[data-tema='moderno'] .retratos li { padding: 0; background: none; border: 0; box-shadow: 0 22px 46px -26px #16120eaa; border-radius: 2px; overflow: hidden; }
+[data-tema='moderno'] .retratos li.r0, [data-tema='moderno'] .retratos li.r2 { transform: translate3d(0, 16px, 0); }
+[data-tema='moderno'] .retratos li.r1 { transform: translate3d(0, -12px, 0); }
+[data-tema='moderno'] .retratos img { filter: contrast(1.03) saturate(0.95); }
+[data-tema='moderno'] .galeria img, [data-tema='moderno'] .ambiente img { filter: none; }
+[data-tema='moderno'] .barra-tot { font-weight: 600; }
+[data-tema='moderno'] .btn { border-radius: 0; }
+@media (max-width: 640px) { [data-tema='moderno'] .marca img { width: 112px; } [data-tema='moderno'] .retratos li.r0, [data-tema='moderno'] .retratos li.r2 { transform: translate3d(0, 8px, 0); } }
